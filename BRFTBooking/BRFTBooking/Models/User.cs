@@ -15,8 +15,8 @@ namespace BRFTBooking.Models
 
         int ID { get; set; }
 
-        [Display(Name="User")]
-
+        [Display(Name="Student ID")]
+        [Required(ErrorMessage = "User must have a student ID.")]
         public int StudentID { get; set; }
 
         [Display(Name = "First Name")]
