@@ -35,6 +35,7 @@ namespace BRFT_Booking
                 options.UseSqlite(
                     Configuration.GetConnectionString("BRFTContext")));
 
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
