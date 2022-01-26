@@ -1,0 +1,3 @@
+﻿Add-Migration -Context BRFTContext -o Data\BRFTMigrations Initial
+Update-Database -Context BRFTContext 
+Update-Database -Context ApplicationDbContext
