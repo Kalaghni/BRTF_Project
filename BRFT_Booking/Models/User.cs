@@ -15,6 +15,18 @@ namespace BRFT_Booking.Models
 
         public int ID { get; set; }
 
+        [Display(Name = "Full Name")]
+        public string FullName
+        {
+            get
+            {
+                return FName
+                    + (string.IsNullOrEmpty(MName) ? " " :
+                        (" " + (char?)MName[0] + ". ").ToUpper())
+                    + LName;
+            }
+        }
+
         [Display(Name = "Student ID")]
         [Required(ErrorMessage = "User must have a student ID.")]
         public int StudentID { get; set; }

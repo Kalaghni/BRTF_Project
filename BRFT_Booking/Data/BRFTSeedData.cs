@@ -22,7 +22,7 @@ namespace BRFT_Booking.Data
                         context.Users.AddRange(
                          new User
                          {
-                             ID = 4362670,
+                             StudentID = 4362670,
                              FName = "Cat",
                              MName = "Sun",
                              LName = "Al-Bahrini",
@@ -36,7 +36,7 @@ namespace BRFT_Booking.Data
 
                          new User
                          {
-                             ID = 9311011,
+                             StudentID = 9311011,
                              FName = "Sterling",
                              LName = "Archer",
                              AcadPlan = "P0163",
@@ -48,7 +48,7 @@ namespace BRFT_Booking.Data
                          },
                          new User
                          {
-                             ID = 9508725,
+                             StudentID = 9508725,
                              FName = "Matt",
                              MName = "Elmi-Johanna",
                              LName = "Parker",
@@ -61,7 +61,7 @@ namespace BRFT_Booking.Data
                          },
                          new User
                          {
-                             ID = 4407393,
+                             StudentID = 4407393,
                              FName = "James",
                              MName = "Bullough",
                              LName = "Lansing",
@@ -74,7 +74,7 @@ namespace BRFT_Booking.Data
                          },
                          new User
                          {
-                             ID = 4105233,
+                             StudentID = 4105233,
                              FName = "Judy",
                              MName = "Ugonna",
                              LName = "Garland",
@@ -87,7 +87,7 @@ namespace BRFT_Booking.Data
                          },
                          new User
                          {
-                             ID = 4242885,
+                             StudentID = 4242885,
                              FName = "Marge",
                              LName = "Simpson",
                              AcadPlan = "P0795",
@@ -99,7 +99,7 @@ namespace BRFT_Booking.Data
                          },
                          new User
                          {
-                             ID = 4035763,
+                             StudentID = 4035763,
                              FName = "Sarah",
                              MName = "Wing-Hay",
                              LName = "Slean",
@@ -112,7 +112,7 @@ namespace BRFT_Booking.Data
                          },
                          new User
                          {
-                             ID = 4444312,
+                             StudentID = 4444312,
                              FName = "Morag",
                              MName = "Leah-Grace",
                              LName = "Smith",
@@ -125,7 +125,7 @@ namespace BRFT_Booking.Data
                          },
                          new User
                          {
-                             ID = 4398123,
+                             StudentID = 4398123,
                              FName = "Akira",
                              MName = "Kaur",
                              LName = "Kurosawa",
@@ -138,7 +138,7 @@ namespace BRFT_Booking.Data
                          },
                          new User
                          {
-                             ID = 9470695,
+                             StudentID = 9470695,
                              FName = "Zhuo-Chang",
                              LName = "Wu",
                              AcadPlan = "P0474",
