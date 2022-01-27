@@ -23,7 +23,10 @@ namespace BRFT_Booking.Models
 
         public string? Description { get; set; }
 
+        public string? Rule { get; set; }
         public int? Limit { get; set; }
+
+        public int? MaxNumofBookings { get; set; }
 
         public bool Enabled { get; set; }
 

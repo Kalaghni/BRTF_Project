@@ -15,7 +15,9 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     Area = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    Rule = table.Column<string>(nullable: true),
                     Limit = table.Column<int>(nullable: true),
+                    MaxNumofBookings = table.Column<int>(nullable: true),
                     Enabled = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>

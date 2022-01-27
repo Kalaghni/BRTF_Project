@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRFT_Booking.Data.BRFTMigrations
 {
     [DbContext(typeof(BRFTContext))]
-    [Migration("20220125215452_Initial")]
+    [Migration("20220127201855_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,7 +57,13 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     b.Property<int?>("Limit")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MaxNumofBookings")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Rule")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");

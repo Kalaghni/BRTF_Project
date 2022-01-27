@@ -55,7 +55,13 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     b.Property<int?>("Limit")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MaxNumofBookings")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Rule")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
