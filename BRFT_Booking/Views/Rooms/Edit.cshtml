@@ -15,22 +15,22 @@
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Area" class="control-label"></label>
-                <input asp-for="Area" class="form-control" />
+                <input asp-for="Area" placeholder="Area" data-toggle="tooltip" title="Area that the room is in" class="form-control" />
                 <span asp-validation-for="Area" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" data-toggle="tooltip" placeholder="Room Name" title="Name of the room" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <input asp-for="Description" data-toggle="tooltip" placeholder="Description" title="Description of what the room contains" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Limit" class="control-label"></label>
-                <input asp-for="Limit" class="form-control" />
+                <input asp-for="Limit" data-toggle="tooltip" title="Limit of how many people can be in the room" class="form-control" />
                 <span asp-validation-for="Limit" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
