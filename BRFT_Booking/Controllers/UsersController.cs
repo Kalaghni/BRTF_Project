@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BRFT_Booking.Data;
 using BRFT_Booking.Models;
+using BRFT_Booking.Utilities;
 
 namespace BRFT_Booking.Controllers
 {
@@ -20,9 +21,101 @@ namespace BRFT_Booking.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchPlan, string SearchDescription,
+            int? page, int? pageSizeID,
+            string actionButton, string sortDirection = "asc", string sortField = "User")
         {
-            return View(await _context.Users.ToListAsync());
+            ViewData["Filtering"] = "btn-outline-secondary";
+
+            string[] sortOptions = new[] { "StudentID", "Full Name", "Start Level", "Term" };
+
+            var users = from u in _context.Users
+                        .AsNoTracking()
+                        select u;
+
+            if (!String.IsNullOrEmpty(SearchPlan))
+            {
+                users = users.Where(u => u.AcadPlan.ToUpper().Contains(SearchPlan.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(SearchDescription))
+            {
+                users = users.Where(u => u.Description.ToUpper().Contains(SearchDescription.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+
+            if (!String.IsNullOrEmpty(actionButton))
+            {
+                page = 1;
+                if (actionButton != "Filter")
+                {
+                    if (actionButton == sortField)
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;
+                }
+            }
+            if (sortField == "StudentID")
+            {
+                if (sortDirection == "asc")
+                {
+                    users = users.OrderByDescending(u => u.StudentID);
+                }
+                else
+                {
+                    users = users.OrderBy(u => u.StudentID);
+                }
+            }
+            else if (sortField == "Start Level")
+            {
+                if (sortDirection == "asc")
+                {
+                    users = users.OrderByDescending(u => u.StrtLevel);
+                }
+                else
+                {
+                    users = users.OrderBy(u => u.StrtLevel);
+                }
+            }
+            else if (sortField == "Term")
+            {
+                if (sortDirection == "asc")
+                {
+                    users = users.OrderByDescending(u => u.Term);
+                }
+                else
+                {
+                    users = users.OrderBy(u => u.Term);
+                }
+            }
+            else
+            {
+                if (sortDirection == "asc")
+                {
+                    users = users
+                        .OrderBy(u => u.LName)
+                        .ThenBy(u => u.FName);
+                }
+                else
+                {
+                    users = users
+                        .OrderByDescending(u => u.LName)
+                        .ThenByDescending(u => u.FName);
+                }
+            }
+
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
+
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
+
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+
+            var pagedData = await PaginatedList<User>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize);
+
+            return View(pagedData);
         }
 
         // GET: Users/Details/5
@@ -143,6 +236,11 @@ namespace BRFT_Booking.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private string ControllerName()
+        {
+            return this.ControllerContext.RouteData.Values["controller"].ToString();
         }
 
         private bool UserExists(int id)

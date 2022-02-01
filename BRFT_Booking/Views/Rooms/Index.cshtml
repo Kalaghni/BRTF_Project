@@ -1,59 +1,86 @@
 ﻿@model IEnumerable<BRFT_Booking.Models.Room>
 
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
 
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Area)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Limit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Enabled)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Area)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Limit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Enabled)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
+<form asp-action="Index" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+    <div class="form-horizontal">
+        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            Filter/Search
+        </button>
+        <div class="collapse" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Search Area:</label>
+                        @Html.TextBox("SearchArea", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Search Room:</label>
+                        @Html.TextBox("SearchRoom", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4 align-self-end">
+                        <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                        <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <input type="submit" name="actionButton" value="Area" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Room" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Description" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Limit" class="btn btn-link" />
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Enabled)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Area)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Description)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Limit)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Enabled)
+    </td>
+    <td>
+        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+    </td>
+</tr>
 }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+    <partial name="_PagingNavBar" />
+</form>
