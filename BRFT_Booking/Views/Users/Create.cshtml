@@ -1,8 +1,6 @@
 ﻿@model BRFT_Booking.Models.User
 
-@{
-    ViewData["Title"] = "Create";
-}
+@{ ViewData["Title"] = "Create"; }
 
 <h1>Create</h1>
 
@@ -14,42 +12,42 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="StudentID" class="control-label"></label>
-                <input asp-for="StudentID" data-toggle="tooltip" title="The Students ID" placeholder ="Student ID" class="form-control" />
+                <input asp-for="StudentID" data-toggle="tooltip" title="The Students ID" placeholder="e.g 4265448" class="form-control" />
                 <span asp-validation-for="StudentID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FName" class="control-label"></label>
-                <input asp-for="FName" data-toggle="tooltip" title="First name of the student you are adding" placeholder ="First Name" class="form-control" />
+                <input asp-for="FName" data-toggle="tooltip" title="First name of the student you are adding" placeholder="e.g John" class="form-control" />
                 <span asp-validation-for="FName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MName" class="control-label"></label>
-                <input asp-for="MName" data-toggle="tooltip" title="Middle name of the student you are adding" placeholder ="Middle Name" class="form-control" />
+                <input asp-for="MName" data-toggle="tooltip" title="Middle name of the student you are adding" placeholder="e.g Frank" class="form-control" />
                 <span asp-validation-for="MName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LName" class="control-label"></label>
-                <input asp-for="LName" data-toggle="tooltip" title="Last name of the student you are adding" placeholder ="Last Name" class="form-control" />
+                <input asp-for="LName" data-toggle="tooltip" title="Last name of the student you are adding" placeholder="e.g Doe" class="form-control" />
                 <span asp-validation-for="LName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AcadPlan" class="control-label"></label>
-                <input asp-for="AcadPlan" data-toggle="tooltip" title="Academic plan that the student is enrolled in" placeholder ="P0122" class="form-control" />
+                <input asp-for="AcadPlan" data-toggle="tooltip" title="Academic plan that the student is enrolled in" placeholder="e.g P0122" class="form-control" />
                 <span asp-validation-for="AcadPlan" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" data-toggle="tooltip" title="Description of the students academic plan" placeholder ="Broadcasting" class="form-control" />
+                <input asp-for="Description" data-toggle="tooltip" title="Description of the students academic plan" placeholder="e.g Broadcasting" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" data-toggle="tooltip" title="Students Email" placeholder ="sample@gmail.com" class="form-control" />
+                <input asp-for="Email" data-toggle="tooltip" title="Students Email" placeholder="e.g JDoe@gmail.com" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StrtLevel" class="control-label"></label>
-                <input asp-for="StrtLevel" data-toggle="tooltip" title="The level the student is starting at" placeholder ="Start Level" class="form-control" />
+                <input asp-for="StrtLevel" data-toggle="tooltip" title="The level the student is starting at" placeholder="e.g Start Level" class="form-control" />
                 <span asp-validation-for="StrtLevel" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -59,7 +57,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Term" class="control-label"></label>
-                <input asp-for="Term" data-toggle="tooltip" title="The term the student is enrolled in" placeholder ="1204" class="form-control" />
+                <input asp-for="Term" data-toggle="tooltip" title="The term the student is enrolled in" placeholder="e.g 1204" class="form-control" />
                 <span asp-validation-for="Term" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -76,3 +74,8 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>$(document).ready(function(){
+              $('[data-toggle="tooltip"]').tooltip();
+            });</script>

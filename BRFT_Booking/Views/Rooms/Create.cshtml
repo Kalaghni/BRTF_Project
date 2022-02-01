@@ -1,8 +1,6 @@
 ﻿@model BRFT_Booking.Models.Room
 
-@{
-    ViewData["Title"] = "Create";
-}
+@{ ViewData["Title"] = "Create"; }
 
 <h1>Create</h1>
 
@@ -14,22 +12,22 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Area" class="control-label"></label>
-                <input asp-for="Area" placeholder ="Area" data-toggle="tooltip" title="Area that the room is in" class="form-control"  />
+                <input asp-for="Area" placeholder="e.g V110" data-toggle="tooltip" title="Area that the room is in" class="form-control" />
                 <span asp-validation-for="Area" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" data-toggle="tooltip" placeholder ="Room Name" title="Name of the room" class="form-control" />
+                <input asp-for="Name" data-toggle="tooltip" placeholder="e.g Audio Edit #8" title="Name of the room" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" data-toggle="tooltip" placeholder ="Description" title ="Description of what the room contains" class="form-control" />
+                <input asp-for="Description" data-toggle="tooltip" placeholder="e.g All Studios have phone access for interviews" title="Description of what the room contains" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Limit" class="control-label"></label>
-                <input asp-for="Limit" data-toggle="tooltip" title="Limit of how many people can be in the room" class="form-control" />
+                <input asp-for="Limit" data-toggle="tooltip" placeholder="0" title="Limit of how many people can be in the room" class="form-control" />
                 <span asp-validation-for="Limit" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -51,3 +49,9 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>$(document).ready(function(){
+              $('[data-toggle="tooltip"]').tooltip();
+            });</script>
