@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using BRFT_Booking.Data;
 using BRFT_Booking.Models;
 using BRFT_Booking.Utilities;
+using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
+using System.IO;
 
 namespace BRFT_Booking.Controllers
 {
@@ -236,6 +239,46 @@ namespace BRFT_Booking.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertFromExcel(IFormFile theExcel)
+        {
+            //TODO Add Error Handling to the files.
+            ExcelPackage excel;
+            using (var memoryStream = new MemoryStream())
+            {
+                await theExcel.CopyToAsync(memoryStream);
+                excel = new ExcelPackage(memoryStream);
+            }
+            var workSheet = excel.Workbook.Worksheets[0];
+            var start = workSheet.Dimension.Start;
+            var end = workSheet.Dimension.End;
+
+            //Start a new list to hold imported objects
+            List<User> userList = new List<User>();
+
+            for (int row = start.Row; row <= end.Row; row++)
+            {
+                // Row by row...
+                User u = new User
+                {
+                    ID = Int32.Parse(workSheet.Cells[row, 1].Text),
+                    FName = workSheet.Cells[row, 2].Text,
+                    MName = workSheet.Cells[row, 3].Text,
+                    LName = workSheet.Cells[row, 4].Text,
+                    StudentID = Int32.Parse(workSheet.Cells[row, 5].Text),
+                    AcadPlan = workSheet.Cells[row, 7].Text,
+                    Description = workSheet.Cells[row, 8].Text,
+                    Email = workSheet.Cells[row, 9].Text,
+                    StrtLevel = Int32.Parse(workSheet.Cells[row, 10].Text),
+                    LastLevel = bool.Parse(workSheet.Cells[row, 10].Text),
+                };
+                userList.Add(u);
+            }
+            _context.Users.AddRange(userList);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Lookups", new { Tab = "AppointmentReasonsTab" });
         }
 
         private string ControllerName()

@@ -1410,3 +1410,7 @@ C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3
 C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRFT_Booking.genruntimeconfig.cache
 C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_PageSizeModal.cshtml.g.cs
 C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_PagingNavBar.cshtml.g.cs
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\EPPlus.dll
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\System.Xml.XPath.XmlDocument.dll
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_PageSizeModal.cshtml.g.cs
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_PagingNavBar.cshtml.g.cs
