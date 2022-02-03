@@ -722,6 +722,7 @@ namespace BRFT_Booking.Data
                     new Room
                     {
                         Area = "V110",
+                        Name = "V110",
                         Enabled = true,
 
                     },
@@ -748,6 +749,7 @@ namespace BRFT_Booking.Data
                     new Room
                     {
                         Area = "V110f Acting Edit",
+                        Name = "V110f Acting Edit",
                         Enabled = true,
 
                     },

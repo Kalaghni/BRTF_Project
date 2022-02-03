@@ -49,8 +49,8 @@ namespace BRFT_Booking.Controllers
         // GET: Bookings/Create
         public IActionResult Create()
         {
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID");
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "AcadPlan");
+            ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
             return View();
         }
 
