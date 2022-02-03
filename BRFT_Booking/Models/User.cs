@@ -67,5 +67,6 @@ namespace BRFT_Booking.Models
         public int Term { get; set; }
 
         public ICollection<Booking> Bookings { get; set; }
+
     }
 }

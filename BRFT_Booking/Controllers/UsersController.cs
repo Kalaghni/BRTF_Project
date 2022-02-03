@@ -152,11 +152,26 @@ namespace BRFT_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,StudentID,FName,MName,LName,AcadPlan,Description,Email,StrtLevel,LastLevel,Term")] User user)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(user);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Users.StudentID"))
+                {
+                    ModelState.AddModelError("StudentID", "Unable to save changes. Remember, you cannot have duplicate Student ID numbers.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
             }
             return View(user);
         }
