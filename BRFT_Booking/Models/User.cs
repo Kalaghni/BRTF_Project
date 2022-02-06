@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BRFT_Booking.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace BRFT_Booking.Models
     {
         public User()
         {
+            Active = true;
             this.Bookings = new HashSet<Booking>();
         }
 
@@ -42,30 +44,17 @@ namespace BRFT_Booking.Models
         [Required(ErrorMessage = "User must have a last name.")]
         public string LName { get; set; }
 
-        [Display(Name = "Academic Plan")]
-        [Required(ErrorMessage = "Academic Plan is required.")]
-        public string AcadPlan { get; set; }
-
-        [Display(Name = "Description")]
-        [Required(ErrorMessage = "Description is required.")]
-        public string Description { get; set; }
+        [Display(Name = "Role")]
+        public string Role { get; set; }
 
         [Display(Name = "Email")]
         [Required(ErrorMessage = "User must have an email.")]
         public string Email { get; set; }
 
-        [Display(Name = "Start Level")]
-        [Required(ErrorMessage = "Start Level is required.")]
-        public int StrtLevel { get; set; }
+        [Display(Name = "Password")]
+        public string Password { get; set; }
 
-        [Display(Name = "Last Level")]
-        [Required(ErrorMessage = "Last Level is required.")]
-        public bool LastLevel { get; set; }
-
-        [Display(Name = "Term")]
-        [Required(ErrorMessage = "Term is required.")]
-        public int Term { get; set; }
-
+        public bool Active { get; set; }
         public ICollection<Booking> Bookings { get; set; }
 
     }

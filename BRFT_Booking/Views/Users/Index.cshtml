@@ -44,22 +44,7 @@
                     <input type="submit" name="actionButton" value="Full Name" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AcadPlan)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Start Level" class="btn btn-link" />
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastLevel)
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Term" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -75,22 +60,7 @@
         @Html.DisplayFor(modelItem => item.FullName)
     </td>
     <td>
-        @Html.DisplayFor(modelItem => item.AcadPlan)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Description)
-    </td>
-    <td>
         @Html.DisplayFor(modelItem => item.Email)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.StrtLevel)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.LastLevel)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Term)
     </td>
     <td>
         <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

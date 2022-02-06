@@ -67,8 +67,8 @@ namespace BRFT_Booking.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", booking.RoomID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "AcadPlan", booking.UserID);
+            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "Name", booking.RoomID);
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName", booking.UserID);
             return View(booking);
         }
 
@@ -85,8 +85,8 @@ namespace BRFT_Booking.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", booking.RoomID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "AcadPlan", booking.UserID);
+            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "Name", booking.RoomID);
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName", booking.UserID);
             return View(booking);
         }
 
@@ -122,8 +122,8 @@ namespace BRFT_Booking.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", booking.RoomID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "AcadPlan", booking.UserID);
+            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "Name", booking.RoomID);
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName", booking.UserID);
             return View(booking);
         }
 

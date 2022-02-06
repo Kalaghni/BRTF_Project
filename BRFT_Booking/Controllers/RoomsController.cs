@@ -25,15 +25,15 @@ namespace BRFT_Booking.Controllers
             string actionButton, string sortDirection = "asc", string sortField = "Room")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
-            var rooms = from r in _context.Rooms
-                        .AsNoTracking()
-                        select r;
+            var rooms = _context.Rooms
+                        .Include(a => a.Area)
+                        .AsNoTracking();
 
             string[] sortOptions = new[] { "Area", "Room", "Description", "Limit" };
 
             if (!String.IsNullOrEmpty(SearchArea))
             {
-                rooms = rooms.Where(r => r.Area.ToUpper().Contains(SearchArea.ToUpper()));
+                rooms = rooms.Where(r => r.Area.Name.ToUpper().Contains(SearchArea.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
             if (!String.IsNullOrEmpty(SearchRoom))
@@ -120,6 +120,7 @@ namespace BRFT_Booking.Controllers
             }
 
             var room = await _context.Rooms
+                .Include(a => a.Area)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (room == null)
             {
@@ -132,6 +133,7 @@ namespace BRFT_Booking.Controllers
         // GET: Rooms/Create
         public IActionResult Create()
         {
+            ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
             return View();
         }
 
@@ -140,7 +142,7 @@ namespace BRFT_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Area,Name,Description,Limit,Enabled")] Room room)
+        public async Task<IActionResult> Create([Bind("ID,AreaID,Name,Description,Limit,Enabled")] Room room)
         {
             if (ModelState.IsValid)
             {
@@ -148,6 +150,7 @@ namespace BRFT_Booking.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
             return View(room);
         }
 
@@ -164,6 +167,7 @@ namespace BRFT_Booking.Controllers
             {
                 return NotFound();
             }
+            ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
             return View(room);
         }
 
@@ -172,7 +176,7 @@ namespace BRFT_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Area,Name,Description,Limit,Enabled")] Room room)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,AreaID,Name,Description,Limit,Enabled")] Room room)
         {
             if (id != room.ID)
             {
@@ -199,6 +203,7 @@ namespace BRFT_Booking.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
             return View(room);
         }
 

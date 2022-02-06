@@ -16,6 +16,20 @@ namespace BRFT_Booking.Data.BRFTMigrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.21");
 
+            modelBuilder.Entity("BRFT_Booking.Models.Area", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Areas");
+                });
+
             modelBuilder.Entity("BRFT_Booking.Models.Booking", b =>
                 {
                     b.Property<int>("ID")
@@ -37,14 +51,47 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     b.ToTable("Bookings");
                 });
 
+            modelBuilder.Entity("BRFT_Booking.Models.ProgramTerm", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AcadPlan")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("LastLevel")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("StrtLevel")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Term")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("ProgramTerms");
+                });
+
             modelBuilder.Entity("BRFT_Booking.Models.Room", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Area")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("AreaID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
@@ -66,6 +113,8 @@ namespace BRFT_Booking.Data.BRFTMigrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("AreaID");
+
                     b.ToTable("Rooms");
                 });
 
@@ -75,13 +124,8 @@ namespace BRFT_Booking.Data.BRFTMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AcadPlan")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -95,22 +139,22 @@ namespace BRFT_Booking.Data.BRFTMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("LastLevel")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("MName")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("StrtLevel")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Password")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("StudentID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Term")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ID");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("StudentID")
                         .IsUnique();
@@ -130,6 +174,24 @@ namespace BRFT_Booking.Data.BRFTMigrations
                         .WithMany("Bookings")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BRFT_Booking.Models.ProgramTerm", b =>
+                {
+                    b.HasOne("BRFT_Booking.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BRFT_Booking.Models.Room", b =>
+                {
+                    b.HasOne("BRFT_Booking.Models.Area", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

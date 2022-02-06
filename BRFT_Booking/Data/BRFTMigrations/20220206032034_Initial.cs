@@ -7,22 +7,16 @@ namespace BRFT_Booking.Data.BRFTMigrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Rooms",
+                name: "Areas",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Area = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Rule = table.Column<string>(nullable: true),
-                    Limit = table.Column<int>(nullable: true),
-                    MaxNumofBookings = table.Column<int>(nullable: true),
-                    Enabled = table.Column<bool>(nullable: false)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rooms", x => x.ID);
+                    table.PrimaryKey("PK_Areas", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -35,16 +29,63 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     FName = table.Column<string>(nullable: false),
                     MName = table.Column<string>(nullable: true),
                     LName = table.Column<string>(nullable: false),
+                    Role = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: true),
+                    Active = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rooms",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AreaID = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Rule = table.Column<string>(nullable: true),
+                    Limit = table.Column<int>(nullable: true),
+                    MaxNumofBookings = table.Column<int>(nullable: true),
+                    Enabled = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rooms", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Rooms_Areas_AreaID",
+                        column: x => x.AreaID,
+                        principalTable: "Areas",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProgramTerms",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserID = table.Column<int>(nullable: false),
                     AcadPlan = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: false),
                     StrtLevel = table.Column<int>(nullable: false),
                     LastLevel = table.Column<bool>(nullable: false),
                     Term = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.ID);
+                    table.PrimaryKey("PK_ProgramTerms", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ProgramTerms_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,6 +125,22 @@ namespace BRFT_Booking.Data.BRFTMigrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProgramTerms_UserID",
+                table: "ProgramTerms",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rooms_AreaID",
+                table: "Rooms",
+                column: "AreaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_StudentID",
                 table: "Users",
                 column: "StudentID",
@@ -96,10 +153,16 @@ namespace BRFT_Booking.Data.BRFTMigrations
                 name: "Bookings");
 
             migrationBuilder.DropTable(
+                name: "ProgramTerms");
+
+            migrationBuilder.DropTable(
                 name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Areas");
         }
     }
 }

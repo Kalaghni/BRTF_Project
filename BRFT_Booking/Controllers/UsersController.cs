@@ -30,22 +30,11 @@ namespace BRFT_Booking.Controllers
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
-            string[] sortOptions = new[] { "StudentID", "Full Name", "Start Level", "Term" };
+            string[] sortOptions = new[] { "StudentID" };
 
             var users = from u in _context.Users
                         .AsNoTracking()
                         select u;
-
-            if (!String.IsNullOrEmpty(SearchPlan))
-            {
-                users = users.Where(u => u.AcadPlan.ToUpper().Contains(SearchPlan.ToUpper()));
-                ViewData["Filtering"] = " show";
-            }
-            if (!String.IsNullOrEmpty(SearchDescription))
-            {
-                users = users.Where(u => u.Description.ToUpper().Contains(SearchDescription.ToUpper()));
-                ViewData["Filtering"] = " show";
-            }
 
             if (!String.IsNullOrEmpty(actionButton))
             {
@@ -68,28 +57,6 @@ namespace BRFT_Booking.Controllers
                 else
                 {
                     users = users.OrderBy(u => u.StudentID);
-                }
-            }
-            else if (sortField == "Start Level")
-            {
-                if (sortDirection == "asc")
-                {
-                    users = users.OrderByDescending(u => u.StrtLevel);
-                }
-                else
-                {
-                    users = users.OrderBy(u => u.StrtLevel);
-                }
-            }
-            else if (sortField == "Term")
-            {
-                if (sortDirection == "asc")
-                {
-                    users = users.OrderByDescending(u => u.Term);
-                }
-                else
-                {
-                    users = users.OrderBy(u => u.Term);
                 }
             }
             else
@@ -283,11 +250,11 @@ namespace BRFT_Booking.Controllers
                     MName = workSheet.Cells[row, 3].Text,
                     LName = workSheet.Cells[row, 4].Text,
                     StudentID = Int32.Parse(workSheet.Cells[row, 5].Text),
-                    AcadPlan = workSheet.Cells[row, 7].Text,
-                    Description = workSheet.Cells[row, 8].Text,
+                    //AcadPlan = workSheet.Cells[row, 7].Text,
+                    //Description = workSheet.Cells[row, 8].Text,
                     Email = workSheet.Cells[row, 9].Text,
-                    StrtLevel = Int32.Parse(workSheet.Cells[row, 10].Text),
-                    LastLevel = bool.Parse(workSheet.Cells[row, 10].Text),
+                    //StrtLevel = Int32.Parse(workSheet.Cells[row, 10].Text),
+                    //LastLevel = bool.Parse(workSheet.Cells[row, 10].Text),
                 };
                 userList.Add(u);
             }

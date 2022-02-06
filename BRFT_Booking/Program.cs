@@ -27,6 +27,8 @@ namespace BRFT_Booking
                     var context = services.GetRequiredService<BRFTContext>();
                     context.Database.Migrate();
                     BRFTSeedData.Initialize(services);
+                    var identityContext = services.GetRequiredService<ApplicationDbContext>();
+                    ApplicationSeedData.SeedAsync(identityContext, services).Wait();
                 }
                 catch (Exception ex)
                 {

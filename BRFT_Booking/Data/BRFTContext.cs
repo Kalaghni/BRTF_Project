@@ -16,7 +16,11 @@ namespace BRFT_Booking.Data
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<ProgramTerm> ProgramTerms { get; set; }
+
         public DbSet<Room> Rooms { get; set; }
+
+        public DbSet<Area> Areas { get; set; }
 
         public DbSet<Booking> Bookings { get; set; }
 
@@ -41,6 +45,11 @@ namespace BRFT_Booking.Data
             modelBuilder.Entity<User>()
                 .HasIndex(a => a.StudentID)
                 .IsUnique();
+
+            modelBuilder.Entity<User>()
+            .HasIndex(a => new { a.Email })
+            .IsUnique();
+
         }
     }
 }

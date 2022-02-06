@@ -15,8 +15,9 @@ namespace BRFT_Booking.Models
 
         public int ID { get; set; }
 
-        
-        public string Area { get; set; }
+        [Display(Name = "Area")]
+        public Area Area { get; set; }
+        public int AreaID { get; set; }
 
         [Display(Name = "Room")]
         public string Name { get; set; }

@@ -45,34 +45,9 @@
                 <span asp-validation-for="LName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AcadPlan" class="control-label"></label>
-                <input asp-for="AcadPlan" data-toggle="tooltip" title="Academic plan that the student is enrolled in" placeholder="e.g P0122" class="form-control" />
-                <span asp-validation-for="AcadPlan" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" data-toggle="tooltip" title="Description of the students academic plan" placeholder="e.g Broadcasting" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" data-toggle="tooltip" title="Students Email" placeholder="e.g JDoe@gmail.com" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StrtLevel" class="control-label"></label>
-                <input asp-for="StrtLevel" data-toggle="tooltip" title="The level the student is starting at" placeholder="e.g Start Level" class="form-control" />
-                <span asp-validation-for="StrtLevel" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="LastLevel" /> @Html.DisplayNameFor(model => model.LastLevel)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Term" class="control-label"></label>
-                <input asp-for="Term" data-toggle="tooltip" title="The term the student is enrolled in" placeholder="e.g 1204" class="form-control" />
-                <span asp-validation-for="Term" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
