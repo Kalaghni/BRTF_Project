@@ -72,6 +72,9 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     b.Property<int>("StrtLevel")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("StudentID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Term")
                         .HasColumnType("INTEGER");
 

@@ -256,7 +256,7 @@ namespace BRFT_Booking.Controllers
             List<User> userList = new List<User>();
             List<ProgramTerm> userPrograms = new List<ProgramTerm>();
 
-            for (int row = start.Row; row <= end.Row; row++)
+            for (int row = start.Row + 1; row <= end.Row; row++)
             {
                 // Row by row...
                 User u = new User
@@ -269,7 +269,7 @@ namespace BRFT_Booking.Controllers
                 };
                 ProgramTerm p = new ProgramTerm
                 {
-                    UserID = Int32.Parse(workSheet.Cells[row, 1].Text),
+                    StudentID = Int32.Parse(workSheet.Cells[row, 1].Text), //studentID
                     AcadPlan = workSheet.Cells[row, 5].Text,
                     Description = workSheet.Cells[row, 6].Text,
                     StrtLevel = Int32.Parse(workSheet.Cells[row, 8].Text),
@@ -281,6 +281,13 @@ namespace BRFT_Booking.Controllers
             }
             _context.Users.AddRange(userList);
             //_context.ProgramTerms.AddRange(userPrograms);
+            _context.SaveChanges();
+
+            foreach (var p in userPrograms)
+            {
+                p.UserID = _context.Users.Where(u => u.StudentID == p.StudentID).FirstOrDefault().ID;
+            }
+            _context.ProgramTerms.AddRange(userPrograms);
             _context.SaveChanges();
             return RedirectToAction("Index", "Users");
         }

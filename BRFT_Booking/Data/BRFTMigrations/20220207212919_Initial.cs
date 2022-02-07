@@ -71,6 +71,7 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     UserID = table.Column<int>(nullable: false),
+                    StudentID = table.Column<int>(nullable: true),
                     AcadPlan = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: false),
                     StrtLevel = table.Column<int>(nullable: false),

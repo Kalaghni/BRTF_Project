@@ -10,10 +10,13 @@ namespace BRFT_Booking.Models
     {
         public int ID { get; set; }
 
-        [Display(Name ="User")]
+        [Display(Name = "User")]
         [Required(ErrorMessage = "User is required.")]
         public User User { get; set; }
         public int UserID { get; set; }
+
+        [Display(Name = "Student ID")]
+        public int? StudentID { get; set; }
 
         [Display(Name = "Academic Plan")]
         [Required(ErrorMessage = "Academic Plan is required.")]
