@@ -65,8 +65,9 @@ namespace BRFT_Booking.Data.BRFTMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("LastLevel")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("LastLevel")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("StrtLevel")
                         .HasColumnType("INTEGER");

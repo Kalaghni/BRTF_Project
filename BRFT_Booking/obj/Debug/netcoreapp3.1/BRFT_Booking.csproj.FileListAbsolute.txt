@@ -1426,3 +1426,9 @@ C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\System.Xml.XPath.XmlDocument.dll
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\UserVM\Edit.cshtml.g.cs
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\UserVM\Index.cshtml.g.cs
+C:\Users\Zac\OneDrive\Desktop\GitHub\1180\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\EPPlus.dll
+C:\Users\Zac\OneDrive\Desktop\GitHub\1180\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\System.Xml.XPath.XmlDocument.dll
+C:\Users\Zac\OneDrive\Desktop\GitHub\1180\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_PageSizeModal.cshtml.g.cs
+C:\Users\Zac\OneDrive\Desktop\GitHub\1180\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_PagingNavBar.cshtml.g.cs
+C:\Users\Zac\OneDrive\Desktop\GitHub\1180\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\UserVM\Edit.cshtml.g.cs
+C:\Users\Zac\OneDrive\Desktop\GitHub\1180\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\UserVM\Index.cshtml.g.cs

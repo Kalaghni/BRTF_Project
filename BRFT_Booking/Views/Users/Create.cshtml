@@ -8,19 +8,6 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label class="control-label">Upload Excel File:</label>
-                <input type="file" class="" name="theExcel" /><br />
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <input type="submit" value="Upload Data" class="btn btn-primary" />
-                    </div>
-                </div>
-            </div>
-        </form>
 
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -68,6 +55,7 @@
 }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script>$(document).ready(function(){
-              $('[data-toggle="tooltip"]').tooltip();
-            });</script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });</script>

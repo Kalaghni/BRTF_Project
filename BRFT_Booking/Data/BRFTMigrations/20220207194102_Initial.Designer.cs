@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRFT_Booking.Data.BRFTMigrations
 {
     [DbContext(typeof(BRFTContext))]
-    [Migration("20220206032034_Initial")]
+    [Migration("20220207194102_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,8 +67,9 @@ namespace BRFT_Booking.Data.BRFTMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("LastLevel")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("LastLevel")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("StrtLevel")
                         .HasColumnType("INTEGER");

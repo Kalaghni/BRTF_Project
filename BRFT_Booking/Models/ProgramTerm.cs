@@ -29,7 +29,7 @@ namespace BRFT_Booking.Models
 
         [Display(Name = "Last Level")]
         [Required(ErrorMessage = "Last Level is required.")]
-        public bool LastLevel { get; set; }
+        public string LastLevel { get; set; }
 
         [Display(Name = "Term")]
         [Required(ErrorMessage = "Term is required.")]

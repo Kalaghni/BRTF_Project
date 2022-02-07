@@ -241,7 +241,7 @@ namespace BRFT_Booking.Controllers
         [HttpPost]
         public async Task<IActionResult> InsertFromExcel(IFormFile theExcel)
         {
-            //TODO Add Error Handling to the files.
+            //TODO Add Error Handling to the files. Prevent duplication
             ExcelPackage excel;
             using (var memoryStream = new MemoryStream())
             {
@@ -254,28 +254,35 @@ namespace BRFT_Booking.Controllers
 
             //Start a new list to hold imported objects
             List<User> userList = new List<User>();
+            List<ProgramTerm> userPrograms = new List<ProgramTerm>();
 
             for (int row = start.Row; row <= end.Row; row++)
             {
                 // Row by row...
                 User u = new User
                 {
-                    ID = Int32.Parse(workSheet.Cells[row, 1].Text),
+                    StudentID = Int32.Parse(workSheet.Cells[row, 1].Text),
                     FName = workSheet.Cells[row, 2].Text,
                     MName = workSheet.Cells[row, 3].Text,
                     LName = workSheet.Cells[row, 4].Text,
-                    StudentID = Int32.Parse(workSheet.Cells[row, 5].Text),
-                    //AcadPlan = workSheet.Cells[row, 7].Text,
-                    //Description = workSheet.Cells[row, 8].Text,
-                    Email = workSheet.Cells[row, 9].Text,
-                    //StrtLevel = Int32.Parse(workSheet.Cells[row, 10].Text),
-                    //LastLevel = bool.Parse(workSheet.Cells[row, 10].Text),
+                    Email = workSheet.Cells[row, 7].Text,
+                };
+                ProgramTerm p = new ProgramTerm
+                {
+                    UserID = Int32.Parse(workSheet.Cells[row, 1].Text),
+                    AcadPlan = workSheet.Cells[row, 5].Text,
+                    Description = workSheet.Cells[row, 6].Text,
+                    StrtLevel = Int32.Parse(workSheet.Cells[row, 8].Text),
+                    LastLevel = workSheet.Cells[row, 9].Text,
+                    Term = Int32.Parse(workSheet.Cells[row, 10].Text),
                 };
                 userList.Add(u);
+                userPrograms.Add(p);
             }
             _context.Users.AddRange(userList);
+            //_context.ProgramTerms.AddRange(userPrograms);
             _context.SaveChanges();
-            return RedirectToAction("Index", "Lookups", new { Tab = "AppointmentReasonsTab" });
+            return RedirectToAction("Index", "Users");
         }
 
         private string ControllerName()
@@ -298,5 +305,7 @@ namespace BRFT_Booking.Controllers
         {
             return _context.Users.Any(e => e.ID == id);
         }
+
+        
     }
 }

@@ -74,7 +74,7 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     AcadPlan = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: false),
                     StrtLevel = table.Column<int>(nullable: false),
-                    LastLevel = table.Column<bool>(nullable: false),
+                    LastLevel = table.Column<string>(nullable: false),
                     Term = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
