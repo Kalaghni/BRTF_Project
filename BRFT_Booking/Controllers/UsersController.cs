@@ -24,17 +24,32 @@ namespace BRFT_Booking.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(string SearchPlan, string SearchDescription,
+        public async Task<IActionResult> Index(string SearchName, int? ProgramTermID,
             int? page, int? pageSizeID,
             string actionButton, string sortDirection = "asc", string sortField = "User")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
+
+            PopulateDropDownLists();
 
             string[] sortOptions = new[] { "StudentID" };
 
             var users = from u in _context.Users
                         .AsNoTracking()
                         select u;
+
+            if (ProgramTermID.HasValue)
+            {
+                users = users.Where(u => u.StudentID == ProgramTermID);
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(SearchName))
+            {
+                users = users.Where(u => u.LName.ToUpper().Contains(SearchName.ToUpper())
+                                       || u.FName.ToUpper().Contains(SearchName.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+
 
             if (!String.IsNullOrEmpty(actionButton))
             {
@@ -266,6 +281,17 @@ namespace BRFT_Booking.Controllers
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private SelectList AcadPlanList(int? selectedId)
+        {
+            return new SelectList(_context.ProgramTerms
+                .OrderBy(u => u.AcadPlan), "ID", "AcadPlan", selectedId);
+        }
+
+        private void PopulateDropDownLists(User users = null)
+        {
+            ViewData["ProgramTermID"] = AcadPlanList(users?.ID);
         }
 
         private bool UserExists(int id)

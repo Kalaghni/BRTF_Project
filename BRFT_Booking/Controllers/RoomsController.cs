@@ -21,19 +21,22 @@ namespace BRFT_Booking.Controllers
         }
 
         // GET: Rooms
-        public async Task<IActionResult> Index(string SearchArea, string SearchRoom, int? page, int? pageSizeID,
+        public async Task<IActionResult> Index(string SearchRoom, int? AreaID, int? page, int? pageSizeID,
             string actionButton, string sortDirection = "asc", string sortField = "Room")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
+
+            PopulateDropDownLists();
+
             var rooms = _context.Rooms
                         .Include(a => a.Area)
                         .AsNoTracking();
 
             string[] sortOptions = new[] { "Area", "Room", "Description", "Limit" };
 
-            if (!String.IsNullOrEmpty(SearchArea))
+            if (AreaID.HasValue)
             {
-                rooms = rooms.Where(r => r.Area.Name.ToUpper().Contains(SearchArea.ToUpper()));
+                rooms = rooms.Where(r => r.AreaID == AreaID);
                 ViewData["Filtering"] = " show";
             }
             if (!String.IsNullOrEmpty(SearchRoom))
@@ -239,6 +242,17 @@ namespace BRFT_Booking.Controllers
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private SelectList AreaSelectList(int? selectedId)
+        {
+            return new SelectList(_context.Areas
+                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+        }
+
+        private void PopulateDropDownLists(Room rooms = null)
+        {
+            ViewData["AreaID"] = AreaSelectList(rooms?.AreaID);
         }
 
         private bool RoomExists(int id)
