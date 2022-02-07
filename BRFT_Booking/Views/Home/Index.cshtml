@@ -2,6 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 <body style="background-color:lightsteelblue;">
+    <!--
     <div class="text-center">
         <br />
         <br />
@@ -13,8 +14,18 @@
         <br />
         <br />
         <a class="nav-link font-weight-bolder" style="color: black; font-size: 55px" asp-area="" asp-controller="Users" asp-action="Index">Get Started</a>
-        <!--<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>  DO NOT DELETE link could be useful for later-->
+        <!--<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>  DO NOT DELETE link could be useful for later
     </div>
+    -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title mt-0">Welcome to BRFT</h1>
+            <p class="hero-paragraph">Doors must be open by department faculty during school hours (M-F 8:30am to 5:30pm). Security will only open doors during off hours.</p>
+            <div class="hero-cta">
+                <a class="button button-primary" asp-area="" asp-controller="Rooms" asp-action="Index">Start Booking</a>
+            </div>
+        </div>
+    </section>
 </body>
 
 <!--; width: fit-content;padding: 60px 190px-->
