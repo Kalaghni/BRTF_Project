@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BRFT_Booking.Data;
 using BRFT_Booking.Models;
+using BRFT_Booking.Utilities;
 
 namespace BRFT_Booking.Controllers
 {
@@ -20,10 +21,68 @@ namespace BRFT_Booking.Controllers
         }
 
         // GET: ProgramTerms
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchDescription, int? page, int? pageSizeID,
+            string actionButton, string sortDirection = "asc", string sortField = "ProgramTerms")
         {
-            var bRFTContext = _context.ProgramTerms.Include(p => p.User);
-            return View(await bRFTContext.ToListAsync());
+            ViewData["Filtering"] = "btn-outline-secondary";
+
+            var terms = _context.ProgramTerms
+                .Include(t => t.User)
+                .AsNoTracking();
+
+            string[] sortOptions = new[] { "Academic Plan", "Description" };
+
+            if (!String.IsNullOrEmpty(SearchDescription))
+            {
+                terms = terms.Where(t => t.Description.ToUpper().Contains(SearchDescription.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+
+            if (!String.IsNullOrEmpty(actionButton))
+            {
+                if (actionButton != "Filter")
+                {
+                    if (actionButton == sortField)
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;
+                }
+            }
+            if (sortField == "Academic Plan")
+            {
+                if (sortDirection == "asc")
+                {
+                    terms = terms.OrderByDescending(t => t.AcadPlan);
+                }
+                else
+                {
+                    terms = terms.OrderBy(t => t.AcadPlan);
+                }
+            }
+            else if (sortField == "Description")
+            {
+                if (sortDirection == "asc")
+                {
+                    terms = terms.OrderByDescending(t => t.Description);
+                }
+                else
+                {
+                    terms = terms.OrderBy(t => t.Description);
+                }
+            }
+
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
+
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
+
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+
+            var pagedData = await PaginatedList<ProgramTerm>.CreateAsync(terms.AsNoTracking(), page ?? 1, pageSize);
+
+            return View(pagedData);
         }
 
         // GET: ProgramTerms/Details/5
@@ -150,6 +209,11 @@ namespace BRFT_Booking.Controllers
             _context.ProgramTerms.Remove(programTerm);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private string ControllerName()
+        {
+            return this.ControllerContext.RouteData.Values["controller"].ToString();
         }
 
         private bool ProgramTermExists(int id)
