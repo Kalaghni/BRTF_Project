@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRFT_Booking.Data.BRFTMigrations
 {
     [DbContext(typeof(BRFTContext))]
-    [Migration("20220208021525_Initial")]
+    [Migration("20220208213617_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,16 +38,19 @@ namespace BRFT_Booking.Data.BRFTMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("BookingRequested")
+                    b.Property<DateTime?>("BookingRequested")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("EndTime")
+                    b.Property<DateTime?>("EndTime")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RoomID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime?>("StartTime")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserID")
@@ -83,8 +86,10 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     b.Property<int>("StrtLevel")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("StudentID")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("StudentID")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(7);
 
                     b.Property<int>("Term")
                         .HasColumnType("INTEGER");
@@ -163,8 +168,10 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     b.Property<string>("Role")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("StudentID")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("StudentID")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(7);
 
                     b.HasKey("ID");
 

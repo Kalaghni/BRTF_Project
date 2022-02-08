@@ -1152,7 +1152,6 @@ C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRFT_Booking.csproj.AssemblyReference.cache
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRFT_Booking.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRFT_Booking.AssemblyInfoInputs.cache
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRFT_Booking.AssemblyInfo.cs
@@ -1450,3 +1449,4 @@ C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Details.cshtml.g.cs
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Edit.cshtml.g.cs
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Index.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRFT_Booking.csproj.AssemblyReference.cache

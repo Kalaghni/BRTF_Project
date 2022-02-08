@@ -179,23 +179,26 @@ namespace BRFT_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,StudentID,FName,MName,LName,AcadPlan,Description,Email,StrtLevel,LastLevel,Term")] User user)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != user.ID)
+            var userToUpdate = await _context.Users.FirstOrDefaultAsync(u => u.ID == id);
+
+            if (userToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (await TryUpdateModelAsync<User>(userToUpdate, "", u => u.StudentID, u => u.FName, 
+                u => u.MName, u => u.LName, u => u.Role, u => u.Email, u => u.Password))
             {
                 try
                 {
-                    _context.Update(user);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.ID))
+                    if (!UserExists(userToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -204,9 +207,21 @@ namespace BRFT_Booking.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException dex)
+                {
+                    if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed"))
+                    {
+                        ModelState.AddModelError("StudentID", "Unable to save changes. Remember, you cannot have duplicate student ID.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                    }
+                }
             }
-            return View(user);
+
+            PopulateDropDownLists(userToUpdate);
+            return View(userToUpdate);
         }
 
         // GET: Users/Delete/5
