@@ -34,10 +34,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Email)
+                @Html.DisplayFor(modelItem => item.User.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Room.ID)
+                @Html.DisplayFor(modelItem => item.Room.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.BookingRequested)
