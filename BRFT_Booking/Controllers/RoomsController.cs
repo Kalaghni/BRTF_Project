@@ -22,7 +22,7 @@ namespace BRFT_Booking.Controllers
 
         // GET: Rooms
         public async Task<IActionResult> Index(string SearchRoom, int? AreaID, int? page, int? pageSizeID,
-            string actionButton, string sortDirection = "asc", string sortField = "Room")
+            string? enabled, string actionButton, string sortDirection = "asc", string sortField = "Room")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
@@ -44,6 +44,21 @@ namespace BRFT_Booking.Controllers
                 rooms = rooms.Where(r => r.Name.ToUpper().Contains(SearchRoom.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
+            if (enabled == "N/A")
+            {
+                ViewData["Filtering"] = " show";
+            }
+            else if (enabled == "enabled")
+            {
+                rooms = rooms.Where(r => r.Enabled == true);
+                ViewData["Filtering"] = " show";
+            }
+            else
+            {
+                rooms = rooms.Where(r => r.Enabled == false);
+                ViewData["Filtering"] = " show";
+            }
+
 
             if (!String.IsNullOrEmpty(actionButton))
             {
@@ -87,6 +102,17 @@ namespace BRFT_Booking.Controllers
                 else
                 {
                     rooms = rooms.OrderBy(r => r.Limit);
+                }
+            }
+            else if (sortField == "Enabled")
+            {
+                if (sortDirection == "asc")
+                {
+                    rooms = rooms.OrderByDescending(r => r.Enabled);
+                }
+                else
+                {
+                    rooms = rooms.OrderBy(r => r.Enabled);
                 }
             }
             else
