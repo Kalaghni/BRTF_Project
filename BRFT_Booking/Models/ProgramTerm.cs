@@ -16,7 +16,10 @@ namespace BRFT_Booking.Models
         public int UserID { get; set; }
 
         [Display(Name = "Student ID")]
-        public int? StudentID { get; set; }
+        [StringLength(7, ErrorMessage = "Your student ID must be 7 numbers long")]
+        [Range(0, 9999999, ErrorMessage = "Your student ID must only contain numerical values.")]
+        [Required(ErrorMessage = "User must have a student ID.")]
+        public string? StudentID { get; set; }
 
         [Display(Name = "Academic Plan")]
         [Required(ErrorMessage = "Academic Plan is required.")]

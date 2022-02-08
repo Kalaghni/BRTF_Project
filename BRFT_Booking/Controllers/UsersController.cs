@@ -40,7 +40,7 @@ namespace BRFT_Booking.Controllers
 
             if (ProgramTermID.HasValue)
             {
-                users = users.Where(u => u.StudentID == ProgramTermID);
+                users = users.Where(u => u.StudentID == ProgramTermID.ToString());
                 ViewData["Filtering"] = " show";
             }
             if (!String.IsNullOrEmpty(SearchName))
@@ -261,7 +261,7 @@ namespace BRFT_Booking.Controllers
                 // Row by row...
                 User u = new User
                 {
-                    StudentID = Int32.Parse(workSheet.Cells[row, 1].Text),
+                    StudentID = workSheet.Cells[row, 1].Text,
                     FName = workSheet.Cells[row, 2].Text,
                     MName = workSheet.Cells[row, 3].Text,
                     LName = workSheet.Cells[row, 4].Text,
@@ -269,7 +269,7 @@ namespace BRFT_Booking.Controllers
                 };
                 ProgramTerm p = new ProgramTerm
                 {
-                    StudentID = Int32.Parse(workSheet.Cells[row, 1].Text), //studentID
+                    StudentID = workSheet.Cells[row, 1].Text, //studentID
                     AcadPlan = workSheet.Cells[row, 5].Text,
                     Description = workSheet.Cells[row, 6].Text,
                     StrtLevel = Int32.Parse(workSheet.Cells[row, 8].Text),

@@ -1438,3 +1438,10 @@ C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3
 C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\UserVM\Index.cshtml.g.cs
 C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\UserVM\Edit.cshtml.g.cs
 C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\UserVM\Index.cshtml.g.cs
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\UserVM\Edit.cshtml.g.cs
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\UserVM\Index.cshtml.g.cs
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Create.cshtml.g.cs
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Delete.cshtml.g.cs
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Details.cshtml.g.cs
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Edit.cshtml.g.cs
+D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Index.cshtml.g.cs
