@@ -9836,24 +9836,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vogia\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\thesa\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vogia\\Documents\\GitHub\\BRFT_Project\\BRFT_Booking\\BRFT_Booking.csproj",
+      "projectUniqueName": "C:\\Users\\thesa\\OneDrive\\Documents\\GitHub\\BRFT_Project\\BRFT_Booking\\BRFT_Booking.csproj",
       "projectName": "BRFT_Booking",
-      "projectPath": "C:\\Users\\vogia\\Documents\\GitHub\\BRFT_Project\\BRFT_Booking\\BRFT_Booking.csproj",
-      "packagesPath": "C:\\Users\\vogia\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vogia\\Documents\\GitHub\\BRFT_Project\\BRFT_Booking\\obj\\",
+      "projectPath": "C:\\Users\\thesa\\OneDrive\\Documents\\GitHub\\BRFT_Project\\BRFT_Booking\\BRFT_Booking.csproj",
+      "packagesPath": "C:\\Users\\thesa\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\thesa\\OneDrive\\Documents\\GitHub\\BRFT_Project\\BRFT_Booking\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\vogia\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\thesa\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -9922,6 +9917,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[3.1.22, 3.1.22]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"

@@ -44,19 +44,18 @@ namespace BRFT_Booking.Controllers
                 rooms = rooms.Where(r => r.Name.ToUpper().Contains(SearchRoom.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
-            if (enabled == "N/A")
+            if (!String.IsNullOrEmpty(enabled))
             {
-                ViewData["Filtering"] = " show";
-            }
-            else if (enabled == "enabled")
-            {
-                rooms = rooms.Where(r => r.Enabled == true);
-                ViewData["Filtering"] = " show";
-            }
-            else
-            {
-                rooms = rooms.Where(r => r.Enabled == false);
-                ViewData["Filtering"] = " show";
+                if (enabled == "enabled")
+                {
+                    rooms = rooms.Where(r => r.Enabled == true);
+                    ViewData["Filtering"] = " show";
+                }
+                else if (enabled == "disabled")
+                {
+                    rooms = rooms.Where(r => r.Enabled == false);
+                    ViewData["Filtering"] = " show";
+                }
             }
 
 

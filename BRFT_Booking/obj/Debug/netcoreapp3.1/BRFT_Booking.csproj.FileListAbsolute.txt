@@ -1450,3 +1450,8 @@ C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Edit.cshtml.g.cs
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Index.cshtml.g.cs
 C:\Users\vogia\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRFT_Booking.csproj.AssemblyReference.cache
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Create.cshtml.g.cs
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Delete.cshtml.g.cs
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Details.cshtml.g.cs
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Edit.cshtml.g.cs
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms\Index.cshtml.g.cs
