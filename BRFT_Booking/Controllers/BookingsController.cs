@@ -50,7 +50,7 @@ namespace BRFT_Booking.Controllers
         public IActionResult Create()
         {
             ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace BRFT_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID")] Booking booking)
+        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,BookingRequested,StartTime,EndTime")] Booking booking)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace BRFT_Booking.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "Name", booking.RoomID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName", booking.UserID);
+            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", booking.RoomID);
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email", booking.UserID);
             return View(booking);
         }
 
@@ -85,8 +85,8 @@ namespace BRFT_Booking.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "Name", booking.RoomID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName", booking.UserID);
+            ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email", booking.UserID);
             return View(booking);
         }
 
@@ -95,7 +95,7 @@ namespace BRFT_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID")] Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,BookingRequested,StartTime,EndTime")] Booking booking)
         {
             if (id != booking.ID)
             {
@@ -122,8 +122,8 @@ namespace BRFT_Booking.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "Name", booking.RoomID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName", booking.UserID);
+            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", booking.RoomID);
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email", booking.UserID);
             return View(booking);
         }
 

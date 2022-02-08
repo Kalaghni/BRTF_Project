@@ -24,6 +24,21 @@
                 <span asp-validation-for="RoomID" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="BookingRequested" class="control-label"></label>
+                <input asp-for="BookingRequested" class="form-control" />
+                <span asp-validation-for="BookingRequested" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartTime" class="control-label"></label>
+                <input asp-for="StartTime" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndTime" class="control-label"></label>
+                <input asp-for="EndTime" class="form-control" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

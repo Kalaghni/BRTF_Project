@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BRFT_Booking.Data.BRFTMigrations
 {
@@ -96,7 +97,10 @@ namespace BRFT_Booking.Data.BRFTMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     UserID = table.Column<int>(nullable: false),
-                    RoomID = table.Column<int>(nullable: false)
+                    RoomID = table.Column<int>(nullable: false),
+                    BookingRequested = table.Column<DateTime>(nullable: false),
+                    StartTime = table.Column<DateTime>(nullable: false),
+                    EndTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,6 +1,8 @@
 ﻿@model BRFT_Booking.Models.Booking
 
-@{ ViewData["Title"] = "Create"; }
+@{
+    ViewData["Title"] = "Create";
+}
 
 <h1>Create</h1>
 
@@ -12,11 +14,26 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserID" class="control-label"></label>
-                <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
+                <select asp-for="UserID" class ="form-control" asp-items="ViewBag.UserID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="RoomID" class="control-label"></label>
-                <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+                <select asp-for="RoomID" class ="form-control" asp-items="ViewBag.RoomID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BookingRequested" class="control-label"></label>
+                <input asp-for="BookingRequested" class="form-control" />
+                <span asp-validation-for="BookingRequested" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartTime" class="control-label"></label>
+                <input asp-for="StartTime" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndTime" class="control-label"></label>
+                <input asp-for="EndTime" class="form-control" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -32,9 +49,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });</script>

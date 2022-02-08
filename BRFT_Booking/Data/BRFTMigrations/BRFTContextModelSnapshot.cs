@@ -36,8 +36,17 @@ namespace BRFT_Booking.Data.BRFTMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("BookingRequested")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("RoomID")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserID")
                         .HasColumnType("INTEGER");

@@ -9836,25 +9836,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Zac\\.nuget\\packages\\": {},
+    "C:\\Users\\Curtis\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Zac\\OneDrive\\Desktop\\GitHub\\1180\\BRFT_Project\\BRFT_Booking\\BRFT_Booking.csproj",
+      "projectUniqueName": "C:\\Users\\Curtis\\Documents\\GitHub\\BRFT_Project\\BRFT_Booking\\BRFT_Booking.csproj",
       "projectName": "BRFT_Booking",
-      "projectPath": "C:\\Users\\Zac\\OneDrive\\Desktop\\GitHub\\1180\\BRFT_Project\\BRFT_Booking\\BRFT_Booking.csproj",
-      "packagesPath": "C:\\Users\\Zac\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Zac\\OneDrive\\Desktop\\GitHub\\1180\\BRFT_Project\\BRFT_Booking\\obj\\",
+      "projectPath": "C:\\Users\\Curtis\\Documents\\GitHub\\BRFT_Project\\BRFT_Booking\\BRFT_Booking.csproj",
+      "packagesPath": "C:\\Users\\Curtis\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Curtis\\Documents\\GitHub\\BRFT_Project\\BRFT_Booking\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\Zac\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Curtis\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BRFT_Booking.Models
 {
-    public class Booking
+    public class Booking : IValidatableObject
     {
         public int ID { get; set; }
 
@@ -17,5 +17,34 @@ namespace BRFT_Booking.Models
         [Display(Name = "Room")]
         public int RoomID { get; set; }
         public Room Room { get; set; }
+
+        [Required(ErrorMessage = "You must enter a day.")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Date Requested")]
+        public DateTime? BookingRequested { get; set; }
+
+        [Required(ErrorMessage = "You must enter a Start Time.")]
+        [DataType(DataType.Time)]
+        [Display(Name = "Start Time")]
+        public DateTime? StartTime { get; set; }
+
+        [Required(ErrorMessage = "You must enter a End Time.")]
+        [DataType(DataType.Time)]
+        [Display(Name = "End Time")]
+        public DateTime? EndTime { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (BookingRequested.GetValueOrDefault() < DateTime.Today)
+            {
+                yield return new ValidationResult("Cannot book dates from the past.", new[] { "BookingRequested" });
+            }
+
+            if (StartTime.GetValueOrDefault() > EndTime.GetValueOrDefault())
+                {
+                yield return new ValidationResult("The Start time cannot be after the end time.", new[] { "StartTime" });
+            }
+        }
     }
 }
