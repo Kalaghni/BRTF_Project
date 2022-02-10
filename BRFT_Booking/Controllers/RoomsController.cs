@@ -56,6 +56,10 @@ namespace BRFT_Booking.Controllers
                     rooms = rooms.Where(r => r.Enabled == false);
                     ViewData["Filtering"] = " show";
                 }
+                else
+                {
+                    rooms = rooms.Where(r => r.Enabled == false || r.Enabled == true );
+                }
             }
 
 
