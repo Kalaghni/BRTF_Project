@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using BRFT_Booking.Data;
-using BRFT_Booking.Models;
-using BRFT_Booking.Utilities;
+using BRTF_Booking.Data;
+using BRTF_Booking.Models;
+using BRTF_Booking.Utilities;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System.IO;
 
-namespace BRFT_Booking.Controllers
+namespace BRTF_Booking.Controllers
 {
     public class UsersController : Controller
     {

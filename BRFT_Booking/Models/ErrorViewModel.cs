@@ -1,6 +1,6 @@
 using System;
 
-namespace BRFT_Booking.Models
+namespace BRTF_Booking.Models
 {
     public class ErrorViewModel
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BRFT_Booking.ViewModels
+namespace BRTF_Booking.ViewModels
 {
     public class RoleVM
     {

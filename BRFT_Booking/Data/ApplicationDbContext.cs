@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BRFT_Booking.Data
+namespace BRTF_Booking.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BRFT_Booking.Utilities
+namespace BRTF_Booking.Utilities
 {
     public static class PageSizeHelper
     {

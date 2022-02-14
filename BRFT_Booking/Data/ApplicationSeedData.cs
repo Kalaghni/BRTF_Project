@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BRFT_Booking.Data
+namespace BRTF_Booking.Data
 {
     public static class ApplicationSeedData
     {

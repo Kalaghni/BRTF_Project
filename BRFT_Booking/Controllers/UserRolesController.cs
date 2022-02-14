@@ -1,5 +1,5 @@
-﻿using BRFT_Booking.Data;
-using BRFT_Booking.ViewModels;
+﻿using BRTF_Booking.Data;
+using BRTF_Booking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BRFT_Booking.Controllers
+namespace BRTF_Booking.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class UserRolesController : Controller

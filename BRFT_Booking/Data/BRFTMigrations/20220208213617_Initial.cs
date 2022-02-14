@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BRFT_Booking.Data.BRFTMigrations
+namespace BRTF_Booking.Data.BRFTMigrations
 {
     public partial class Initial : Migration
     {

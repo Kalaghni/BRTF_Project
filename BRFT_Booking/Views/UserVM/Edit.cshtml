@@ -1,4 +1,4 @@
-﻿@model BRFT_Booking.ViewModels.UserVM
+﻿@model BRTF_Booking.ViewModels.UserVM
 
 @{
     ViewBag.Title = "Edit";
@@ -25,7 +25,7 @@
                     <tr>
                         @{
                             int cnt = 0;
-                            List<BRFT_Booking.ViewModels.RoleVM> roles = ViewBag.Roles;
+                            List<BRTF_Booking.ViewModels.RoleVM> roles = ViewBag.Roles;
                             foreach (var role in roles)
                             {
                                 if (cnt++ % 3 == 0)

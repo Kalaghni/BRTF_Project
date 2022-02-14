@@ -1,11 +1,11 @@
-﻿using BRFT_Booking.ViewModels;
+﻿using BRTF_Booking.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BRFT_Booking.Models
+namespace BRTF_Booking.Models
 {
     public class User
     {

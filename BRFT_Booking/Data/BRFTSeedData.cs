@@ -1,4 +1,4 @@
-﻿using BRFT_Booking.Models;
+﻿using BRTF_Booking.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BRFT_Booking.Data
+namespace BRTF_Booking.Data
 {
     public static class BRFTSeedData
     {

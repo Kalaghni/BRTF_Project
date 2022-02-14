@@ -1,4 +1,4 @@
-using BRFT_Booking.Data;
+using BRTF_Booking.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BRFT_Booking
+namespace BRTF_Booking
 {
     public class Startup
     {

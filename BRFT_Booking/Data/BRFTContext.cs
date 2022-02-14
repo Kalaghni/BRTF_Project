@@ -1,11 +1,11 @@
-﻿using BRFT_Booking.Models;
+﻿using BRTF_Booking.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BRFT_Booking.Data
+namespace BRTF_Booking.Data
 {
     public class BRFTContext : DbContext
     {
