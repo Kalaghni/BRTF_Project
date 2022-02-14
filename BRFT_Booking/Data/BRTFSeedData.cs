@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace BRTF_Booking.Data
 {
-    public static class BRFTSeedData
+    public static class BRTFSeedData
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
 
-            using (var context = new BRFTContext(
-                serviceProvider.GetRequiredService<DbContextOptions<BRFTContext>>()))
+            using (var context = new BRTFContext(
+                serviceProvider.GetRequiredService<DbContextOptions<BRTFContext>>()))
             {
                 //Look for any Users(Students)
                 //if (!context.Users.Any())

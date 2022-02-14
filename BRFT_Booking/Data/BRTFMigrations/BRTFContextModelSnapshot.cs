@@ -3,16 +3,14 @@ using System;
 using BRTF_Booking.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BRTF_Booking.Data.BRFTMigrations
+namespace BRTF_Booking.Data.BRTFMigrations
 {
-    [DbContext(typeof(BRFTContext))]
-    [Migration("20220208213617_Initial")]
-    partial class Initial
+    [DbContext(typeof(BRTFContext))]
+    partial class BRTFContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

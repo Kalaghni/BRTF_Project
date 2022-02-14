@@ -31,7 +31,7 @@ namespace BRTF_Booking
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDbContext<BRFTContext>(options =>
+            services.AddDbContext<BRTFContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("BRFTContext")));
 

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BRTF_Booking.Data
 {
-    public class BRFTContext : DbContext
+    public class BRTFContext : DbContext
     {
-        public BRFTContext(DbContextOptions<BRFTContext> options)
+        public BRTFContext(DbContextOptions<BRTFContext> options)
         : base(options)
         {
         }

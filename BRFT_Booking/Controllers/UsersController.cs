@@ -16,9 +16,9 @@ namespace BRTF_Booking.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly BRFTContext _context;
+        private readonly BRTFContext _context;
 
-        public UsersController(BRFTContext context)
+        public UsersController(BRTFContext context)
         {
             _context = context;
         }
