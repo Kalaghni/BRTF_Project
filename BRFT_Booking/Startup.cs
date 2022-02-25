@@ -36,8 +36,7 @@ namespace BRTF_Booking
                     Configuration.GetConnectionString("BRFTContext")));
 
 
-            services.AddDefaultIdentity<IdentityUser>(options => options
-                .SignIn.RequireConfirmedAccount = false) 
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false) 
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 

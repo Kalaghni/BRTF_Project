@@ -13,7 +13,7 @@ namespace BRTF_Booking.Data
         {
             //Create Roles
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = { "Admin", "Student" };
+            string[] roleNames = { "Top-Level Admin", "Admin", "User" };
             IdentityResult roleResult;
             foreach (var roleName in roleNames)
             {
@@ -25,12 +25,27 @@ namespace BRTF_Booking.Data
             }
             //Create Users
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            if (userManager.FindByEmailAsync("ssmith@niagaracollege.ca").Result == null)
+            if (userManager.FindByEmailAsync("topleveladmin@niagaracollege.ca").Result == null)
             {
                 IdentityUser user = new IdentityUser
                 {
-                    UserName = "ssmith",
-                    Email = "ssmith@niagaracollege.ca"
+                    UserName = "tladmin",
+                    Email = "topleveladmin@niagaracollege.ca"
+                };
+
+                IdentityResult result = userManager.CreateAsync(user, "password").Result;
+
+                if (result.Succeeded)
+                {
+                    userManager.AddToRoleAsync(user, "Top-Level Admin").Wait();
+                }
+            }
+            if (userManager.FindByEmailAsync("admin@niagaracollege.ca").Result == null)
+            {
+                IdentityUser user = new IdentityUser
+                {
+                    UserName = "admin",
+                    Email = "admin@niagaracollege.ca"
                 };
 
                 IdentityResult result = userManager.CreateAsync(user, "password").Result;
@@ -40,34 +55,19 @@ namespace BRTF_Booking.Data
                     userManager.AddToRoleAsync(user, "Admin").Wait();
                 }
             }
-            if (userManager.FindByEmailAsync("bgracey@niagaracollege.ca").Result == null)
+            if (userManager.FindByEmailAsync("user@niagaracollege.ca").Result == null)
             {
                 IdentityUser user = new IdentityUser
                 {
-                    UserName = "bgracey",
-                    Email = "bgracey@niagaracollege.ca"
+                    UserName = "user",
+                    Email = "user@niagaracollege.ca"
                 };
 
                 IdentityResult result = userManager.CreateAsync(user, "password").Result;
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, "Admin").Wait();
-                }
-            }
-            if (userManager.FindByEmailAsync("bashford@niagaracollege.ca").Result == null)
-            {
-                IdentityUser user = new IdentityUser
-                {
-                    UserName = "bashford",
-                    Email = "bashford@niagaracollege.ca"
-                };
-
-                IdentityResult result = userManager.CreateAsync(user, "password").Result;
-
-                if (result.Succeeded)
-                {
-                    userManager.AddToRoleAsync(user, "Admin").Wait();
+                    userManager.AddToRoleAsync(user, "User").Wait();
                 }
             }
         }
