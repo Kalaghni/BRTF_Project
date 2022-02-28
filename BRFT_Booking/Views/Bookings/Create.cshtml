@@ -14,13 +14,20 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label class="control-label">User (Temporary)</label>
-                <select asp-for="UserID" class ="form-control" asp-items="ViewBag.UserID"></select>
+                <label class="control-label">User (Temporary):</label>
+                <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Area:</label>
+                <select asp-for="Room.AreaID" id="AreaID" name="AreaID" class="form-control" asp-items="ViewBag.AreaID">
+                    <option value="">All Areas:</option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label asp-for="RoomID" class="control-label"></label>
-                <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+                <select asp-for="RoomID" id="RoomID" name="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="BookingRequested" class="control-label"></label>
@@ -29,18 +36,57 @@
             </div>
             <div class="form-group">
                 <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" class="form-control" />
+                <input asp-for="StartTime" class="form-control" list="limittimeslist" />
                 <span asp-validation-for="StartTime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
+                <input asp-for="EndTime" class="form-control" list="limittimeslist" />
                 <span asp-validation-for="EndTime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+        <datalist id="limittimeslist">
+            <option value="09:00" />
+            <option value="09:15" />
+            <option value="09:30" />
+            <option value="09:45" />
+            <option value="10:00" />
+            <option value="10:15" />
+            <option value="10:30" />
+            <option value="10:45" />
+            <option value="11:00" />
+            <option value="11:15" />
+            <option value="11:30" />
+            <option value="11:45" />
+            <option value="12:00" />
+            <option value="12:15" />
+            <option value="12:30" />
+            <option value="12:45" />
+            <option value="13:00" />
+            <option value="13:15" />
+            <option value="13:30" />
+            <option value="13:45" />
+            <option value="14:00" />
+            <option value="14:15" />
+            <option value="14:30" />
+            <option value="14:45" />
+            <option value="15:00" />
+            <option value="15:15" />
+            <option value="15:30" />
+            <option value="15:45" />
+            <option value="16:00" />
+            <option value="16:15" />
+            <option value="16:30" />
+            <option value="16:45" />
+            <option value="17:00" />
+            <option value="17:15" />
+            <option value="17:30" />
+            <option value="17:45" />
+            <option value="18:00" />
+        </datalist>
     </div>
 </div>
 
@@ -50,4 +96,13 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/refreshDDL.js"></script>
+    <script type="text/javascript">
+        $('#AreaID').change(function () {
+            var selectedProvince = $("#AreaID").val();
+            var URL = "/Bookings/GetRooms/" + selectedProvince;
+            refreshDDL('RoomID', URL, true);
+        });
+    </script>
 }

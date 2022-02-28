@@ -22,7 +22,7 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
-            var bRFTContext = _context.Bookings.Include(b => b.Room).Include(b => b.User);
+            var bRFTContext = _context.Bookings.Include(b => b.User).Include(b => b.Room).ThenInclude(b => b.Area);
             return View(await bRFTContext.ToListAsync());
         }
 
@@ -49,8 +49,7 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings/Create
         public IActionResult Create()
         {
-            ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email");
+            PopulateDropDownLists();
             return View();
         }
 
@@ -67,8 +66,7 @@ namespace BRTF_Booking.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", booking.RoomID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email", booking.UserID);
+            PopulateDropDownLists();
             return View(booking);
         }
 
@@ -85,8 +83,7 @@ namespace BRTF_Booking.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email", booking.UserID);
+            PopulateDropDownLists();
             return View(booking);
         }
 
@@ -122,8 +119,7 @@ namespace BRTF_Booking.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoomID"] = new SelectList(_context.Rooms, "ID", "ID", booking.RoomID);
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email", booking.UserID);
+            PopulateDropDownLists();
             return View(booking);
         }
 
@@ -162,5 +158,38 @@ namespace BRTF_Booking.Controllers
         {
             return _context.Bookings.Any(e => e.ID == id);
         }
+
+        private SelectList AreaSelectList(int? selectedId)
+        {
+            return new SelectList(_context.Areas
+                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+        }
+
+
+        private SelectList RoomSelectList(int? AreaID, int? selectedId)
+        {
+            //The AreaID has been added so we can filter by it.
+            var query = from c in _context.Rooms.Include(c => c.Area)
+                        select c;
+            if (AreaID.HasValue)
+            {
+                query = query.Where(p => p.AreaID == AreaID);
+            }
+            return new SelectList(query.OrderBy(p => p.Name), "ID", "Name", selectedId);
+        }
+
+        [HttpGet]
+        public JsonResult GetRooms(int? ID)
+        {
+            return Json(RoomSelectList(ID, null));
+        }
+
+        private void PopulateDropDownLists()
+        {
+            ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email");
+            ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
+        }
+
     }
 }
