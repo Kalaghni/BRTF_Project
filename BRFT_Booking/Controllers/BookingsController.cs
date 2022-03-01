@@ -105,8 +105,15 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,BookingRequested,StartDate,EndDate")] Booking booking)
         {
-            if (id != booking.ID)
+            var bookingToUpdate = await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .FirstOrDefaultAsync(b => b.ID == id);
+
+            //Gives error if there is no booking
+            if (bookingToUpdate == null)
             {
+                
                 return NotFound();
             }
 
