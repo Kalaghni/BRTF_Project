@@ -70,7 +70,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    background-color: lightsteelblue;
+    background-color: #F0F4EF;
 }
 .footer {
   position: absolute;

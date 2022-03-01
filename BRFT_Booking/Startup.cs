@@ -72,6 +72,8 @@ namespace BRTF_Booking
                 options.SlidingExpiration = true;
             });
 
+
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

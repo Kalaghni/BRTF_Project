@@ -1,0 +1,62 @@
+﻿@model BRTF_Booking.Models.Booking
+
+@{
+    ViewData["Title"] = "Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Request Booking</h1>
+
+<h4>Booking</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Request">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label class="control-label">Area:</label>
+                <select asp-for="Room.AreaID" id="AreaID" name="AreaID" class="form-control" asp-items="ViewBag.AreaID">
+                    <option value="">Select an area:</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RoomID" class="control-label"></label>
+                <select asp-for="RoomID" id="RoomID" name="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" list="limittimeslist" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" list="limittimeslist" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Request" class="btn btn-primary" />
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Calendar">Back to calendar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/refreshDDL.js"></script>
+    <script type="text/javascript">
+
+        $('#AreaID').change(function () {
+            var selectedArea = $("#AreaID").val();
+            var URL = "/Bookings/GetCreateRooms/" + selectedArea;
+            refreshDDL('RoomID', URL, true);
+        });
+    </script>
+}

@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BRTF_Booking.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BRTF_Booking.Data
 {
     public static class ApplicationSeedData
     {
-        public static async Task SeedAsync(ApplicationDbContext context, IServiceProvider serviceProvider)
+        public static async Task SeedAsync(BRTFContext context, ApplicationDbContext identityContext, IServiceProvider serviceProvider)
         {
             //Create Roles
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = { "Top-Level Admin", "Admin", "User" };
+            string[] roleNames = { "Top-Level Admin", "Admin", "Student" };
             IdentityResult roleResult;
             foreach (var roleName in roleNames)
             {
@@ -25,12 +27,16 @@ namespace BRTF_Booking.Data
             }
             //Create Users
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            if (userManager.FindByEmailAsync("topleveladmin@niagaracollege.ca").Result == null)
+
+            //Grab existing users
+            var students = context.Users.ToList();
+
+            if (userManager.FindByEmailAsync("tladmin@niagaracollege.ca").Result == null)
             {
                 IdentityUser user = new IdentityUser
                 {
-                    UserName = "tladmin",
-                    Email = "topleveladmin@niagaracollege.ca"
+                    UserName = "tladmin@niagaracollege.ca",
+                    Email = "tladmin@niagaracollege.ca"
                 };
 
                 IdentityResult result = userManager.CreateAsync(user, "password").Result;
@@ -44,7 +50,7 @@ namespace BRTF_Booking.Data
             {
                 IdentityUser user = new IdentityUser
                 {
-                    UserName = "admin",
+                    UserName = "admin@niagaracollege.ca",
                     Email = "admin@niagaracollege.ca"
                 };
 
@@ -55,21 +61,66 @@ namespace BRTF_Booking.Data
                     userManager.AddToRoleAsync(user, "Admin").Wait();
                 }
             }
-            if (userManager.FindByEmailAsync("user@niagaracollege.ca").Result == null)
+            if (userManager.FindByEmailAsync("testuser@niagaracollege.ca").Result == null)
             {
                 IdentityUser user = new IdentityUser
                 {
-                    UserName = "user",
-                    Email = "user@niagaracollege.ca"
+                    UserName = "testuser@niagaracollege.ca",
+                    Email = "testuser@niagaracollege.ca"
                 };
 
                 IdentityResult result = userManager.CreateAsync(user, "password").Result;
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, "User").Wait();
+                    userManager.AddToRoleAsync(user, "Student").Wait();
+                }
+            }
+
+
+            foreach (User student in students)
+            {
+                if (userManager.FindByEmailAsync(student.Email).Result == null)
+                {
+                    IdentityUser user = new IdentityUser
+                    {
+                        UserName = student.Email,
+                        Email = student.Email
+                    };
+
+                    IdentityResult result = userManager.CreateAsync(user, "password").Result;
+
+                    if (result.Succeeded)
+                    {
+                        userManager.AddToRoleAsync(user, "Student").Wait();
+                    }
                 }
             }
         }
+        public static async Task SeedAdminsAsync(BRTFContext context, ApplicationDbContext identityContext, IServiceProvider serviceProvider)
+        {
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var admins = context.Admins.ToList();
+
+            foreach (Admin admin in admins)
+            {
+                if (userManager.FindByEmailAsync(admin.Email).Result == null)
+                {
+                    IdentityUser user = new IdentityUser
+                    {
+                        UserName = admin.Email,
+                        Email = admin.Email
+                    };
+
+                    IdentityResult result = userManager.CreateAsync(user, "password").Result;
+
+                    if (result.Succeeded)
+                    {
+                        userManager.AddToRoleAsync(user, "Admin").Wait();
+                    }
+                }
+            }
+        }
+
     }
 }

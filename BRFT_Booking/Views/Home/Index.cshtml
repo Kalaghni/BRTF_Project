@@ -1,5 +1,30 @@
-﻿@{
+﻿@model IEnumerable<BRTF_Booking.Models.User>
+@inject BRTF_Booking.Data.BRTFContext context
+
+@{
     ViewData["Title"] = "Home Page";
+    string EventString = "";
+    if (User.IsInRole("Student"))
+    {
+        EventString = "<ul>";
+        var activeUser = Model.Where(u => u.Email == User.Identity.Name).First();
+        foreach (var item in activeUser.Bookings)
+        {
+            if (item.User.Email == User.Identity.Name)
+            {
+                if (item.StartDate.Date == item.EndDate.Date)
+                {
+                    EventString += "<li>" + item.Room.Name + ": " + item.StartDate.ToString("f") + " to " + @item.EndDate.ToString("t") + "</li>" + "<br />";
+                }
+                else
+                {
+                    EventString += "<li>" + item.Room.Name + ": " + item.StartDate.ToString("f") + " to " + @item.EndDate.ToString("f") + "</li>" + "<br />";
+                }
+
+            }
+        }
+        EventString += "</ul>";
+    }
 }
 <body style="background-color:lightsteelblue;">
     <!--
@@ -19,13 +44,94 @@
     -->
     <section class="hero">
         <div class="container">
-            <h1 class="hero-title mt-0">Welcome to BRTF</h1>
-            <p class="hero-paragraph">Doors must be open by department faculty during school hours (M-F 8:30am to 5:30pm). Security will only open doors during off hours.</p>
-            <div class="hero-cta">
-                <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Create">Start Booking</a>
-            </div>
+            @if (User.IsInRole("Admin"))
+            {
+                var activeUser = context.Admins.Where(u => u.Email == User.Identity.Name).First();
+                <h1 class="hero-title mt-0">Admin Panel For @activeUser.FName</h1>
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Create">Create a Booking</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Existing Bookings</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="ProgramTerms" asp-action="Index">Manage Program Terms</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Areas" asp-action="Index">Manage Areas</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="" asp-action="">Accept Bookings</a>
+                </div>
+
+            }
+
+            @if (User.IsInRole("Top-Level Admin"))
+            {
+                <h1 class="hero-title mt-0">Top Level Admin Panel</h1>
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Create">Create a Booking</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Existing Bookings</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="ProgramTerms" asp-action="Index">Manage Program Terms</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Areas" asp-action="Index">Manage Areas</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="" asp-action="">Accept Bookings</a>
+                </div>
+                <br />
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Admins" asp-action="Index">Manage Admins</a>
+                </div>
+
+            }
+
+            @if (User.IsInRole("Student"))
+            {
+                var activeUser = Model.Where(u => u.Email == User.Identity.Name).First();
+                <h1 class="hero-title mt-0">Hello @activeUser.FName!</h1>
+                <p class="hero-paragraph">Doors must be open by department faculty during school hours (M-F 8:30am to 5:30pm). Security will only open doors during off hours.</p>
+                <div class="hero-cta">
+                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Request">Request a Booking</a>
+                </div>
+                <br />
+                @if (activeUser.Bookings.Any())
+                {
+                    <h2>Your upcoming bookings</h2>
+                    <div id="events">@Html.Raw(EventString)</div>
+                }
+            }
         </div>
-    </section>
+</section>
 </body>
 
 <!--; width: fit-content;padding: 60px 190px-->

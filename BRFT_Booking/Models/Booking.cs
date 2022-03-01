@@ -22,26 +22,21 @@ namespace BRTF_Booking.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Date Requested")]
-        public DateTime? BookingRequested { get; set; }
+        public DateTime BookingRequested { get; set; }
 
-        [Required(ErrorMessage = "You must enter a Start Time.")]
-        [DataType(DataType.Time)]
-        [Display(Name = "Start Time")]
-        public DateTime? StartTime { get; set; }
 
-        [Required(ErrorMessage = "You must enter a End Time.")]
-        [DataType(DataType.Time)]
-        [Display(Name = "End Time")]
-        public DateTime? EndTime { get; set; }
+        [Required(ErrorMessage = "You must enter a Start date.")]
+        [Display(Name = "Start")]
+        public DateTime StartDate { get; set; }
+
+        [Required(ErrorMessage = "You must enter a End date.")]
+        [Display(Name = "End")]
+        public DateTime EndDate { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (BookingRequested.GetValueOrDefault() < DateTime.Today)
-            {
-                yield return new ValidationResult("Cannot book dates from the past.", new[] { "BookingRequested" });
-            }
 
-            if (StartTime.GetValueOrDefault() > EndTime.GetValueOrDefault())
+            if (this.StartDate > this.EndDate)
                 {
                 yield return new ValidationResult("The Start time cannot be after the end time.", new[] { "StartTime" });
             }

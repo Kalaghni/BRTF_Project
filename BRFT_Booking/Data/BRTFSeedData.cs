@@ -16,187 +16,197 @@ namespace BRTF_Booking.Data
             using (var context = new BRTFContext(
                 serviceProvider.GetRequiredService<DbContextOptions<BRTFContext>>()))
             {
-                //Look for any Users(Students)
-                //if (!context.Users.Any())
-                //    {
-                //        context.Users.AddRange(
-                //         new User
-                //         {
-                //             StudentID = 4362670,
-                //             FName = "Cat",
-                //             MName = "Sun",
-                //             LName = "Al-Bahrini",
-                //             Email = "cstevens@ncstudents.niagaracollege.ca"
-                //         },
 
-                //         new User
-                //         {
-                //             StudentID = 9311011,
-                //             FName = "Sterling",
-                //             LName = "Archer",
-                //             Email = "sarcher4@ncstudents.niagaracollege.ca"
-                //         },
-                //         new User
-                //         {
-                //             StudentID = 9508725,
-                //             FName = "Matt",
-                //             MName = "Elmi-Johanna",
-                //             LName = "Parker",
-                //             Email = "maparker1@ncstudents.niagaracollege.ca"                             
-                //         },
-                //         new User
-                //         {
-                //             StudentID = 4407393,
-                //             FName = "James",
-                //             MName = "Bullough",
-                //             LName = "Lansing",
-                //             Email = "jblansing@ncstudents.niagaracollege.ca"                             
-                //         },
-                //         new User
-                //         {
-                //             StudentID = 4105233,
-                //             FName = "Judy",
-                //             MName = "Ugonna",
-                //             LName = "Garland",
-                //             Email = "jgarland@ncstudents.niagaracollege.ca",
-                             
-                //         },
-                //         new User
-                //         {
-                //             StudentID = 4242885,
-                //             FName = "Marge",
-                //             LName = "Simpson",
-                //             Email = "masimpson@ncstudents.niagaracollege.ca"                           
-                //         },
-                //         new User
-                //         {
-                //             StudentID = 4035763,
-                //             FName = "Sarah",
-                //             MName = "Wing-Hay",
-                //             LName = "Slean",
-                //             Email = "sslean13@ncstudents.niagaracollege.ca"                             
-                //         },
-                //         new User
-                //         {
-                //             StudentID = 4444312,
-                //             FName = "Morag",
-                //             MName = "Leah-Grace",
-                //             LName = "Smith",
-                //             Email = "msmith11@ncstudents.niagaracollege.ca"                             
-                //         },
-                //         new User
-                //         {
-                //             StudentID = 4398123,
-                //             FName = "Akira",
-                //             MName = "Kaur",
-                //             LName = "Kurosawa",
-                //             Email = "akurosawa@ncstudents.niagaracollege.ca"                             
-                //         },
-                //         new User
-                //         {
-                //             StudentID = 9470695,
-                //             FName = "Zhuo-Chang",
-                //             LName = "Wu",
-                //             Email = "zcwu@ncstudents.niagaracollege.ca"                             
-                //         }
-                //    );
-                //        context.SaveChanges();
-                //    }
-                //if (!context.ProgramTerms.Any())
-                //{
-                //    context.ProgramTerms.AddRange(
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 4362670).FirstOrDefault(),
-                //            AcadPlan = "P0122",
-                //            Description = "Broadcasting: Radion, TV & Film",
-                //            StrtLevel = 01,
-                //            LastLevel = false,
-                //            Term = 1204
-                //        },
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 9311011).FirstOrDefault(),
-                //            AcadPlan = "P0163",
-                //            Description = "Presentation / Radio",
-                //            StrtLevel = 01,
-                //            LastLevel = false,
-                //            Term = 1214
-                //        },
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 9508725).FirstOrDefault(),
-                //            AcadPlan = "P0164",
-                //            Description = "TV Production",
-                //            StrtLevel = 03,
-                //            LastLevel = false,
-                //            Term = 1214
-                //        },
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 4407393).FirstOrDefault(),
-                //            AcadPlan = "P0165",
-                //            Description = "Film Production",
-                //            StrtLevel = 05,
-                //            LastLevel = false,
-                //            Term = 1204
-                //        },
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 4105233).FirstOrDefault(),
-                //            AcadPlan = "P0198",
-                //            Description = "Acting for TV & Film",
-                //            StrtLevel = 02,
-                //            LastLevel = false,
-                //            Term = 1214
-                //        },
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 4242885).FirstOrDefault(),
-                //            AcadPlan = "P0795",
-                //            Description = "Digital Photography",
-                //            StrtLevel = 01,
-                //            LastLevel = false,
-                //            Term = 1214
-                //        },
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 4035763).FirstOrDefault(),
-                //            AcadPlan = "P6801",
-                //            Description = "Joint BSc Game Programming",
-                //            StrtLevel = 04,
-                //            LastLevel = false,
-                //            Term = 1204
-                //        },
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 4444312).FirstOrDefault(),
-                //            AcadPlan = "P6800",
-                //            Description = "Joint BA Game Design",
-                //            StrtLevel = 06,
-                //            LastLevel = true,
-                //            Term = 1204
-                //        },
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 4398123).FirstOrDefault(),
-                //            AcadPlan = "P0441",
-                //            Description = "Game Development",
-                //            StrtLevel = 03,
-                //            LastLevel = false,
-                //            Term = 1204
-                //        },
-                //        new ProgramTerm
-                //        {
-                //            User = context.Users.Where(u => u.StudentID == 9470695).FirstOrDefault(),
-                //            AcadPlan = "P0474",
-                //            Description = "CST – Network and Cloud Tech",
-                //            StrtLevel = 03,
-                //            LastLevel = false,
-                //            Term = 1214
-                //        });
-                //    context.SaveChanges();
-                //}
+                if (!context.Users.Any())
+                {
+                    context.Users.AddRange(
+                     new User
+                     {
+                         StudentID = "4362670",
+                         FName = "Cat",
+                         MName = "Sun",
+                         LName = "Al-Bahrini",
+                         Email = "cstevens@ncstudents.niagaracollege.ca"
+                     },
+
+                     new User
+                     {
+                         StudentID = "9311011",
+                         FName = "Sterling",
+                         LName = "Archer",
+                         Email = "sarcher4@ncstudents.niagaracollege.ca"
+                     },
+                     new User
+                     {
+                         StudentID = "9508725",
+                         FName = "Matt",
+                         MName = "Elmi-Johanna",
+                         LName = "Parker",
+                         Email = "maparker1@ncstudents.niagaracollege.ca"
+                     },
+                     new User
+                     {
+                         StudentID = "4407393",
+                         FName = "James",
+                         MName = "Bullough",
+                         LName = "Lansing",
+                         Email = "jblansing@ncstudents.niagaracollege.ca"
+                     },
+                     new User
+                     {
+                         StudentID = "4105233",
+                         FName = "Judy",
+                         MName = "Ugonna",
+                         LName = "Garland",
+                         Email = "jgarland@ncstudents.niagaracollege.ca",
+
+                     },
+                     new User
+                     {
+                         StudentID = "4242885",
+                         FName = "Marge",
+                         LName = "Simpson",
+                         Email = "masimpson@ncstudents.niagaracollege.ca"
+                     },
+                     new User
+                     {
+                         StudentID = "4035763",
+                         FName = "Sarah",
+                         MName = "Wing-Hay",
+                         LName = "Slean",
+                         Email = "sslean13@ncstudents.niagaracollege.ca"
+                     },
+                     new User
+                     {
+                         StudentID = "4444312",
+                         FName = "Morag",
+                         MName = "Leah-Grace",
+                         LName = "Smith",
+                         Email = "msmith11@ncstudents.niagaracollege.ca"
+                     },
+                     new User
+                     {
+                         StudentID = "4398123",
+                         FName = "Akira",
+                         MName = "Kaur",
+                         LName = "Kurosawa",
+                         Email = "akurosawa@ncstudents.niagaracollege.ca"
+                     },
+                     new User
+                     {
+                         StudentID = "9470695",
+                         FName = "Zhuo-Chang",
+                         LName = "Wu",
+                         Email = "zcwu@ncstudents.niagaracollege.ca"
+                     }
+                );
+                    context.SaveChanges();
+                }
+                if (!context.ProgramTerms.Any())
+                {
+                    context.ProgramTerms.AddRange(
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "4362670").FirstOrDefault(),
+                            StudentID = "4362670",
+                            AcadPlan = "P0122",
+                            Description = "Broadcasting: Radion, TV & Film",
+                            StrtLevel = 01,
+                            LastLevel = "N",
+                            Term = 1204
+                        },
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "9311011").FirstOrDefault(),
+                            StudentID = "9311011",
+                            AcadPlan = "P0163",
+                            Description = "Presentation / Radio",
+                            StrtLevel = 01,
+                            LastLevel = "N",
+                            Term = 1214
+                        },
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "9508725").FirstOrDefault(),
+                            StudentID = "9508725",
+                            AcadPlan = "P0164",
+                            Description = "TV Production",
+                            StrtLevel = 03,
+                            LastLevel = "n",
+                            Term = 1214
+                        },
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "4407393").FirstOrDefault(),
+                            StudentID = "4407393",
+                            AcadPlan = "P0165",
+                            Description = "Film Production",
+                            StrtLevel = 05,
+                            LastLevel = "N",
+                            Term = 1204
+                        },
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "4105233").FirstOrDefault(),
+                            StudentID = "4105233",
+                            AcadPlan = "P0198",
+                            Description = "Acting for TV & Film",
+                            StrtLevel = 02,
+                            LastLevel = "N",
+                            Term = 1214
+                        },
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "4242885").FirstOrDefault(),
+                            StudentID = "4242885",
+                            AcadPlan = "P0795",
+                            Description = "Digital Photography",
+                            StrtLevel = 01,
+                            LastLevel = "N",
+                            Term = 1214
+                        },
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "4035763").FirstOrDefault(),
+                            StudentID = "4035763",
+                            AcadPlan = "P6801",
+                            Description = "Joint BSc Game Programming",
+                            StrtLevel = 04,
+                            LastLevel = "N",
+                            Term = 1204
+                        },
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "4444312").FirstOrDefault(),
+                            StudentID = "4444312",
+                            AcadPlan = "P6800",
+                            Description = "Joint BA Game Design",
+                            StrtLevel = 06,
+                            LastLevel = "Y",
+                            Term = 1204
+                        },
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "4398123").FirstOrDefault(),
+                            StudentID = "4398123",
+                            AcadPlan = "P0441",
+                            Description = "Game Development",
+                            StrtLevel = 03,
+                            LastLevel = "N",
+                            Term = 1204
+                        },
+                        new ProgramTerm
+                        {
+                            User = context.Users.Where(u => u.StudentID == "9470695").FirstOrDefault(),
+                            StudentID = "9470695",
+                            AcadPlan = "P0474",
+                            Description = "CST – Network and Cloud Tech",
+                            StrtLevel = 03,
+                            LastLevel = "N",
+                            Term = 1214
+                        });
+                    context.SaveChanges();
+                }
                 if (!context.Areas.Any())
                 {
                     context.Areas.AddRange(
@@ -306,7 +316,7 @@ namespace BRTF_Booking.Data
                         Limit = 4,
                         MaxNumofBookings = 3,
                         Enabled = true,
-                        
+
                     },
                     new Room
                     {
@@ -317,7 +327,7 @@ namespace BRTF_Booking.Data
                         Limit = 4,
                         Enabled = true,
 
-                    }, 
+                    },
                     new Room
                     {
                         Area = context.Areas.Where(a => a.Name == "Edit 6 3rd Year only").FirstOrDefault(),
@@ -972,7 +982,38 @@ namespace BRTF_Booking.Data
                     );
                     context.SaveChanges();
                 }
-                
+
+            }
+        }
+        public static void InitializeAdmins(IServiceProvider serviceProvider)
+        {
+
+            using (var context = new BRTFContext(
+                serviceProvider.GetRequiredService<DbContextOptions<BRTFContext>>()))
+            {
+                if (!context.Admins.Any())
+                {
+                    context.Admins.AddRange(
+                        new Admin
+                        {
+                            FName = "Simone",
+                            LName = "Smith",
+                            Email = "ssmith@niagaracollege.ca"
+                        },
+                        new Admin
+                        {
+                            FName = "Byron",
+                            LName = "Gracey",
+                            Email = "bgracey@niagaracollege.ca"
+                        },
+                        new Admin
+                        {
+                            FName = "Bruce",
+                            LName = "Ashford",
+                            Email = "Bashford@niagaracollege.ca"
+                        });
+                    context.SaveChanges();
+                }
             }
         }
     }

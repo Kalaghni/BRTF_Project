@@ -16,6 +16,26 @@ namespace BRTF_Booking.Data.BRTFMigrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.21");
 
+            modelBuilder.Entity("BRTF_Booking.Models.Admin", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("BRTF_Booking.Models.Area", b =>
                 {
                     b.Property<int>("ID")
@@ -36,19 +56,16 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("BookingRequested")
-                        .IsRequired()
+                    b.Property<DateTime>("BookingRequested")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("EndTime")
-                        .IsRequired()
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RoomID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("StartTime")
-                        .IsRequired()
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserID")

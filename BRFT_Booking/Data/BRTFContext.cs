@@ -23,6 +23,7 @@ namespace BRTF_Booking.Data
         public DbSet<Area> Areas { get; set; }
 
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Admin> Admins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

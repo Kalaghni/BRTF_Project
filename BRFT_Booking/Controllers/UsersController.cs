@@ -11,16 +11,24 @@ using BRTF_Booking.Utilities;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BRTF_Booking.Controllers
 {
+    [Authorize(Roles = "Admin, Top-Level Admin")]
     public class UsersController : Controller
     {
         private readonly BRTFContext _context;
+        private readonly ApplicationDbContext _identityContext;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UsersController(BRTFContext context)
+
+        public UsersController(BRTFContext context, ApplicationDbContext identityContext, UserManager<IdentityUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
+            _identityContext = identityContext;
         }
 
         // GET: Users
@@ -132,7 +140,7 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StudentID,FName,MName,LName,AcadPlan,Description,Email,StrtLevel,LastLevel,Term")] User user)
+        public async Task<IActionResult> Create([Bind("ID,StudentID,FName,MName,LName,Email,Password")] User user)
         {
             try
             {
@@ -140,6 +148,23 @@ namespace BRTF_Booking.Controllers
                 {
                     _context.Add(user);
                     await _context.SaveChangesAsync();
+
+                    if (_userManager.FindByEmailAsync(user.Email).Result == null)
+                    {
+                        IdentityUser Iuser = new IdentityUser
+                        {
+                            UserName = user.Email,
+                            Email = user.Email
+                        };
+
+                        IdentityResult result = _userManager.CreateAsync(Iuser, user.Password).Result;
+
+                        if (result.Succeeded)
+                        {
+                            _userManager.AddToRoleAsync(Iuser, "Student").Wait();
+                        }
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
                 
@@ -189,8 +214,8 @@ namespace BRTF_Booking.Controllers
             }
 
             if (await TryUpdateModelAsync<User>(userToUpdate, "", u => u.StudentID, u => u.FName, 
-                u => u.MName, u => u.LName, u => u.Role, u => u.Email, u => u.Password))
-            {
+                u => u.MName, u => u.LName))
+            {          
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -248,10 +273,13 @@ namespace BRTF_Booking.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.Users.FindAsync(id);
+            await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> InsertFromExcel(IFormFile theExcel)

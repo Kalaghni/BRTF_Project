@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BRTF_Booking.Models.Booking>
+
+@{
+    ViewData["Title"] = "Calendar";
+}
+
+<h1>Bookings</h1>
+<p>
+    <a asp-action="Request">Request Booking</a>
+</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
+<div class="container">
+    <div id='calendar'></div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js"></script>
+
+    <script type="text/javascript">
+
+			$(document).ready(function () {
+				$('#calendar').fullCalendar({
+        			header: {
+            			left: 'prev,next today',
+            			center: 'title',
+            			right: 'month,agendaWeek,agendaDay'
+					},
+            		firstDay: 1, //The day that each week begins (Monday=1)
+            		slotMinutes: 60,
+            		events: '@Url.RouteUrl(new{ action="GetEvents", controller="Bookings"})'
+        		});
+    		});
+    </script>
+}

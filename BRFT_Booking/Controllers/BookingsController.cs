@@ -7,18 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BRTF_Booking.Data;
 using BRTF_Booking.Models;
+using BRTF_Booking.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BRTF_Booking.Controllers
 {
+    [Authorize]
     public class BookingsController : Controller
     {
         private readonly BRTFContext _context;
+        private readonly ApplicationDbContext _identityContext;
 
-        public BookingsController(BRTFContext context)
+        public BookingsController(BRTFContext context, ApplicationDbContext identityContext)
         {
             _context = context;
+            _identityContext = identityContext;
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
@@ -46,6 +52,7 @@ namespace BRTF_Booking.Controllers
             return View(booking);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings/Create
         public IActionResult Create()
         {
@@ -53,15 +60,17 @@ namespace BRTF_Booking.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // POST: Bookings/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,BookingRequested,StartTime,EndTime")] Booking booking)
+        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,EndDate")] Booking booking)
         {
             if (ModelState.IsValid)
             {
+                booking.BookingRequested = DateTime.Today;
                 _context.Add(booking);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -70,6 +79,7 @@ namespace BRTF_Booking.Controllers
             return View(booking);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -87,12 +97,13 @@ namespace BRTF_Booking.Controllers
             return View(booking);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // POST: Bookings/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,BookingRequested,StartTime,EndTime")] Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,BookingRequested,StartDate,EndDate")] Booking booking)
         {
             if (id != booking.ID)
             {
@@ -123,6 +134,7 @@ namespace BRTF_Booking.Controllers
             return View(booking);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -143,6 +155,7 @@ namespace BRTF_Booking.Controllers
             return View(booking);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // POST: Bookings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -152,6 +165,32 @@ namespace BRTF_Booking.Controllers
             _context.Bookings.Remove(booking);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Bookings/Request
+        public IActionResult Request()
+        {
+            PopulateDropDownLists();
+            return View();
+        }
+
+        // POST: Bookings/Request
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Request([Bind("ID,RoomID,StartDate,EndDate")] Booking booking)
+        {
+            if (ModelState.IsValid)
+            {
+                booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
+                booking.BookingRequested = DateTime.Today;
+                _context.Add(booking);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Calendar));
+            }
+            PopulateDropDownLists();
+            return View(booking);
         }
 
         private bool BookingExists(int id)
@@ -197,6 +236,63 @@ namespace BRTF_Booking.Controllers
         public JsonResult GetEditRooms(int? ID)
         {
             return Json(RoomEditSelectList(ID));
+        }
+
+        public async Task<IActionResult> Calendar()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult GetEvents()
+        {
+            var viewModel = new EventViewModel();
+            var events = new List<EventViewModel>();
+
+
+            var bookings = _context.Bookings.Include(b => b.User).Include(b => b.Room).Where(b => b.User.Email == User.Identity.Name);
+            foreach (Booking booking in bookings)
+            {
+                events.Add(new EventViewModel()
+                {
+                    id = booking.ID,
+                    title = booking.Room.Name,
+                    start = booking.StartDate.ToString(),
+                    end = booking.EndDate.ToString(),
+                    url = Url.RouteUrl(new { Action = "Details", Controller = "Bookings"}) + $"/{booking.ID}",
+                    allDay = false
+                }) ;
+
+            }
+
+
+            return Json(events.ToArray());
+        }
+
+        [HttpGet]
+        public JsonResult GetUserEvents(int? userID)
+        {
+            var viewModel = new EventViewModel();
+            var events = new List<EventViewModel>();
+
+
+            var bookings = _context.Bookings.Include(b => b.User).Include(b => b.Room).Where(b => b.User.ID == userID);
+            foreach (Booking booking in bookings)
+            {
+                events.Add(new EventViewModel()
+                {
+                    id = booking.ID,
+                    title = booking.Room.Name,
+                    start = booking.StartDate.ToString(),
+                    end = booking.EndDate.ToString(),
+                    url = Url.RouteUrl(new { Action = "Details", Controller = "Bookings" }) + $"/{booking.ID}",
+                    allDay = false
+                });
+
+            }
+
+
+            return Json(events.ToArray());
         }
 
         private void PopulateDropDownLists()

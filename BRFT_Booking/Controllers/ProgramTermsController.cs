@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using BRTF_Booking.Data;
 using BRTF_Booking.Models;
 using BRTF_Booking.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BRTF_Booking.Controllers
 {
+    [Authorize(Roles = "Admin, Top-Level Admin")]
     public class ProgramTermsController : Controller
     {
         private readonly BRTFContext _context;

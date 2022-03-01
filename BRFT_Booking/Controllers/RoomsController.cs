@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using BRTF_Booking.Data;
 using BRTF_Booking.Models;
 using BRTF_Booking.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BRTF_Booking.Controllers
 {
+    [Authorize]
     public class RoomsController : Controller
     {
         private readonly BRTFContext _context;
@@ -162,6 +164,7 @@ namespace BRTF_Booking.Controllers
             return View(room);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Rooms/Create
         public IActionResult Create()
         {
@@ -169,6 +172,7 @@ namespace BRTF_Booking.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // POST: Rooms/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -186,6 +190,7 @@ namespace BRTF_Booking.Controllers
             return View(room);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Rooms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -203,6 +208,7 @@ namespace BRTF_Booking.Controllers
             return View(room);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // POST: Rooms/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -239,6 +245,7 @@ namespace BRTF_Booking.Controllers
             return View(room);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Rooms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -257,6 +264,7 @@ namespace BRTF_Booking.Controllers
             return View(room);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // POST: Rooms/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BRTF_Booking.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Top-Level Admin")]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;

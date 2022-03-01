@@ -3,10 +3,12 @@
 @{ ViewData["Title"] = "Index"; }
 
 <h1>Rooms</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.IsInRole("Admin") || User.IsInRole("Top-Level Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <form asp-action="Index" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
@@ -65,29 +67,33 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Area.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Limit)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Enabled)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
-}
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Area.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Limit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Enabled)
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Top-Level Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        }
+
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
     <partial name="_PagingNavBar" />

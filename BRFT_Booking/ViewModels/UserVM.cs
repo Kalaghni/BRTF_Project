@@ -13,6 +13,7 @@ namespace BRTF_Booking.ViewModels
         [Display(Name = "User Name")]
         public string UserName { get; set; }
 
+
         [Display(Name = "Roles")]
         public IList<string> UserRoles { get; set; }
     }
