@@ -78,7 +78,7 @@ namespace BRTF_Booking.Controllers
                 return NotFound();
             }
 
-            var booking = await _context.Bookings.FindAsync(id);
+            var booking = await _context.Bookings.Include(b => b.Room).ThenInclude(b => b.Area).Where(b => b.ID == id).FirstOrDefaultAsync();
             if (booking == null)
             {
                 return NotFound();
@@ -166,27 +166,42 @@ namespace BRTF_Booking.Controllers
         }
 
 
-        private SelectList RoomSelectList(int? AreaID, int? selectedId)
+        private SelectList RoomCreateSelectList(int? AreaID, int? selectedId)
         {
+
             //The AreaID has been added so we can filter by it.
-            var query = from c in _context.Rooms.Include(c => c.Area)
+            var query = from c in _context.Rooms.Include(c => c.Area).Where(p => p.AreaID == AreaID)
                         select c;
-            if (AreaID.HasValue)
-            {
-                query = query.Where(p => p.AreaID == AreaID);
-            }
+
             return new SelectList(query.OrderBy(p => p.Name), "ID", "Name", selectedId);
         }
 
         [HttpGet]
-        public JsonResult GetRooms(int? ID)
+        public JsonResult GetCreateRooms(int? ID)
         {
-            return Json(RoomSelectList(ID, null));
+            return Json(RoomCreateSelectList(ID, null));
+        }
+
+        private SelectList RoomEditSelectList(int? BookingID)
+        {
+            int AreaMatch = _context.Bookings.Include(b => b.Room).ThenInclude(b => b.Area).Where(p => p.ID == BookingID).FirstOrDefault().Room.AreaID;
+
+            //The AreaID has been added so we can filter by it.
+            var query = from c in _context.Rooms.Where(p => p.AreaID == AreaMatch)
+                        select c;
+
+            return new SelectList(query.OrderBy(p => p.Name), "ID", "Name", BookingID);
+        }
+
+        [HttpGet]
+        public JsonResult GetEditRooms(int? ID)
+        {
+            return Json(RoomEditSelectList(ID));
         }
 
         private void PopulateDropDownLists()
         {
-            ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
+            //ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
             ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email");
             ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
         }

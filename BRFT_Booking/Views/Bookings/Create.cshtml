@@ -21,7 +21,7 @@
             <div class="form-group">
                 <label class="control-label">Area:</label>
                 <select asp-for="Room.AreaID" id="AreaID" name="AreaID" class="form-control" asp-items="ViewBag.AreaID">
-                    <option value="">All Areas:</option>
+                    <option value="">Select an area:</option>
                 </select>
             </div>
 
@@ -99,9 +99,10 @@
 
     <script src="~/js/refreshDDL.js"></script>
     <script type="text/javascript">
+
         $('#AreaID').change(function () {
-            var selectedProvince = $("#AreaID").val();
-            var URL = "/Bookings/GetRooms/" + selectedProvince;
+            var selectedArea = $("#AreaID").val();
+            var URL = "/Bookings/GetCreateRooms/" + selectedArea;
             refreshDDL('RoomID', URL, true);
         });
     </script>

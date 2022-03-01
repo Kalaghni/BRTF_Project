@@ -78,11 +78,11 @@ namespace BRTF_Booking.Controllers
             {
                 if (sortDirection == "asc")
                 {
-                    rooms = rooms.OrderByDescending(r => r.Area);
+                    rooms = rooms.OrderByDescending(r => r.Area.Name);
                 }
                 else
                 {
-                    rooms = rooms.OrderBy(r => r.Area);
+                    rooms = rooms.OrderBy(r => r.Area.Name);
                 }
             }
             else if (sortField == "Description")
@@ -118,9 +118,9 @@ namespace BRTF_Booking.Controllers
                     rooms = rooms.OrderBy(r => r.Enabled);
                 }
             }
-            else
+            else if (sortField == "Room")
             {
-                if (sortDirection == "Room")
+                if (sortDirection == "asc")
                 {
                     rooms = rooms.OrderByDescending(r => r.Name);
                 }
