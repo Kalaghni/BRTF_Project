@@ -9,6 +9,7 @@ using BRTF_Booking.Data;
 using BRTF_Booking.Models;
 using BRTF_Booking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BRTF_Booking.Controllers
 {
@@ -66,15 +67,43 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,EndDate")] Booking booking)
+        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,EndDate")] Booking booking, string[] selectedOptions)
         {
-            if (ModelState.IsValid)
+            try
             {
-                booking.BookingRequested = DateTime.Today;
-                _context.Add(booking);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var l = new List<Booking>();
+                var ex = l.SelectMany(a => new[] { a.StartDate, a.EndDate }).Distinct().OrderBy(dt => dt);
+                var pairs = ex.Zip(ex.Skip(1), (First, Second) => new { First, Second });
+
+                if(pairs == null)
+                {
+                    _context.Add(booking);
+                    await _context.SaveChangesAsync();
+                    return View(booking);
+
+                }
+                else
+                {
+                    throw new Exception("This time slot is already booked, please try and book a different timeslot.");
+                }
+                
             }
+            catch (RetryLimitExceededException /* dex */)
+            {
+                ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed"))
+                {
+                    ModelState.AddModelError("AthleteCode", "Unable to save changes. Remember, you cannot have duplicate Athlete Codes.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+
             PopulateDropDownLists();
             return View(booking);
         }
@@ -103,40 +132,81 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,BookingRequested,StartDate,EndDate")] Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,BookingRequested,StartDate,EndDate")] Booking booking, string[] selectedOptions, Byte[] RowVersion)
         {
             var bookingToUpdate = await _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Room)
                 .FirstOrDefaultAsync(b => b.ID == id);
 
-            //Gives error if there is no booking
+
             if (bookingToUpdate == null)
             {
-                
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            //Adding RowVersion to the OrginialValues collection for the entity
+            _context.Entry(booking).Property("RowVersion").OriginalValue = RowVersion;
+
+            if(await TryUpdateModelAsync<Booking>(bookingToUpdate, "", 
+                b => b.UserID, b => b.RoomID, b => b.StartDate, b => b.EndDate, b => b.BookingRequested))
             {
                 try
                 {
-                    _context.Update(booking);
+                    _context.Update(bookingToUpdate);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (RetryLimitExceededException)
                 {
-                    if (!BookingExists(booking.ID))
+                    ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    var exceptionEntry = ex.Entries.Single();
+                    var clientValues = (Booking)exceptionEntry.Entity;
+                    var databaseEntry = exceptionEntry.GetDatabaseValues();
+                    if (databaseEntry == null)
                     {
-                        return NotFound();
+                        ModelState.AddModelError("",
+                            "Unable to save changes. The Athlete was deleted by another user.");
                     }
                     else
                     {
-                        throw;
+                        var databaseValues = (Booking)databaseEntry.ToObject();
+                        if (databaseValues.StartDate != clientValues.StartDate)
+                            ModelState.AddModelError("StartDate", "Current value: "
+                                + databaseValues.StartDate);
+                        if (databaseValues.EndDate != clientValues.EndDate)
+                            ModelState.AddModelError("EndDate", "Current value: "
+                                + databaseValues.EndDate);
+                        if (databaseValues.BookingRequested != clientValues.BookingRequested)
+                            ModelState.AddModelError("BookingRequested", "Current value: "
+                                + databaseValues.BookingRequested);
+
+                        //For the foreign key, we need to go to the database to get the information to show
+                        if (databaseValues.RoomID != clientValues.RoomID)
+                        {
+                            Room databaseRoom = await _context.Rooms.SingleOrDefaultAsync(i => i.ID == databaseValues.RoomID);
+                            ModelState.AddModelError("RoomID", $"Current value: {databaseRoom?.Name}");
+                        }
+                        if (databaseValues.UserID != clientValues.UserID)
+                        {
+                            User databaseUser = await _context.Users.SingleOrDefaultAsync(i => i.ID == databaseValues.UserID);
+                            ModelState.AddModelError("SportID", $"Current value: {databaseUser?.FullName}");
+                        }
+
+                        ModelState.AddModelError(string.Empty, "The record you attempted to edit "
+                                + "was modified by another user after you received your values. The "
+                                + "edit operation was canceled and the current values in the database "
+                                + "have been displayed. If you still want to save your version of this record, click "
+                                + "the Save button again. Otherwise click the 'Back to List' hyperlink.");
+                        bookingToUpdate.RowVersion = (byte[])databaseValues.RowVersion;
+                        ModelState.Remove("RowVersion");
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
+
             PopulateDropDownLists();
             return View(booking);
         }
@@ -204,6 +274,7 @@ namespace BRTF_Booking.Controllers
         {
             return _context.Bookings.Any(e => e.ID == id);
         }
+
 
         private SelectList AreaSelectList(int? selectedId)
         {
