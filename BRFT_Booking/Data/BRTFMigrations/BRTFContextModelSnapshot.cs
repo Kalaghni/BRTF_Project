@@ -23,12 +23,15 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -64,6 +67,11 @@ namespace BRTF_Booking.Data.BRTFMigrations
 
                     b.Property<int>("RoomID")
                         .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");

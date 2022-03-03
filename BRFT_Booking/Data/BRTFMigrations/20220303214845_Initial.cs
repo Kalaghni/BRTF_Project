@@ -13,9 +13,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    FName = table.Column<string>(nullable: true),
-                    LName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true)
+                    FName = table.Column<string>(nullable: false),
+                    LName = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,7 +115,8 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     RoomID = table.Column<int>(nullable: false),
                     BookingRequested = table.Column<DateTime>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false)
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {

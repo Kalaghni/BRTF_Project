@@ -67,7 +67,7 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,EndDate")] Booking booking, string[] selectedOptions)
+        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,EndDate")] Booking booking, DateTime[] selectedTimes)
         {
             try
             {
@@ -148,13 +148,26 @@ namespace BRTF_Booking.Controllers
             //Adding RowVersion to the OrginialValues collection for the entity
             _context.Entry(booking).Property("RowVersion").OriginalValue = RowVersion;
 
-            if(await TryUpdateModelAsync<Booking>(bookingToUpdate, "", 
+            //Checking for conflicting times
+            var l = new List<Booking>();
+            var comp = l.SelectMany(a => new[] { a.StartDate, a.EndDate }).Distinct().OrderBy(dt => dt);
+            var pairs = comp.Zip(comp.Skip(1), (First, Second) => new { First, Second });
+
+            if (await TryUpdateModelAsync<Booking>(bookingToUpdate, "", 
                 b => b.UserID, b => b.RoomID, b => b.StartDate, b => b.EndDate, b => b.BookingRequested))
             {
                 try
                 {
-                    _context.Update(bookingToUpdate);
-                    await _context.SaveChangesAsync();
+                    if(pairs == null)
+                    {
+                        _context.Update(bookingToUpdate);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        throw new Exception("This time slot is already booked, please try and book a different timeslot.");
+                    }
+                    
                 }
                 catch (RetryLimitExceededException)
                 {
