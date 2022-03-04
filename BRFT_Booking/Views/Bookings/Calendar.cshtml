@@ -12,6 +12,7 @@
 <div class="container">
     <div id='calendar'></div>
 </div>
+<input id="hiddenDate" type="hidden" />
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -21,20 +22,41 @@
     <script src="//ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js"></script>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js'></script>
+    <script src='/docs/dist/demo-to-codepen.js'></script>
+
 
     <script type="text/javascript">
-
-			$(document).ready(function () {
-				$('#calendar').fullCalendar({
-        			header: {
-            			left: 'prev,next today',
-            			center: 'title',
-            			right: 'month,agendaWeek,agendaDay'
-					},
-            		firstDay: 1, //The day that each week begins (Monday=1)
-            		slotMinutes: 60,
-            		events: '@Url.RouteUrl(new{ action="GetEvents", controller="Bookings"})'
-        		});
-    		});
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                firstDay: 1, //The day that each week begins (Monday=1)
+                slotMinutes: 60,
+                events: '@Url.RouteUrl(new { action = "GetEvents", controller = "Bookings" })',
+                eventOverlap: false,
+                selectable: true,
+                editable: true,
+                dateClick: function (info) {
+                    location.href = '@Url.RouteUrl(new { action = "Request", controller = "Bookings"})';
+                },
+                eventDragStop: function (info) {
+                    const myJSON = JSON.stringify(info.event);
+                    console.log(myJSON);
+                    $.ajax({
+                        url: '@Url.RouteUrl(new { action = "PostEvents", controller = "Bookings" })',
+                        type: "POST",
+                        data: { jsonData: myJSON },
+                        contentType: "application/json; charset=utf-8"
+                    });
+                }
+            });
+            calendar.render();
+        });
     </script>
 }

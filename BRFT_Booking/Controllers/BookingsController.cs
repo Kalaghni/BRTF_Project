@@ -10,6 +10,7 @@ using BRTF_Booking.Models;
 using BRTF_Booking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Storage;
+using Newtonsoft.Json;
 
 namespace BRTF_Booking.Controllers
 {
@@ -275,8 +276,8 @@ namespace BRTF_Booking.Controllers
                 {
                     id = booking.ID,
                     title = booking.Room.Name,
-                    start = booking.StartDate.ToString(),
-                    end = booking.EndDate.ToString(),
+                    start = booking.StartDate.ToString("O"),
+                    end = booking.EndDate.ToString("O"),
                     url = Url.RouteUrl(new { Action = "Details", Controller = "Bookings"}) + $"/{booking.ID}",
                     borderColor = color,
                     backgroundColor = color,
@@ -288,6 +289,17 @@ namespace BRTF_Booking.Controllers
 
             return Json(events.ToArray());
         }
+
+        [HttpPost]
+        public ActionResult PostEvents(string jsonData)
+        {Console.WriteLine(jsonData);
+            EventViewModel bookingEvent = JsonConvert.DeserializeObject<EventViewModel>(jsonData);
+
+            
+
+            return View(nameof(Calendar));
+        }
+
 
         [HttpGet]
         public JsonResult GetUserEvents(int? userID)

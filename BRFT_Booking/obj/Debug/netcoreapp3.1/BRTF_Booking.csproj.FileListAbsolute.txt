@@ -1098,8 +1098,3 @@ D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF
 D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.dll
 D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.pdb
 D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.genruntimeconfig.cache
-C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms1\Create.cshtml.g.cs
-C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms1\Delete.cshtml.g.cs
-C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms1\Details.cshtml.g.cs
-C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms1\Edit.cshtml.g.cs
-C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\ProgramTerms1\Index.cshtml.g.cs
