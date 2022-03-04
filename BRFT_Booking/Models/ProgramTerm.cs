@@ -8,16 +8,51 @@ namespace BRTF_Booking.Models
 {
     public class ProgramTerm
     {
+
         public int ID { get; set; }
 
+    public string Group
+        {
+            get
+            {
+                try
+                {
+                    if (this.ProgramDetail.Name == "Acting for TV & Film")
+                    {
+                        return this.ProgramDetail.ProgramTermGroups.Where(p => p.ProgramDetail.Name == "Acting for TV & Film").FirstOrDefault().Name;
+                    }
+                    else if (this.StrtLevel == 1)
+                    {
+                        return "combo1";
+                    }
+                    else if (this.StrtLevel == 2 && this.ProgramDetail.Name != "Presentation / Radio")
+                    {
+                        return "combo2";
+                    }
+                    else if (this.ProgramDetail.ProgramTermGroups.Where(p => p.Level == this.StrtLevel && p.ProgramDetail.ID == this.ProgramDetail.ID).Any())
+                    {
+                        return this.ProgramDetail.ProgramTermGroups.Where(p => p.Level == this.StrtLevel && p.ProgramDetail.ID == this.ProgramDetail.ID).FirstOrDefault().Name;
+                    }
+                    else
+                    {
+                        return "";
+                    }
+                }
+                catch (NullReferenceException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return "";
+                }
+            }
+        }
         [Display(Name = "Academic Plan")]
         [Required(ErrorMessage = "Academic Plan is required.")]
         public string AcadPlan { get; set; }
 
         [Display(Name = "Program")]
         [Required(ErrorMessage = "Program is required.")]
-        public ProgramDetail ProgramDetail { get; set; }
-        public int ProgramDetailID { get; set; }
+        public ProgramDetail? ProgramDetail { get; set; }
+        public int? ProgramDetailID { get; set; }
 
         [Display(Name = "Student")]
         [Required(ErrorMessage = "Student is required.")]
@@ -35,6 +70,6 @@ namespace BRTF_Booking.Models
         [Display(Name = "Term")]
         [Required(ErrorMessage = "Term is required.")]
         public int Term { get; set; }
+        }
 
     }
-}

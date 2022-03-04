@@ -75,30 +75,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.FullName)
                     </td>
-                    @if (item.ProgramTerm.ProgramDetail.Name == "Acting for TV & Film")
-                    {
                         <td>
-                            @Html.DisplayFor(modelItem => item.ProgramTerm.ProgramDetail.ProgramTermGroups.Where(p => p.Level == 0).FirstOrDefault().Name)
+                            @Html.DisplayFor(modelItem => item.ProgramTerm.Group)
                         </td>
-                    }
-                    @if (!(item.ProgramTerm.ProgramDetail.Name == "Acting for TV & Film") && item.ProgramTerm.StrtLevel == 1)
-                    {
-                    <td>
-                        combo1
-                    </td>
-                    }
-                    @if (!((item.ProgramTerm.ProgramDetail.Name == "Acting for TV & Film") && item.ProgramTerm.StrtLevel == 1) && item.ProgramTerm.StrtLevel == 2 && item.ProgramTerm.ProgramDetail.Name != "Radio / Presentation")
-                    {
-                    <td>
-                        combo2
-                    </td>
-                    }
-                    @if (!((((item.ProgramTerm.ProgramDetail.Name == "Acting for TV & Film") && item.ProgramTerm.StrtLevel == 1) && item.ProgramTerm.StrtLevel == 2 && item.ProgramTerm.ProgramDetail.Name != "Radio / Presentation")))
-                    {
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProgramTerm.ProgramDetail.ProgramTermGroups.Where(p => p.Level == item.ProgramTerm.StrtLevel).FirstOrDefault().Name)
-                        </td>
-                    }
                     <td>
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>

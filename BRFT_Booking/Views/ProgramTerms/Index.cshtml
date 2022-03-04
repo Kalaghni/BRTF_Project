@@ -49,7 +49,7 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.UserID)
+                    @Html.DisplayNameFor(model => model.User)
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Academic Plan" class="btn btn-link" />
@@ -74,13 +74,13 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UserID)
+                        @Html.DisplayFor(modelItem => item.User.FullName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.AcadPlan)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ProgramDetailID)
+                        @Html.DisplayFor(modelItem => item.ProgramDetail.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.StrtLevel)

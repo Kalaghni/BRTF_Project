@@ -30,6 +30,7 @@ namespace BRTF_Booking.Controllers
 
             var terms = _context.ProgramTerms
                 .Include(p => p.User)
+                .Include(p => p.ProgramDetail)
                 .AsNoTracking();
 
             string[] sortOptions = new[] { "Academic Plan", "Program" };
@@ -110,7 +111,9 @@ namespace BRTF_Booking.Controllers
         // GET: ProgramTerms/Create
         public IActionResult Create()
         {
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email");
+            ViewData["UserID"] = new SelectList(_context.Users.Where(u => u.ProgramTerm == null), "ID", "FullName");
+            ViewData["AcadPlan"] = new SelectList(_context.ProgramTerms, "AcadPlan", "AcadPlan");
+            ViewData["ProgramDetailID"] = new SelectList(_context.ProgramDetails, "ID", "Name");
             return View();
         }
 
@@ -119,12 +122,13 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,StudentID,AcadPlan,Description,StrtLevel,LastLevel,Term")] ProgramTerm programTerm)
+        public async Task<IActionResult> Create([Bind("ID,UserID,AcadPlan,ProgramDetailID,StrtLevel,LastLevel,Term")] ProgramTerm programTerm)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(programTerm);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(programTerm);
@@ -143,6 +147,9 @@ namespace BRTF_Booking.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
+            ViewData["ProgramDetailID"] = new SelectList(_context.Users, "ID", "Name");
             return View(programTerm);
         }
 

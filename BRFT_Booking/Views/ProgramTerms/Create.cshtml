@@ -15,8 +15,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserID" class="control-label"></label>
-                <input asp-for="UserID" class="form-control" />
-                <span asp-validation-for="UserID" class="text-danger"></span>
+                <select asp-for="UserID" class="form-control" data-toggle="tooltip" title="Choose User" asp-items="ViewBag.UserID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="AcadPlan" class="control-label"></label>
@@ -24,8 +23,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProgramDetailID" class="control-label"></label>
-                <input asp-for="ProgramDetailID" class="form-control" />
-                <span asp-validation-for="ProgramDetailID" class="text-danger"></span>
+                <select asp-for="ProgramDetailID" class="form-control" data-toggle="tooltip" title="Choose Program" asp-items="ViewBag.ProgramDetailID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="StrtLevel" class="control-label"></label>
