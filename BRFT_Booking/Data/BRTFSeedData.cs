@@ -12,12 +12,9 @@ namespace BRTF_Booking.Data
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-
             using (var context = new BRTFContext(
                 serviceProvider.GetRequiredService<DbContextOptions<BRTFContext>>()))
             {
-
-                
                 if (!context.ProgramDetails.Any())
                 {
                     context.ProgramDetails.AddRange(
@@ -63,6 +60,7 @@ namespace BRTF_Booking.Data
                         }
                         );
                 }
+
                 if (!context.Users.Any())
                 {
                     context.Users.AddRange(
@@ -147,6 +145,7 @@ namespace BRTF_Booking.Data
                 );
                     context.SaveChanges();
                 }
+
                 if (!context.ProgramTerms.Any())
                 {
                     context.ProgramTerms.AddRange(
@@ -249,7 +248,8 @@ namespace BRTF_Booking.Data
                         context.Update(userToUpdate);
                     }
                     context.SaveChanges();
-                }               
+                }
+
                 if (!context.Areas.Any())
                 {
                     context.Areas.AddRange(
@@ -347,6 +347,7 @@ namespace BRTF_Booking.Data
                         });
                     context.SaveChanges();
                 }
+
                 if (!context.Rooms.Any())
                 {
                     context.Rooms.AddRange(
@@ -1025,6 +1026,7 @@ namespace BRTF_Booking.Data
                     );
                     context.SaveChanges();
                 }
+
                 if (!context.ProgramTermGroups.Any())
                 {
                     context.ProgramTermGroups.AddRange(                      
@@ -1125,7 +1127,6 @@ namespace BRTF_Booking.Data
                     );
                     context.SaveChanges();
                 }
-
             }
         }
         public static void InitializeAdmins(IServiceProvider serviceProvider)

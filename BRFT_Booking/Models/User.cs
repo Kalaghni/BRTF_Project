@@ -9,25 +9,13 @@ namespace BRTF_Booking.Models
 {
     public class User
     {
-        public User()
-        {
-            Active = true;
-            this.Bookings = new HashSet<Booking>();
-        }
-
         public int ID { get; set; }
 
         [Display(Name = "Full Name")]
-        public string FullName
-        {
-            get
-            {
-                return FName
+        public string FullName => FName
                     + (string.IsNullOrEmpty(MName) ? " " :
                         (" " + (char?)MName[0] + ". ").ToUpper())
                     + LName;
-            }
-        }
 
         [Display(Name = "Student ID")]
         [StringLength(7, ErrorMessage = "Your student ID must be 7 numbers long")]
@@ -63,5 +51,10 @@ namespace BRTF_Booking.Models
         public bool Active { get; set; }
         public ICollection<Booking> Bookings { get; set; }
 
+        public User()
+        {
+            Active = true;
+            this.Bookings = new HashSet<Booking>();
+        }
     }
 }

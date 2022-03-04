@@ -111,9 +111,7 @@ namespace BRTF_Booking.Controllers
         // GET: ProgramTerms/Create
         public IActionResult Create()
         {
-            ViewData["UserID"] = new SelectList(_context.Users.Where(u => u.ProgramTerm == null), "ID", "FullName");
-            ViewData["AcadPlan"] = new SelectList(_context.ProgramTerms, "AcadPlan", "AcadPlan");
-            ViewData["ProgramDetailID"] = new SelectList(_context.ProgramDetails, "ID", "Name");
+            PopulateDropDownLists();
             return View();
         }
 
@@ -124,19 +122,27 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,AcadPlan,ProgramDetailID,UserID,StrtLevel,LastLevel,Term")] ProgramTerm programTerm)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var userToUpdate = _context.Users.Where(u => u.ID == programTerm.UserID).FirstOrDefault();
-                userToUpdate.ProgramTermID = programTerm.ID;
-                
-                _context.Add(programTerm);
-                _context.Update(userToUpdate);
-                await _context.SaveChangesAsync();
-                return Redirect(Url.RouteUrl( new { Controller = "Users", Action = "Details" }) + $"/{userToUpdate.ID}");
+                if (ModelState.IsValid)
+                {
+                    var userToUpdate = _context.Users
+                        .Where(u => u.ID == programTerm.UserID)
+                        .FirstOrDefault();
+                    userToUpdate.ProgramTermID = programTerm.ID;
+
+                    _context.Add(programTerm);
+                    _context.Update(userToUpdate);
+                    await _context.SaveChangesAsync();
+                    return Redirect(Url.RouteUrl(new { Controller = "Users", Action = "Details" }) + $"/{userToUpdate.ID}");
+                }
             }
-            ViewData["UserID"] = new SelectList(_context.Users.Where(u => u.ProgramTerm == null), "ID", "FullName");
-            ViewData["AcadPlan"] = new SelectList(_context.ProgramTerms, "AcadPlan", "AcadPlan");
-            ViewData["ProgramDetailID"] = new SelectList(_context.ProgramDetails, "ID", "Name");
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+            
+            PopulateDropDownLists();
             return View(programTerm);
         }
 
@@ -154,8 +160,7 @@ namespace BRTF_Booking.Controllers
                 return NotFound();
             }
 
-            ViewData["AcadPlan"] = new SelectList(_context.ProgramTerms, "AcadPlan", "AcadPlan");
-            ViewData["ProgramDetailID"] = new SelectList(_context.ProgramDetails, "ID", "Name");
+            PopulateDropDownLists();
             return View(programTerm);
         }
 
@@ -164,27 +169,33 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,AcadPlan,ProgramDetailID,UserID,StrtLevel,LastLevel,Term")] ProgramTerm programTerm)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != programTerm.ID)
+            var programTermToUpdate = await _context.ProgramTerms
+                .Include(p => p.ProgramDetail)
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.ID == id);
+
+            if (programTermToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (await TryUpdateModelAsync<ProgramTerm>(programTermToUpdate, "", p => p.AcadPlan,
+                p => p.ProgramDetailID, p => p.UserID, p => p.StrtLevel, p => p.LastLevel, p => p.Term))
             {
                 try
                 {
-                    var userToUpdate = _context.Users.Where(u => u.ID == programTerm.UserID).FirstOrDefault();
-                    userToUpdate.ProgramTermID = programTerm.ID;
+                    var userToUpdate = _context.Users.Where(u => u.ID == programTermToUpdate.UserID).FirstOrDefault();
+                    userToUpdate.ProgramTermID = programTermToUpdate.ID;
                     _context.Update(userToUpdate);
 
-                    _context.Update(programTerm);
                     await _context.SaveChangesAsync();
+                    return Redirect(Url.RouteUrl(new { Controller = "Users", Action = "Details" }) + $"/{programTermToUpdate.UserID}");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProgramTermExists(programTerm.ID))
+                    if (!ProgramTermExists(programTermToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -193,11 +204,13 @@ namespace BRTF_Booking.Controllers
                         throw;
                     }
                 }
-                return Redirect(Url.RouteUrl(new { Controller = "Users", Action = "Details" }) + $"/{programTerm.UserID}");
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
             }
-            ViewData["AcadPlan"] = new SelectList(_context.ProgramTerms, "AcadPlan", "AcadPlan");
-            ViewData["ProgramDetailID"] = new SelectList(_context.ProgramDetails, "ID", "Name");
-            return View(programTerm);
+            PopulateDropDownLists();
+            return View(programTermToUpdate);
         }
 
         // GET: ProgramTerms/Delete/5
@@ -227,9 +240,31 @@ namespace BRTF_Booking.Controllers
         {
             var programTerm = await _context.ProgramTerms.FindAsync(id);
 
-            _context.ProgramTerms.Remove(programTerm);
-            await _context.SaveChangesAsync();
-            return Redirect(Url.RouteUrl(new { Controller = "Users", Action = "Details" }) + $"/{programTerm.UserID}");
+            try
+            {
+                _context.ProgramTerms.Remove(programTerm);
+                await _context.SaveChangesAsync();
+                return Redirect(Url.RouteUrl(new { Controller = "Users", Action = "Details" }) + $"/{programTerm.UserID}");
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to Delete ProgramTerm. Remember, you cannot delete a Program with existing Users.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            return View(programTerm);
+        }
+
+        private void PopulateDropDownLists()
+        {
+            ViewData["UserID"] = new SelectList(_context.Users.Where(u => u.ProgramTerm == null), "ID", "FullName");
+            ViewData["AcadPlan"] = new SelectList(_context.ProgramTerms, "AcadPlan", "AcadPlan");
+            ViewData["ProgramDetailID"] = new SelectList(_context.ProgramDetails, "ID", "Name");
         }
 
         private string ControllerName()

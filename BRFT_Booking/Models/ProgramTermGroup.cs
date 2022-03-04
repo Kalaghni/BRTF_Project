@@ -8,8 +8,6 @@ namespace BRTF_Booking.Models
 {
     public class ProgramTermGroup
     {
-
-
         public int ID { get; set; }
 
         [Display(Name = "Group Name")]
@@ -21,6 +19,5 @@ namespace BRTF_Booking.Models
 
         [Display(Name = "Level")]
         public int Level { get; set; }
-
     }
 }

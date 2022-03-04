@@ -7,13 +7,15 @@ namespace BRTF_Booking.Models
 {
     public class ProgramDetail
     {
+        public int ID { get; set; }
+
+        public string Name { get; set; }
+
+        public ICollection<ProgramTermGroup> ProgramTermGroups { get; set; }
+
         public ProgramDetail()
         {
             this.ProgramTermGroups = new HashSet<ProgramTermGroup>();
         }
-        public int ID { get; set; }
-        public string Name { get; set; }
-
-        public ICollection<ProgramTermGroup> ProgramTermGroups { get; set; }
     }
 }

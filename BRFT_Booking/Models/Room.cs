@@ -8,11 +8,6 @@ namespace BRTF_Booking.Models
 {
     public class Room
     {
-        public Room()
-        {
-            this.Bookings = new HashSet<Booking>();
-        }
-
         public int ID { get; set; }
 
         [Display(Name = "Area")]
@@ -32,5 +27,10 @@ namespace BRTF_Booking.Models
         public bool Enabled { get; set; }
 
         public ICollection<Booking> Bookings { get; set; }
+
+        public Room()
+        {
+            this.Bookings = new HashSet<Booking>();
+        }
     }
 }

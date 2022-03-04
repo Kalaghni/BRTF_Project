@@ -35,8 +35,7 @@ namespace BRTF_Booking.Controllers
                 return NotFound();
             }
 
-            var area = await _context.Areas
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var area = await _context.Areas.FirstOrDefaultAsync(m => m.ID == id);
             if (area == null)
             {
                 return NotFound();
@@ -58,11 +57,18 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name")] Area area)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(area);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(area);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
             return View(area);
         }
@@ -88,23 +94,24 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name")] Area area)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != area.ID)
+            var areaToUpdate = await _context.Areas.FindAsync(id);
+            if (areaToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (await TryUpdateModelAsync<Area>(areaToUpdate, "", a => a.Name))
             {
                 try
                 {
-                    _context.Update(area);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AreaExists(area.ID))
+                    if (!AreaExists(areaToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -113,9 +120,12 @@ namespace BRTF_Booking.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
             }
-            return View(area);
+            return View(areaToUpdate);
         }
 
         // GET: Areas/Delete/5

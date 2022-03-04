@@ -81,8 +81,7 @@ namespace BRTF_Booking.Controllers
             }
             catch (Exception)
             {
-                ModelState.AddModelError(string.Empty,
-                                "Unable to save changes.");
+                ModelState.AddModelError(string.Empty, "Unable to save changes.");
             }
             PopulateAssignedRoleData(user);
             return View(user);

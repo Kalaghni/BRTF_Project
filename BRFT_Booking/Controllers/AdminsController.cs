@@ -9,6 +9,7 @@ using BRTF_Booking.Data;
 using BRTF_Booking.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BRTF_Booking.Controllers
 {
@@ -38,8 +39,7 @@ namespace BRTF_Booking.Controllers
                 return NotFound();
             }
 
-            var admin = await _context.Admins
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var admin = await _context.Admins.FirstOrDefaultAsync(m => m.ID == id);
             if (admin == null)
             {
                 return NotFound();
@@ -66,33 +66,52 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,FName,LName,Email,Role")] Admin admin, string? password)
         {
-            if (ModelState.IsValid)
+            try
             {
-                string roleString = "Admin";
-                if(admin.Role != null)
+                if (ModelState.IsValid)
                 {
-                    roleString = admin.Role;
-                }
-                if (_userManager.FindByEmailAsync(admin.Email).Result == null)
-                {
-                    IdentityUser user = new IdentityUser
+                    string roleString = "Admin";
+                    if (admin.Role != null)
                     {
-                        UserName = admin.Email,
-                        Email = admin.Email
-                    };
-
-                    IdentityResult result = _userManager.CreateAsync(user, password).Result;
-
-                    if (result.Succeeded)
-                    {
-                        _userManager.AddToRoleAsync(user, roleString).Wait();
+                        roleString = admin.Role;
                     }
-                }
+                    if (_userManager.FindByEmailAsync(admin.Email).Result == null)
+                    {
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = admin.Email,
+                            Email = admin.Email
+                        };
+
+                        IdentityResult result = _userManager.CreateAsync(user, password).Result;
+
+                        if (result.Succeeded)
+                        {
+                            _userManager.AddToRoleAsync(user, roleString).Wait();
+                        }
+                    }
                     _context.Add(admin);
                     await _context.SaveChangesAsync();
-                
-                return RedirectToAction(nameof(Index));
+
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            catch (RetryLimitExceededException /* dex */)
+            {
+                ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed"))
+                {
+                    ModelState.AddModelError("Email", "Unable to save changes. Remember, you cannot have duplicate admin emails.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+
             return View(admin);
         }
 
@@ -117,35 +136,36 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FName,LName,Email,Role")] Admin admin)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != admin.ID)
+            var adminToUpdate = await _context.Admins.FindAsync(id);
+            if (adminToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (await TryUpdateModelAsync<Admin>(adminToUpdate, "", a => a.FName, a => a.LName, a => a.Email, a => a.Role))
             {
                 try
                 {
-                    if (admin.Role == "Top-Level Admin")
+                    if (adminToUpdate.Role == "Top-Level Admin")
                     {
-                        IdentityUser user = _userManager.FindByEmailAsync(admin.Email).Result;
+                        IdentityUser user = _userManager.FindByEmailAsync(adminToUpdate.Email).Result;
                         await _userManager.RemoveFromRoleAsync(user, "Admin");
                         await _userManager.AddToRoleAsync(user, "Top-Level Admin");
-                        _context.Update(admin);
+                        _context.Update(adminToUpdate);
                         await _context.SaveChangesAsync();
                     }
                     else
                     {
-                        _context.Update(admin);
                         await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
                     }
                     
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AdminExists(admin.ID))
+                    if (!AdminExists(adminToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -154,9 +174,12 @@ namespace BRTF_Booking.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
             }
-            return View(admin);
+            return View(adminToUpdate);
         }
 
         // GET: Admins/Delete/5

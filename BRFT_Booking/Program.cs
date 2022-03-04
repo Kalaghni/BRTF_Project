@@ -25,8 +25,6 @@ namespace BRTF_Booking
                 try
                 {
                     //calls application seed data
-                    
-
                     var context = services.GetRequiredService<BRTFContext>();
                     context.Database.Migrate();
                     BRTFSeedData.Initialize(services);

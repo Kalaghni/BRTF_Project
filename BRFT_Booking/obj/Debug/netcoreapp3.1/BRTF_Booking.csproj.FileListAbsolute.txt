@@ -1098,3 +1098,23 @@ D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF
 D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.dll
 D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.pdb
 D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.genruntimeconfig.cache
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Login.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Logout.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\ChangePassword.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\_ViewImports.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ValidationScriptsPartial.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewImports.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Admins\Create.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Admins\Delete.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Admins\Details.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Admins\Edit.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Admins\Index.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Areas\Create.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Areas\Delete.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Areas\Details.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Areas\Edit.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Areas\Index.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Bookings\Calendar.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Bookings\Request.cshtml.g.cs

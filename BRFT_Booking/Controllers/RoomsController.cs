@@ -180,11 +180,18 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,AreaID,Name,Description,Limit,Enabled")] Room room)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(room);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(room);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
             ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
             return View(room);
@@ -214,23 +221,27 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,AreaID,Name,Description,Limit,Enabled")] Room room)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id != room.ID)
+            var roomToUpdate = await _context.Rooms
+                .Include(r => r.Area)
+                .FirstOrDefaultAsync(r => r.ID == id);
+            if (roomToUpdate == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (await TryUpdateModelAsync<Room>(roomToUpdate, "", r => r.AreaID, r => r.Name, 
+                r => r.Description, r => r.Limit, r => r.Enabled))
             {
                 try
                 {
-                    _context.Update(room);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RoomExists(room.ID))
+                    if (!RoomExists(roomToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -239,10 +250,13 @@ namespace BRTF_Booking.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
             }
             ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
-            return View(room);
+            return View(roomToUpdate);
         }
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
@@ -254,8 +268,7 @@ namespace BRTF_Booking.Controllers
                 return NotFound();
             }
 
-            var room = await _context.Rooms
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var room = await _context.Rooms.FirstOrDefaultAsync(m => m.ID == id);
             if (room == null)
             {
                 return NotFound();
@@ -271,9 +284,25 @@ namespace BRTF_Booking.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var room = await _context.Rooms.FindAsync(id);
-            _context.Rooms.Remove(room);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            
+            try
+            {
+                _context.Rooms.Remove(room);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to Delete Room. Remember, you cannot delete a Room with existing Bookings.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            return View(room);
         }
 
         private string ControllerName()

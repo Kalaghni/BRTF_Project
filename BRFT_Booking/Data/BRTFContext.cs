@@ -52,11 +52,12 @@ namespace BRTF_Booking.Data
                 .IsUnique();
 
             modelBuilder.Entity<User>()
-            .HasIndex(a => new { a.Email })
-            .IsUnique();
+                .HasIndex(a => new { a.Email })
+                .IsUnique();
+
+            modelBuilder.Entity<Admin>().HasIndex(a => a.Email).IsUnique();
 
             //Foreign key constraints
-
             modelBuilder.Entity<ProgramTerm>()
                 .HasOne(u => u.User)
                 .WithOne(b => b.ProgramTerm)

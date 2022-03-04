@@ -30,7 +30,11 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
-            var bRFTContext = _context.Bookings.Include(b => b.User).Include(b => b.Room).ThenInclude(b => b.Area);
+            var bRFTContext = _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .ThenInclude(b => b.Area);
+
             return View(await bRFTContext.ToListAsync());
         }
 
@@ -45,7 +49,7 @@ namespace BRTF_Booking.Controllers
             var booking = await _context.Bookings
                 .Include(b => b.Room)
                 .Include(b => b.User)
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(b => b.ID == id);
             if (booking == null)
             {
                 return NotFound();
@@ -70,7 +74,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,EndDate,Status")] Booking booking, DateTime[] selectedTimes)
         {
-
+            try
+            {
                 if (ModelState.IsValid)
                 {
                     booking.BookingRequested = DateTime.Today;
@@ -78,6 +83,11 @@ namespace BRTF_Booking.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
 
             PopulateDropDownLists();
             return View(booking);
@@ -92,7 +102,11 @@ namespace BRTF_Booking.Controllers
                 return NotFound();
             }
 
-            var booking = await _context.Bookings.Include(b => b.Room).ThenInclude(b => b.Area).Where(b => b.ID == id).FirstOrDefaultAsync();
+            var booking = await _context.Bookings
+                .Include(b => b.Room)
+                .ThenInclude(b => b.Area)
+                .Where(b => b.ID == id)
+                .FirstOrDefaultAsync();
             if (booking == null)
             {
                 return NotFound();
@@ -107,22 +121,29 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,BookingRequested,StartDate,EndDate,Status")] Booking booking, string[] selectedOptions, Byte[] RowVersion)
+        public async Task<IActionResult> Edit(int id, string[] selectedOptions, Byte[] RowVersion)
         {
-            if (id != booking.ID)
+            var bookingToUpdate = await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .FirstOrDefaultAsync(b => b.ID == id);
+
+            if (bookingToUpdate == null)
             {
                 return NotFound();
             }
-            if (ModelState.IsValid)
+
+            if (await TryUpdateModelAsync<Booking>(bookingToUpdate, "", b => b.UserID, b => b.RoomID, 
+                b => b.BookingRequested, b => b.StartDate, b => b.EndDate, b => b.Status))
             {
                 try
                 {
-                    _context.Update(booking);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookingExists(booking.ID))
+                    if (!BookingExists(bookingToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -131,10 +152,13 @@ namespace BRTF_Booking.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
             }
             PopulateDropDownLists();
-            return View(booking);
+            return View(bookingToUpdate);
         }
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
@@ -204,8 +228,7 @@ namespace BRTF_Booking.Controllers
 
         private SelectList AreaSelectList(int? selectedId)
         {
-            return new SelectList(_context.Areas
-                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+            return new SelectList(_context.Areas.OrderBy(d => d.Name), "ID", "Name", selectedId);
         }
 
 
@@ -213,7 +236,9 @@ namespace BRTF_Booking.Controllers
         {
 
             //The AreaID has been added so we can filter by it.
-            var query = from c in _context.Rooms.Include(c => c.Area).Where(p => p.AreaID == AreaID)
+            var query = from c in _context.Rooms
+                        .Include(c => c.Area)
+                        .Where(p => p.AreaID == AreaID)
                         select c;
 
             return new SelectList(query.OrderBy(p => p.Name), "ID", "Name", selectedId);
@@ -283,20 +308,15 @@ namespace BRTF_Booking.Controllers
                     backgroundColor = color,
                     allDay = false
                 }) ;
-
             }
-
-
             return Json(events.ToArray());
         }
 
         [HttpPost]
         public ActionResult PostEvents(string jsonData)
-        {Console.WriteLine(jsonData);
+        {
+            Console.WriteLine(jsonData);
             EventViewModel bookingEvent = JsonConvert.DeserializeObject<EventViewModel>(jsonData);
-
-            
-
             return View(nameof(Calendar));
         }
 
@@ -340,7 +360,6 @@ namespace BRTF_Booking.Controllers
 
             }
 
-
             return Json(events.ToArray());
         }
 
@@ -350,8 +369,11 @@ namespace BRTF_Booking.Controllers
             var viewModel = new EventViewModel();
             var events = new List<EventViewModel>();
 
+            var bookings = _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .Where(b => b.Room.ID == roomID);
 
-            var bookings = _context.Bookings.Include(b => b.User).Include(b => b.Room).Where(b => b.Room.ID == roomID);
             foreach (Booking booking in bookings)
             {
                 string color = "";
@@ -382,8 +404,6 @@ namespace BRTF_Booking.Controllers
                 });
 
             }
-
-
             return Json(events.ToArray());
         }
 
@@ -393,6 +413,5 @@ namespace BRTF_Booking.Controllers
             ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
             ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
         }
-
     }
 }

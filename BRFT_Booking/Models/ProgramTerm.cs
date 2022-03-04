@@ -8,7 +8,6 @@ namespace BRTF_Booking.Models
 {
     public class ProgramTerm
     {
-
         public int ID { get; set; }
 
         [Display(Name = "Group")]
@@ -69,6 +68,5 @@ namespace BRTF_Booking.Models
         [Display(Name = "Term")]
         [Required(ErrorMessage = "Term is required.")]
         public int Term { get; set; }
-        }
-
     }
+}

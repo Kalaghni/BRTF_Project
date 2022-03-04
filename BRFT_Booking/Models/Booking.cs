@@ -9,13 +9,7 @@ namespace BRTF_Booking.Models
     public class Booking : IValidatableObject
     {
 
-        public TimeSpan timeSpan
-        {
-            get
-            {
-                return new TimeSpan(EndDate.Ticks - StartDate.Ticks);
-            }
-        }
+        public TimeSpan timeSpan => new TimeSpan(EndDate.Ticks - StartDate.Ticks);
 
         public int ID { get; set; }
 

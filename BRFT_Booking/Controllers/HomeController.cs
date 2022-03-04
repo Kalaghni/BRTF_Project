@@ -26,7 +26,9 @@ namespace BRTF_Booking.Controllers
 
         public IActionResult Index()
         {
-            var users = _context.Users.Include(b => b.Bookings).ThenInclude(b => b.Room);
+            var users = _context.Users
+                .Include(b => b.Bookings)
+                .ThenInclude(b => b.Room);
             return View(users);
         }
 
