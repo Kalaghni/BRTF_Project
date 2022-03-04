@@ -46,7 +46,6 @@
         <div class="container">
             @if (User.IsInRole("Admin"))
             {
-                var activeUser = context.Admins.Where(u => u.Email == User.Identity.Name).FirstOrDefault();
                 <h1 class="hero-title mt-0">Admin Panel</h1>
                 <div class="hero-cta">
                     <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Create">Create a Booking</a>
@@ -80,7 +79,7 @@
 
             @if (User.IsInRole("Top-Level Admin"))
             {
-                <h1 class="hero-title mt-0">Top Level Admin Panel</h1>
+                <h1 class="hero-title mt-0">Admin Panel</h1>
                 <div class="hero-cta">
                     <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Create">Create a Booking</a>
                 </div>

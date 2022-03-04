@@ -15,8 +15,8 @@
     <WebStackScaffolding_ViewDialogWidth>800</WebStackScaffolding_ViewDialogWidth>
     <ActiveDebugProfile>BRFT_Booking</ActiveDebugProfile>
     <WebStackScaffolding_LayoutPageFile>~/Views/Shared/_Layout.cshtml</WebStackScaffolding_LayoutPageFile>
-    <_SelectedScaffolderID>IdentityScaffolder</_SelectedScaffolderID>
-    <_SelectedScaffolderCategoryPath>root/Identity</_SelectedScaffolderCategoryPath>
+    <_SelectedScaffolderID>MvcControllerWithActionsScaffolder</_SelectedScaffolderID>
+    <_SelectedScaffolderCategoryPath>root/Common/MVC</_SelectedScaffolderCategoryPath>
     <WebStackScaffolding_DependencyDialogWidth>650</WebStackScaffolding_DependencyDialogWidth>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

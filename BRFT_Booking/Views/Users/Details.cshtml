@@ -4,49 +4,58 @@
     ViewData["Title"] = "Details";
     int UserID = Model.ID;
 }
+<a asp-action="Index">Back to List</a>
 
-<h1>Details</h1>
-
-<div style="color: black">
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StudentID)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StudentID)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-    </dl>
-</div>
+<h1>@Html.DisplayFor(model => model.FullName)</h1>
+<h4>@Html.DisplayFor(model => model.StudentID)</h4>
+<h4>@Html.DisplayFor(model => model.Email)</h4>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit Student Details</a>
 </div>
+<hr />
+@if (Model.ProgramTerm == null)
+{
+    <h2>Student has no program information available</h2>
+    <a class="button button-primary" asp-controller="ProgramTerms" asp-action="Create">Add Program Term</a>
+}
+@if (Model.ProgramTerm != null)
+{
+    <div style="color: black">
+        <h2>Program Term</h2>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProgramTerm.ProgramDetail)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProgramTerm.ProgramDetail.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProgramTerm.StrtLevel)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProgramTerm.StrtLevel)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProgramTerm.LastLevel)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProgramTerm.LastLevel)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProgramTerm.Term)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProgramTerm.Term)
+            </dd>
+        </dl>
+    </div>
+    <a asp-controller="ProgramTerms" asp-action="Edit" asp-route-id="@Model.ProgramTerm.ID">Edit Program Details</a> <br />
+    <a asp-controller="ProgramTerms" asp-action="Delete" asp-route-id="@Model.ProgramTerm.ID">Delete User Program Details</a>
+}
+<hr />
+<h2>Bookings</h2>
+<br />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
 <div class="container">
     <div id='calendar'></div>

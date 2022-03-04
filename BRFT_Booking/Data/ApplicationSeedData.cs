@@ -31,21 +31,6 @@ namespace BRTF_Booking.Data
             //Grab existing users
             var students = context.Users.ToList();
 
-            if (userManager.FindByEmailAsync("tladmin@niagaracollege.ca").Result == null)
-            {
-                IdentityUser user = new IdentityUser
-                {
-                    UserName = "tladmin@niagaracollege.ca",
-                    Email = "tladmin@niagaracollege.ca"
-                };
-
-                IdentityResult result = userManager.CreateAsync(user, "password").Result;
-
-                if (result.Succeeded)
-                {
-                    userManager.AddToRoleAsync(user, "Top-Level Admin").Wait();
-                }
-            }
 
             foreach (User student in students)
             {
@@ -85,7 +70,7 @@ namespace BRTF_Booking.Data
 
                     if (result.Succeeded)
                     {
-                        userManager.AddToRoleAsync(user, "Admin").Wait();
+                        userManager.AddToRoleAsync(user, admin.Role).Wait();
                     }
                 }
             }

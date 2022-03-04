@@ -15,7 +15,8 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .Annotation("Sqlite:Autoincrement", true),
                     FName = table.Column<string>(nullable: false),
                     LName = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: false)
+                    Email = table.Column<string>(nullable: false),
+                    Role = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,8 +123,8 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     AcadPlan = table.Column<string>(nullable: false),
-                    ProgramDetailID = table.Column<int>(nullable: false),
-                    UserID = table.Column<int>(nullable: false),
+                    ProgramDetailID = table.Column<int>(nullable: true),
+                    UserID = table.Column<int>(nullable: true),
                     StrtLevel = table.Column<int>(nullable: false),
                     LastLevel = table.Column<string>(nullable: false),
                     Term = table.Column<int>(nullable: false)
@@ -136,13 +137,13 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         column: x => x.ProgramDetailID,
                         principalTable: "ProgramDetails",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ProgramTerms_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,6 +157,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     BookingRequested = table.Column<DateTime>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<string>(nullable: true),
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
                 constraints: table =>

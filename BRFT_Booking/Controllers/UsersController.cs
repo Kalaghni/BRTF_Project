@@ -123,6 +123,8 @@ namespace BRTF_Booking.Controllers
             }
 
             var user = await _context.Users
+                .Include(u => u.ProgramTerm)
+                .ThenInclude(u => u.ProgramDetail)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (user == null)
             {
@@ -143,7 +145,7 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StudentID,FName,MName,LName,Email,Password")] User user)
+        public async Task<IActionResult> Create([Bind("ID,StudentID,FName,MName,LName,Email")] User user, string? Password)
         {
             try
             {
@@ -160,7 +162,7 @@ namespace BRTF_Booking.Controllers
                             Email = user.Email
                         };
 
-                        IdentityResult result = _userManager.CreateAsync(Iuser, user.Password).Result;
+                        IdentityResult result = _userManager.CreateAsync(Iuser, Password).Result;
 
                         if (result.Succeeded)
                         {

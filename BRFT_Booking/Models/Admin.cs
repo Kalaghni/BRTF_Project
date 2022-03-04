@@ -21,5 +21,9 @@ namespace BRTF_Booking.Models
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
+
+        [Display(Name = "Role")]
+        [Required(ErrorMessage = "Role is required")]
+        public string Role { get; set; }
     }
 }

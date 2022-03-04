@@ -64,14 +64,14 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FName,LName,Email")] Admin admin, string? password, string? Role)
+        public async Task<IActionResult> Create([Bind("ID,FName,LName,Email,Role")] Admin admin, string? password)
         {
             if (ModelState.IsValid)
             {
                 string roleString = "Admin";
-                if(Role != null)
+                if(admin.Role != null)
                 {
-                    roleString = Role;
+                    roleString = admin.Role;
                 }
                 if (_userManager.FindByEmailAsync(admin.Email).Result == null)
                 {
@@ -88,8 +88,9 @@ namespace BRTF_Booking.Controllers
                         _userManager.AddToRoleAsync(user, roleString).Wait();
                     }
                 }
-                _context.Add(admin);
-                await _context.SaveChangesAsync();
+                    _context.Add(admin);
+                    await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
             return View(admin);
@@ -116,7 +117,7 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FName,LName,Email")] Admin admin)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,FName,LName,Email,Role")] Admin admin)
         {
             if (id != admin.ID)
             {
@@ -127,8 +128,20 @@ namespace BRTF_Booking.Controllers
             {
                 try
                 {
-                    _context.Update(admin);
-                    await _context.SaveChangesAsync();
+                    if (admin.Role == "Top-Level Admin")
+                    {
+                        IdentityUser user = _userManager.FindByEmailAsync(admin.Email).Result;
+                        await _userManager.RemoveFromRoleAsync(user, "Admin");
+                        await _userManager.AddToRoleAsync(user, "Top-Level Admin");
+                        _context.Update(admin);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        _context.Update(admin);
+                        await _context.SaveChangesAsync();
+                    }
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

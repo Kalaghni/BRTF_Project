@@ -11,7 +11,8 @@ namespace BRTF_Booking.Models
 
         public int ID { get; set; }
 
-    public string Group
+        [Display(Name = "Group")]
+        public string Group
         {
             get
             {
@@ -40,22 +41,20 @@ namespace BRTF_Booking.Models
                 }
                 catch (NullReferenceException ex)
                 {
-                    Console.WriteLine(ex.Message);
-                    return "";
+                    return ex.Message;
                 }
             }
         }
+
         [Display(Name = "Academic Plan")]
         [Required(ErrorMessage = "Academic Plan is required.")]
         public string AcadPlan { get; set; }
 
         [Display(Name = "Program")]
-        [Required(ErrorMessage = "Program is required.")]
         public ProgramDetail? ProgramDetail { get; set; }
         public int? ProgramDetailID { get; set; }
 
         [Display(Name = "Student")]
-        [Required(ErrorMessage = "Student is required.")]
         public User? User { get; set; }
         public int? UserID { get; set; }
 

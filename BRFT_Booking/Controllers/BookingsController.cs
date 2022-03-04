@@ -67,43 +67,16 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,EndDate")] Booking booking, DateTime[] selectedTimes)
+        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,EndDate,Status")] Booking booking, DateTime[] selectedTimes)
         {
-            try
-            {
 
-                var l = new List<Booking>();
-                var ex = l.SelectMany(a => new[] { a.StartDate, a.EndDate }).Distinct().OrderBy(dt => dt);
-                var pairs = ex.Zip(ex.Skip(1), (First, Second) => new { First, Second });
-
-                if(pairs == null)
+                if (ModelState.IsValid)
                 {
+                    booking.BookingRequested = DateTime.Today;
                     _context.Add(booking);
                     await _context.SaveChangesAsync();
-                    return View(booking);
-
+                    return RedirectToAction(nameof(Index));
                 }
-                else
-                {
-                    throw new Exception("This time slot is already booked, please try and book a different timeslot.");
-                }
-                
-            }
-            catch (RetryLimitExceededException /* dex */)
-            {
-                ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
-            }
-            catch (DbUpdateException dex)
-            {
-                if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed"))
-                {
-                    ModelState.AddModelError("AthleteCode", "Unable to save changes. Remember, you cannot have duplicate Athlete Codes.");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-                }
-            }
 
             PopulateDropDownLists();
             return View(booking);
@@ -133,94 +106,32 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,BookingRequested,StartDate,EndDate")] Booking booking, string[] selectedOptions, Byte[] RowVersion)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,RoomID,BookingRequested,StartDate,EndDate,Status")] Booking booking, string[] selectedOptions, Byte[] RowVersion)
         {
-            var bookingToUpdate = await _context.Bookings
-                .Include(b => b.User)
-                .Include(b => b.Room)
-                .FirstOrDefaultAsync(b => b.ID == id);
-
-
-            if (bookingToUpdate == null)
+            if (id != booking.ID)
             {
                 return NotFound();
             }
-
-            //Adding RowVersion to the OrginialValues collection for the entity
-            _context.Entry(booking).Property("RowVersion").OriginalValue = RowVersion;
-
-            //Checking for conflicting times
-            var l = new List<Booking>();
-            var comp = l.SelectMany(a => new[] { a.StartDate, a.EndDate }).Distinct().OrderBy(dt => dt);
-            var pairs = comp.Zip(comp.Skip(1), (First, Second) => new { First, Second });
-
-            if (await TryUpdateModelAsync<Booking>(bookingToUpdate, "", 
-                b => b.UserID, b => b.RoomID, b => b.StartDate, b => b.EndDate, b => b.BookingRequested))
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    if(pairs == null)
+                    _context.Update(booking);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BookingExists(booking.ID))
                     {
-                        _context.Update(bookingToUpdate);
-                        await _context.SaveChangesAsync();
+                        return NotFound();
                     }
                     else
                     {
-                        throw new Exception("This time slot is already booked, please try and book a different timeslot.");
+                        throw;
                     }
-                    
                 }
-                catch (RetryLimitExceededException)
-                {
-                    ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
-                }
-                catch (DbUpdateConcurrencyException ex)
-                {
-                    var exceptionEntry = ex.Entries.Single();
-                    var clientValues = (Booking)exceptionEntry.Entity;
-                    var databaseEntry = exceptionEntry.GetDatabaseValues();
-                    if (databaseEntry == null)
-                    {
-                        ModelState.AddModelError("",
-                            "Unable to save changes. The Athlete was deleted by another user.");
-                    }
-                    else
-                    {
-                        var databaseValues = (Booking)databaseEntry.ToObject();
-                        if (databaseValues.StartDate != clientValues.StartDate)
-                            ModelState.AddModelError("StartDate", "Current value: "
-                                + databaseValues.StartDate);
-                        if (databaseValues.EndDate != clientValues.EndDate)
-                            ModelState.AddModelError("EndDate", "Current value: "
-                                + databaseValues.EndDate);
-                        if (databaseValues.BookingRequested != clientValues.BookingRequested)
-                            ModelState.AddModelError("BookingRequested", "Current value: "
-                                + databaseValues.BookingRequested);
-
-                        //For the foreign key, we need to go to the database to get the information to show
-                        if (databaseValues.RoomID != clientValues.RoomID)
-                        {
-                            Room databaseRoom = await _context.Rooms.SingleOrDefaultAsync(i => i.ID == databaseValues.RoomID);
-                            ModelState.AddModelError("RoomID", $"Current value: {databaseRoom?.Name}");
-                        }
-                        if (databaseValues.UserID != clientValues.UserID)
-                        {
-                            User databaseUser = await _context.Users.SingleOrDefaultAsync(i => i.ID == databaseValues.UserID);
-                            ModelState.AddModelError("SportID", $"Current value: {databaseUser?.FullName}");
-                        }
-
-                        ModelState.AddModelError(string.Empty, "The record you attempted to edit "
-                                + "was modified by another user after you received your values. The "
-                                + "edit operation was canceled and the current values in the database "
-                                + "have been displayed. If you still want to save your version of this record, click "
-                                + "the Save button again. Otherwise click the 'Back to List' hyperlink.");
-                        bookingToUpdate.RowVersion = (byte[])databaseValues.RowVersion;
-                        ModelState.Remove("RowVersion");
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
+                return RedirectToAction(nameof(Index));
             }
-
             PopulateDropDownLists();
             return View(booking);
         }
@@ -345,6 +256,21 @@ namespace BRTF_Booking.Controllers
             var bookings = _context.Bookings.Include(b => b.User).Include(b => b.Room).Where(b => b.User.Email == User.Identity.Name);
             foreach (Booking booking in bookings)
             {
+                string color = "";
+
+                if(booking.Status == "Accepted")
+                {
+                    color = "#44CF6C";
+                }
+                else if (booking.Status == "Declined")
+                {
+                    color = "#D52941";
+                }
+                else
+                {
+                    color = "#E2C044";
+                }
+
                 events.Add(new EventViewModel()
                 {
                     id = booking.ID,
@@ -352,6 +278,8 @@ namespace BRTF_Booking.Controllers
                     start = booking.StartDate.ToString(),
                     end = booking.EndDate.ToString(),
                     url = Url.RouteUrl(new { Action = "Details", Controller = "Bookings"}) + $"/{booking.ID}",
+                    borderColor = color,
+                    backgroundColor = color,
                     allDay = false
                 }) ;
 
@@ -371,6 +299,21 @@ namespace BRTF_Booking.Controllers
             var bookings = _context.Bookings.Include(b => b.User).Include(b => b.Room).Where(b => b.User.ID == userID);
             foreach (Booking booking in bookings)
             {
+                string color = "";
+
+                if (booking.Status == "Accepted")
+                {
+                    color = "#44CF6C";
+                }
+                else if (booking.Status == "Declined")
+                {
+                    color = "#D52941";
+                }
+                else
+                {
+                    color = "#E2C044";
+                }
+
                 events.Add(new EventViewModel()
                 {
                     id = booking.ID,
@@ -378,6 +321,51 @@ namespace BRTF_Booking.Controllers
                     start = booking.StartDate.ToString(),
                     end = booking.EndDate.ToString(),
                     url = Url.RouteUrl(new { Action = "Details", Controller = "Bookings" }) + $"/{booking.ID}",
+                    borderColor = color,
+                    backgroundColor = color,
+                    allDay = false
+                });
+
+            }
+
+
+            return Json(events.ToArray());
+        }
+
+        [HttpGet]
+        public JsonResult GetRoomEvents(int? roomID)
+        {
+            var viewModel = new EventViewModel();
+            var events = new List<EventViewModel>();
+
+
+            var bookings = _context.Bookings.Include(b => b.User).Include(b => b.Room).Where(b => b.Room.ID == roomID);
+            foreach (Booking booking in bookings)
+            {
+                string color = "";
+
+                if (booking.Status == "Accepted")
+                {
+                    color = "#44CF6C";
+                }
+                else if (booking.Status == "Declined")
+                {
+                    color = "#D52941";
+                }
+                else
+                {
+                    color = "#E2C044";
+                }
+
+                events.Add(new EventViewModel()
+                {
+                    id = booking.ID,
+                    title = booking.User.FullName,
+                    start = booking.StartDate.ToString(),
+                    end = booking.EndDate.ToString(),
+                    url = Url.RouteUrl(new { Action = "Details", Controller = "Bookings" }) + $"/{booking.ID}",
+                    borderColor = color,
+                    backgroundColor = color,
                     allDay = false
                 });
 
@@ -390,7 +378,7 @@ namespace BRTF_Booking.Controllers
         private void PopulateDropDownLists()
         {
             //ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email");
+            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
             ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
         }
 

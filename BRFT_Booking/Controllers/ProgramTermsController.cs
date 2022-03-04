@@ -122,15 +122,21 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,AcadPlan,ProgramDetailID,StrtLevel,LastLevel,Term")] ProgramTerm programTerm)
+        public async Task<IActionResult> Create([Bind("ID,AcadPlan,ProgramDetailID,UserID,StrtLevel,LastLevel,Term")] ProgramTerm programTerm)
         {
             if (ModelState.IsValid)
             {
+                var userToUpdate = _context.Users.Where(u => u.ID == programTerm.UserID).FirstOrDefault();
+                userToUpdate.ProgramTermID = programTerm.ID;
+                
                 _context.Add(programTerm);
+                _context.Update(userToUpdate);
                 await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
+                return Redirect(Url.RouteUrl( new { Controller = "Users", Action = "Details" }) + $"/{userToUpdate.ID}");
             }
+            ViewData["UserID"] = new SelectList(_context.Users.Where(u => u.ProgramTerm == null), "ID", "FullName");
+            ViewData["AcadPlan"] = new SelectList(_context.ProgramTerms, "AcadPlan", "AcadPlan");
+            ViewData["ProgramDetailID"] = new SelectList(_context.ProgramDetails, "ID", "Name");
             return View(programTerm);
         }
 
@@ -148,8 +154,8 @@ namespace BRTF_Booking.Controllers
                 return NotFound();
             }
 
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
-            ViewData["ProgramDetailID"] = new SelectList(_context.Users, "ID", "Name");
+            ViewData["AcadPlan"] = new SelectList(_context.ProgramTerms, "AcadPlan", "AcadPlan");
+            ViewData["ProgramDetailID"] = new SelectList(_context.ProgramDetails, "ID", "Name");
             return View(programTerm);
         }
 
@@ -158,7 +164,7 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UserID,StudentID,AcadPlan,Description,StrtLevel,LastLevel,Term")] ProgramTerm programTerm)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,AcadPlan,ProgramDetailID,UserID,StrtLevel,LastLevel,Term")] ProgramTerm programTerm)
         {
             if (id != programTerm.ID)
             {
@@ -169,6 +175,10 @@ namespace BRTF_Booking.Controllers
             {
                 try
                 {
+                    var userToUpdate = _context.Users.Where(u => u.ID == programTerm.UserID).FirstOrDefault();
+                    userToUpdate.ProgramTermID = programTerm.ID;
+                    _context.Update(userToUpdate);
+
                     _context.Update(programTerm);
                     await _context.SaveChangesAsync();
                 }
@@ -183,8 +193,10 @@ namespace BRTF_Booking.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Redirect(Url.RouteUrl(new { Controller = "Users", Action = "Details" }) + $"/{programTerm.UserID}");
             }
+            ViewData["AcadPlan"] = new SelectList(_context.ProgramTerms, "AcadPlan", "AcadPlan");
+            ViewData["ProgramDetailID"] = new SelectList(_context.ProgramDetails, "ID", "Name");
             return View(programTerm);
         }
 
@@ -214,9 +226,10 @@ namespace BRTF_Booking.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var programTerm = await _context.ProgramTerms.FindAsync(id);
+
             _context.ProgramTerms.Remove(programTerm);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Redirect(Url.RouteUrl(new { Controller = "Users", Action = "Details" }) + $"/{programTerm.UserID}");
         }
 
         private string ControllerName()

@@ -8,7 +8,7 @@
     @if (SignInManager.IsSignedIn(User))
     {
     <li class="nav-item">
-        @if (User.IsInRole("Admin"))
+        @if (User.IsInRole("Admin") || User.IsInRole("Top-Level Admin"))
         {
             var activeUser = context.Admins.Where(a => a.Email == User.Identity.Name).FirstOrDefault();
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Logged in as @activeUser.FName @activeUser.LName</a>
@@ -18,10 +18,7 @@
             var activeUser = context.Users.Where(a => a.Email == User.Identity.Name).FirstOrDefault();
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Logged in as @activeUser.FName @activeUser.LName</a>
         }
-        @if (User.IsInRole("Top-Level Admin"))
-        {
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Logged in as Top-Level Admin</a>
-        }
+
 
     </li>
         <li class="nav-item">

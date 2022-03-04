@@ -34,6 +34,10 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ID");
 
                     b.ToTable("Admins");
@@ -76,6 +80,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("UserID")
                         .HasColumnType("INTEGER");
 
@@ -116,7 +123,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProgramDetailID")
+                    b.Property<int?>("ProgramDetailID")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("StrtLevel")
@@ -126,7 +133,6 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("UserID")
-                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
@@ -263,15 +269,11 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 {
                     b.HasOne("BRTF_Booking.Models.ProgramDetail", "ProgramDetail")
                         .WithMany()
-                        .HasForeignKey("ProgramDetailID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProgramDetailID");
 
                     b.HasOne("BRTF_Booking.Models.User", "User")
                         .WithOne("ProgramTerm")
-                        .HasForeignKey("BRTF_Booking.Models.ProgramTerm", "UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BRTF_Booking.Models.ProgramTerm", "UserID");
                 });
 
             modelBuilder.Entity("BRTF_Booking.Models.ProgramTermGroup", b =>

@@ -33,6 +33,9 @@ namespace BRTF_Booking.Models
         [Display(Name = "End")]
         public DateTime EndDate { get; set; }
 
+        [Display(Name = "Status")]
+        public string Status { get; set; }
+
         [ScaffoldColumn(false)]
         [Timestamp]
         public Byte[] RowVersion { get; set; }//Added for concurrency

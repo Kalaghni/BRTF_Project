@@ -1141,19 +1141,22 @@ namespace BRTF_Booking.Data
                         {
                             FName = "Simone",
                             LName = "Smith",
-                            Email = "ssmith@niagaracollege.ca"
+                            Email = "ssmith@niagaracollege.ca",
+                            Role = "Admin"
                         },
                         new Admin
                         {
                             FName = "Byron",
                             LName = "Gracey",
-                            Email = "bgracey@niagaracollege.ca"
+                            Email = "bgracey@niagaracollege.ca",
+                            Role = "Top-Level Admin"
                         },
                         new Admin
                         {
                             FName = "Bruce",
                             LName = "Ashford",
-                            Email = "Bashford@niagaracollege.ca"
+                            Email = "Bashford@niagaracollege.ca",
+                            Role = "Admin"
                         });
                     context.SaveChanges();
                 }
