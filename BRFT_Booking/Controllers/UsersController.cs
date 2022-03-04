@@ -43,6 +43,9 @@ namespace BRTF_Booking.Controllers
             string[] sortOptions = new[] { "StudentID" };
 
             var users = from u in _context.Users
+                        .Include(u => u.ProgramTerm)
+                        .ThenInclude(u => u.ProgramDetail)
+                        .ThenInclude(u => u.ProgramTermGroups)
                         .AsNoTracking()
                         select u;
 
@@ -312,9 +315,9 @@ namespace BRTF_Booking.Controllers
                 };
                 ProgramTerm p = new ProgramTerm
                 {
-                    StudentID = workSheet.Cells[row, 1].Text, //studentID
+                    User = _context.Users.Where(u => u.StudentID == workSheet.Cells[row, 1].Text).FirstOrDefault(), //studentID
                     AcadPlan = workSheet.Cells[row, 5].Text,
-                    Description = workSheet.Cells[row, 6].Text,
+                    ProgramDetail = _context.ProgramDetails.Where(p => p.Name == workSheet.Cells[row, 6].Text).FirstOrDefault(),
                     StrtLevel = Int32.Parse(workSheet.Cells[row, 8].Text),
                     LastLevel = workSheet.Cells[row, 9].Text,
                     Term = Int32.Parse(workSheet.Cells[row, 10].Text),
@@ -326,10 +329,6 @@ namespace BRTF_Booking.Controllers
             //_context.ProgramTerms.AddRange(userPrograms);
             _context.SaveChanges();
 
-            foreach (var p in userPrograms)
-            {
-                p.UserID = _context.Users.Where(u => u.StudentID == p.StudentID).FirstOrDefault().ID;
-            }
             _context.ProgramTerms.AddRange(userPrograms);
             _context.SaveChanges();
             return RedirectToAction("Index", "Users");

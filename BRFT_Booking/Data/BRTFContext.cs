@@ -15,15 +15,13 @@ namespace BRTF_Booking.Data
         }
 
         public DbSet<User> Users { get; set; }
-
         public DbSet<ProgramTerm> ProgramTerms { get; set; }
-
         public DbSet<Room> Rooms { get; set; }
-
         public DbSet<Area> Areas { get; set; }
-
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<ProgramTermGroup> ProgramTermGroups { get; set; }
+        public DbSet<ProgramDetail> ProgramDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +40,12 @@ namespace BRTF_Booking.Data
                 .HasForeignKey(b => b.RoomID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<ProgramDetail>()
+                .HasMany<ProgramTermGroup>(u => u.ProgramTermGroups)
+                .WithOne(b => b.ProgramDetail)
+                .HasForeignKey(b => b.ProgramDetailID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //Add a unique index
             modelBuilder.Entity<User>()
                 .HasIndex(a => a.StudentID)
@@ -50,6 +54,18 @@ namespace BRTF_Booking.Data
             modelBuilder.Entity<User>()
             .HasIndex(a => new { a.Email })
             .IsUnique();
+
+            //Foreign key constraints
+
+            modelBuilder.Entity<ProgramTerm>()
+                .HasOne(u => u.User)
+                .WithOne(b => b.ProgramTerm)
+                .HasForeignKey<User>(b => b.ProgramTermID);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.ProgramTerm)
+                .WithOne(b => b.User)
+                .HasForeignKey<ProgramTerm>(b => b.UserID);
 
         }
     }

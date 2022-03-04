@@ -17,6 +17,52 @@ namespace BRTF_Booking.Data
                 serviceProvider.GetRequiredService<DbContextOptions<BRTFContext>>()))
             {
 
+                
+                if (!context.ProgramDetails.Any())
+                {
+                    context.ProgramDetails.AddRange(
+                        new ProgramDetail
+                        {
+                            Name = "Broadcasting: Radio, TV & Film"
+                        },
+                        new ProgramDetail
+                        {
+                            Name = "Presentation / Radio"
+                        },
+                        new ProgramDetail
+                        {
+                            Name = "TV Production"
+                        },
+                        new ProgramDetail
+                        {
+                            Name = "Film Production"
+                        },
+                        new ProgramDetail
+                        {
+                            Name = "Acting for TV & Film"
+                        },
+                        new ProgramDetail
+                        {
+                            Name = "Digital Photography",
+                        },
+                        new ProgramDetail
+                        {
+                            Name = "Joint BSc Game Programming",
+                        },
+                        new ProgramDetail
+                        {
+                            Name = "Joint BA Game Design",
+                        },
+                        new ProgramDetail
+                        {
+                            Name = "Game Development",
+                        },
+                        new ProgramDetail
+                        {
+                            Name = "CST – Network and Cloud Tech",
+                        }
+                        );
+                }
                 if (!context.Users.Any())
                 {
                     context.Users.AddRange(
@@ -58,8 +104,7 @@ namespace BRTF_Booking.Data
                          FName = "Judy",
                          MName = "Ugonna",
                          LName = "Garland",
-                         Email = "jgarland@ncstudents.niagaracollege.ca",
-
+                         Email = "jgarland@ncstudents.niagaracollege.ca"
                      },
                      new User
                      {
@@ -107,106 +152,104 @@ namespace BRTF_Booking.Data
                     context.ProgramTerms.AddRange(
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "4362670").FirstOrDefault(),
-                            StudentID = "4362670",
+                            User = context.Users.Where(u => u.Email == "cstevens@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P0122",
-                            Description = "Broadcasting: Radion, TV & Film",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Broadcasting: Radio, TV & Film").FirstOrDefault(),
                             StrtLevel = 01,
                             LastLevel = "N",
                             Term = 1204
                         },
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "9311011").FirstOrDefault(),
-                            StudentID = "9311011",
+                            User = context.Users.Where(u => u.Email == "sarcher4@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P0163",
-                            Description = "Presentation / Radio",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Presentation / Radio").FirstOrDefault(),
                             StrtLevel = 01,
                             LastLevel = "N",
                             Term = 1214
                         },
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "9508725").FirstOrDefault(),
-                            StudentID = "9508725",
+                            User = context.Users.Where(u => u.Email == "maparker1@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P0164",
-                            Description = "TV Production",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "TV Production").FirstOrDefault(),
                             StrtLevel = 03,
-                            LastLevel = "n",
+                            LastLevel = "N",
                             Term = 1214
                         },
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "4407393").FirstOrDefault(),
-                            StudentID = "4407393",
+                            User = context.Users.Where(u => u.Email == "jblansing@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P0165",
-                            Description = "Film Production",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Film Production").FirstOrDefault(),
                             StrtLevel = 05,
                             LastLevel = "N",
                             Term = 1204
                         },
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "4105233").FirstOrDefault(),
-                            StudentID = "4105233",
+                            User = context.Users.Where(u => u.Email == "jgarland@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P0198",
-                            Description = "Acting for TV & Film",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Acting for TV & Film").FirstOrDefault(),
                             StrtLevel = 02,
                             LastLevel = "N",
                             Term = 1214
                         },
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "4242885").FirstOrDefault(),
-                            StudentID = "4242885",
+                            User = context.Users.Where(u => u.Email == "masimpson@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P0795",
-                            Description = "Digital Photography",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Digital Photography").FirstOrDefault(),
                             StrtLevel = 01,
                             LastLevel = "N",
                             Term = 1214
                         },
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "4035763").FirstOrDefault(),
-                            StudentID = "4035763",
+                            User = context.Users.Where(u => u.Email == "sslean13@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P6801",
-                            Description = "Joint BSc Game Programming",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Joint BSc Game Programming").FirstOrDefault(),
                             StrtLevel = 04,
                             LastLevel = "N",
                             Term = 1204
                         },
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "4444312").FirstOrDefault(),
-                            StudentID = "4444312",
+                            User = context.Users.Where(u => u.Email == "msmith11@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P6800",
-                            Description = "Joint BA Game Design",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Joint BA Game Design").FirstOrDefault(),
                             StrtLevel = 06,
                             LastLevel = "Y",
                             Term = 1204
                         },
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "4398123").FirstOrDefault(),
-                            StudentID = "4398123",
+                            User = context.Users.Where(u => u.Email == "akurosawa@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P0441",
-                            Description = "Game Development",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Game Development").FirstOrDefault(),
                             StrtLevel = 03,
                             LastLevel = "N",
                             Term = 1204
                         },
                         new ProgramTerm
                         {
-                            User = context.Users.Where(u => u.StudentID == "9470695").FirstOrDefault(),
-                            StudentID = "9470695",
+                            User = context.Users.Where(u => u.Email == "zcwu@ncstudents.niagaracollege.ca").FirstOrDefault(),
                             AcadPlan = "P0474",
-                            Description = "CST – Network and Cloud Tech",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "CST – Network and Cloud Tech").FirstOrDefault(),
                             StrtLevel = 03,
                             LastLevel = "N",
                             Term = 1214
                         });
+
                     context.SaveChanges();
-                }
+                    foreach (ProgramTerm program in context.ProgramTerms)
+                    {
+                        var userToUpdate = context.Users.Where(u => program.UserID == u.ID).FirstOrDefault();
+                        userToUpdate.ProgramTermID = program.ID;
+                        context.Update(userToUpdate);
+                    }
+                    context.SaveChanges();
+                }               
                 if (!context.Areas.Any())
                 {
                     context.Areas.AddRange(
@@ -979,6 +1022,106 @@ namespace BRTF_Booking.Data
                         Enabled = false,
 
                     }
+                    );
+                    context.SaveChanges();
+                }
+                if (!context.ProgramTermGroups.Any())
+                {
+                    context.ProgramTermGroups.AddRange(                      
+                        new ProgramTermGroup
+                        {
+                            Name = "combo1",
+                            Level = 1
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "combo2",
+                            Level = 2
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "tv3",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "TV Production").FirstOrDefault(),
+                            Level = 3
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "tv4",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "TV Production").FirstOrDefault(),
+                            Level = 4
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "tv5",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "TV Production").FirstOrDefault(),
+                            Level = 5
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "tv6",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "TV Production").FirstOrDefault(),
+                            Level = 6
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "film3",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Film Production").FirstOrDefault(),
+                            Level = 3
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "film4",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Film Production").FirstOrDefault(),
+                            Level = 4
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "film5",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Film Production").FirstOrDefault(),
+                            Level = 5
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "film6",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Film Production").FirstOrDefault(),
+                            Level = 6
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "pres2",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Presentation / Radio").FirstOrDefault(),
+                            Level = 2
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "pres3",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Presentation / Radio").FirstOrDefault(),
+                            Level = 3
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "pres4",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Presentation / Radio").FirstOrDefault(),
+                            Level = 4
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "pres5",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Presentation / Radio").FirstOrDefault(),
+                            Level = 5
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "pres6",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Presentation / Radio").FirstOrDefault(),
+                            Level = 6
+                        },
+                        new ProgramTermGroup
+                        {
+                            Name = "acting",
+                            ProgramDetail = context.ProgramDetails.Where(u => u.Name == "Acting for TV & Film").FirstOrDefault(),
+                            Level = 0
+                        }
                     );
                     context.SaveChanges();
                 }

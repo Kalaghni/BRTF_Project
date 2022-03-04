@@ -56,6 +56,10 @@ namespace BRTF_Booking.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
+        [Display(Name = "Program Term")]
+        public ProgramTerm? ProgramTerm { get; set; }
+        public int? ProgramTermID { get; set; }
+
         public bool Active { get; set; }
         public ICollection<Booking> Bookings { get; set; }
 

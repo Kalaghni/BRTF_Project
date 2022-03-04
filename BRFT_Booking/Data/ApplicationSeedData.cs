@@ -46,37 +46,6 @@ namespace BRTF_Booking.Data
                     userManager.AddToRoleAsync(user, "Top-Level Admin").Wait();
                 }
             }
-            if (userManager.FindByEmailAsync("admin@niagaracollege.ca").Result == null)
-            {
-                IdentityUser user = new IdentityUser
-                {
-                    UserName = "admin@niagaracollege.ca",
-                    Email = "admin@niagaracollege.ca"
-                };
-
-                IdentityResult result = userManager.CreateAsync(user, "password").Result;
-
-                if (result.Succeeded)
-                {
-                    userManager.AddToRoleAsync(user, "Admin").Wait();
-                }
-            }
-            if (userManager.FindByEmailAsync("testuser@niagaracollege.ca").Result == null)
-            {
-                IdentityUser user = new IdentityUser
-                {
-                    UserName = "testuser@niagaracollege.ca",
-                    Email = "testuser@niagaracollege.ca"
-                };
-
-                IdentityResult result = userManager.CreateAsync(user, "password").Result;
-
-                if (result.Succeeded)
-                {
-                    userManager.AddToRoleAsync(user, "Student").Wait();
-                }
-            }
-
 
             foreach (User student in students)
             {

@@ -29,14 +29,14 @@ namespace BRTF_Booking.Controllers
             ViewData["Filtering"] = "btn-outline-secondary";
 
             var terms = _context.ProgramTerms
-                .Include(t => t.User)
+                .Include(p => p.User)
                 .AsNoTracking();
 
-            string[] sortOptions = new[] { "Academic Plan", "Description" };
+            string[] sortOptions = new[] { "Academic Plan", "Program" };
 
             if (!String.IsNullOrEmpty(SearchDescription))
             {
-                terms = terms.Where(t => t.Description.ToUpper().Contains(SearchDescription.ToUpper()));
+                terms = terms.Where(t => t.ProgramDetail.Name.ToUpper().Contains(SearchDescription.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
 
@@ -62,15 +62,15 @@ namespace BRTF_Booking.Controllers
                     terms = terms.OrderBy(t => t.AcadPlan);
                 }
             }
-            else if (sortField == "Description")
+            else if (sortField == "Program")
             {
                 if (sortDirection == "asc")
                 {
-                    terms = terms.OrderByDescending(t => t.Description);
+                    terms = terms.OrderByDescending(t => t.ProgramDetail.Name);
                 }
                 else
                 {
-                    terms = terms.OrderBy(t => t.Description);
+                    terms = terms.OrderBy(t => t.ProgramDetail.Name);
                 }
             }
 
@@ -97,6 +97,7 @@ namespace BRTF_Booking.Controllers
 
             var programTerm = await _context.ProgramTerms
                 .Include(p => p.User)
+                .Include(p => p.ProgramDetail)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (programTerm == null)
             {
@@ -126,7 +127,6 @@ namespace BRTF_Booking.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email", programTerm.UserID);
             return View(programTerm);
         }
 
@@ -143,7 +143,6 @@ namespace BRTF_Booking.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email", programTerm.UserID);
             return View(programTerm);
         }
 
@@ -179,7 +178,6 @@ namespace BRTF_Booking.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "Email", programTerm.UserID);
             return View(programTerm);
         }
 
@@ -193,6 +191,7 @@ namespace BRTF_Booking.Controllers
 
             var programTerm = await _context.ProgramTerms
                 .Include(p => p.User)
+                .Include(p => p.ProgramDetail)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (programTerm == null)
             {

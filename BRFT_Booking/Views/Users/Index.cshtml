@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<BRTF_Booking.Models.User>
 
-@{ ViewData["Title"] = "Index"; }
+@{ ViewData["Title"] = "Index";}
 
 <h1>Users</h1>
 
@@ -57,6 +57,9 @@
                     <input type="submit" name="actionButton" value="Full Name" class="btn btn-link" />
                 </th>
                 <th>
+                    <input type="submit" name="actionButton" value="Term and Program" class="btn btn-link" />
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Email)
                 </th>
                 <th></th>
@@ -65,22 +68,47 @@
         <tbody>
             @foreach (var item in Model)
             {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.StudentID)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.FullName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Email)
-    </td>
-    <td>
-        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-    </td>
-</tr>}
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StudentID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    @if (item.ProgramTerm.ProgramDetail.Name == "Acting for TV & Film")
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProgramTerm.ProgramDetail.ProgramTermGroups.Where(p => p.Level == 0).FirstOrDefault().Name)
+                        </td>
+                    }
+                    @if (!(item.ProgramTerm.ProgramDetail.Name == "Acting for TV & Film") && item.ProgramTerm.StrtLevel == 1)
+                    {
+                    <td>
+                        combo1
+                    </td>
+                    }
+                    @if (!((item.ProgramTerm.ProgramDetail.Name == "Acting for TV & Film") && item.ProgramTerm.StrtLevel == 1) && item.ProgramTerm.StrtLevel == 2 && item.ProgramTerm.ProgramDetail.Name != "Radio / Presentation")
+                    {
+                    <td>
+                        combo2
+                    </td>
+                    }
+                    @if (!((((item.ProgramTerm.ProgramDetail.Name == "Acting for TV & Film") && item.ProgramTerm.StrtLevel == 1) && item.ProgramTerm.StrtLevel == 2 && item.ProgramTerm.ProgramDetail.Name != "Radio / Presentation")))
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProgramTerm.ProgramDetail.ProgramTermGroups.Where(p => p.Level == item.ProgramTerm.StrtLevel).FirstOrDefault().Name)
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    </td>
+                </tr>
+}
         </tbody>
     </table>
     <partial name="_PagingNavBar" />

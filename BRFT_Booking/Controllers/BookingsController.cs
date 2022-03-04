@@ -71,6 +71,7 @@ namespace BRTF_Booking.Controllers
         {
             try
             {
+
                 var l = new List<Booking>();
                 var ex = l.SelectMany(a => new[] { a.StartDate, a.EndDate }).Distinct().OrderBy(dt => dt);
                 var pairs = ex.Zip(ex.Skip(1), (First, Second) => new { First, Second });

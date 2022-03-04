@@ -88,6 +88,20 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.ToTable("Bookings");
                 });
 
+            modelBuilder.Entity("BRTF_Booking.Models.ProgramDetail", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ProgramDetails");
+                });
+
             modelBuilder.Entity("BRTF_Booking.Models.ProgramTerm", b =>
                 {
                     b.Property<int>("ID")
@@ -98,33 +112,53 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("LastLevel")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("StrtLevel")
+                    b.Property<int>("ProgramDetailID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("StudentID")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(7);
+                    b.Property<int>("StrtLevel")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Term")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserID")
+                    b.Property<int?>("UserID")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("ProgramDetailID");
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("ProgramTerms");
+                });
+
+            modelBuilder.Entity("BRTF_Booking.Models.ProgramTermGroup", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ProgramDetailID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProgramDetailID");
+
+                    b.ToTable("ProgramTermGroups");
                 });
 
             modelBuilder.Entity("BRTF_Booking.Models.Room", b =>
@@ -188,6 +222,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.Property<string>("Password")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("ProgramTermID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Role")
                         .HasColumnType("TEXT");
 
@@ -224,11 +261,25 @@ namespace BRTF_Booking.Data.BRTFMigrations
 
             modelBuilder.Entity("BRTF_Booking.Models.ProgramTerm", b =>
                 {
-                    b.HasOne("BRTF_Booking.Models.User", "User")
+                    b.HasOne("BRTF_Booking.Models.ProgramDetail", "ProgramDetail")
                         .WithMany()
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("ProgramDetailID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BRTF_Booking.Models.User", "User")
+                        .WithOne("ProgramTerm")
+                        .HasForeignKey("BRTF_Booking.Models.ProgramTerm", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BRTF_Booking.Models.ProgramTermGroup", b =>
+                {
+                    b.HasOne("BRTF_Booking.Models.ProgramDetail", "ProgramDetail")
+                        .WithMany("ProgramTermGroups")
+                        .HasForeignKey("ProgramDetailID")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BRTF_Booking.Models.Room", b =>

@@ -49,16 +49,13 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.User)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.StudentID)
+                    @Html.DisplayNameFor(model => model.UserID)
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Academic Plan" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Description" class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="Program" class="btn btn-link" />
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.StrtLevel)
@@ -77,16 +74,13 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.User.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StudentID)
+                        @Html.DisplayFor(modelItem => item.UserID)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.AcadPlan)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Description)
+                        @Html.DisplayFor(modelItem => item.ProgramDetailID)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.StrtLevel)

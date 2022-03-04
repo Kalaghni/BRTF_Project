@@ -36,6 +36,19 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProgramDetails",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProgramDetails", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -48,6 +61,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     Role = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: true),
+                    ProgramTermID = table.Column<int>(nullable: true),
                     Active = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -81,15 +95,35 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProgramTermGroups",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: true),
+                    ProgramDetailID = table.Column<int>(nullable: true),
+                    Level = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProgramTermGroups", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ProgramTermGroups_ProgramDetails_ProgramDetailID",
+                        column: x => x.ProgramDetailID,
+                        principalTable: "ProgramDetails",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProgramTerms",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserID = table.Column<int>(nullable: false),
-                    StudentID = table.Column<string>(maxLength: 7, nullable: false),
                     AcadPlan = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
+                    ProgramDetailID = table.Column<int>(nullable: false),
+                    UserID = table.Column<int>(nullable: false),
                     StrtLevel = table.Column<int>(nullable: false),
                     LastLevel = table.Column<string>(nullable: false),
                     Term = table.Column<int>(nullable: false)
@@ -97,6 +131,12 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProgramTerms", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ProgramTerms_ProgramDetails_ProgramDetailID",
+                        column: x => x.ProgramDetailID,
+                        principalTable: "ProgramDetails",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProgramTerms_Users_UserID",
                         column: x => x.UserID,
@@ -146,9 +186,20 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProgramTermGroups_ProgramDetailID",
+                table: "ProgramTermGroups",
+                column: "ProgramDetailID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramTerms_ProgramDetailID",
+                table: "ProgramTerms",
+                column: "ProgramDetailID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProgramTerms_UserID",
                 table: "ProgramTerms",
-                column: "UserID");
+                column: "UserID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rooms_AreaID",
@@ -177,10 +228,16 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 name: "Bookings");
 
             migrationBuilder.DropTable(
+                name: "ProgramTermGroups");
+
+            migrationBuilder.DropTable(
                 name: "ProgramTerms");
 
             migrationBuilder.DropTable(
                 name: "Rooms");
+
+            migrationBuilder.DropTable(
+                name: "ProgramDetails");
 
             migrationBuilder.DropTable(
                 name: "Users");
