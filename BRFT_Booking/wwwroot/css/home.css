@@ -127,6 +127,20 @@ button, input, select, textarea, label {
     padding-right: 0;
 }
 
+.button-create {
+    display: block;
+    width: 115px;
+    height: 25px;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+    line-height: 25px;
+}
+
+
 .button {
     display: inline-flex;
     font-family: "IBM Plex Sans", sans-serif;
