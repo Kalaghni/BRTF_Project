@@ -21,18 +21,18 @@ namespace BRTF_Booking.Models
         public int RoomID { get; set; }
         public Room Room { get; set; }
 
-        [Required(ErrorMessage = "You must enter a day.")]
+        [Required(ErrorMessage = "You must enter a day!")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Date Requested")]
         public DateTime BookingRequested { get; set; }
 
 
-        [Required(ErrorMessage = "You must enter a Start date.")]
+        [Required(ErrorMessage = "You must enter a Start date!")]
         [Display(Name = "Start")]
         public DateTime StartDate { get; set; }
 
-        [Required(ErrorMessage = "You must enter a End date.")]
+        [Required(ErrorMessage = "You must enter a End date!")]
         [Display(Name = "End")]
         public DateTime EndDate { get; set; }
 

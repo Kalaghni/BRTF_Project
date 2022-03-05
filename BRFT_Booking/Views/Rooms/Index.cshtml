@@ -6,7 +6,17 @@
 @if (User.IsInRole("Admin") || User.IsInRole("Top-Level Admin"))
 {
     <p>
-        <a asp-action="Create">Create New</a>
+        <a style="
+        background: #1b6ec2;
+        display: block;
+        font-weight: bold;
+        line-height: 22px;
+        width: 115px;
+        height: 40px;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+        color: white; " asp-action="Create">New Room</a>
     </p>
 }
 <form asp-action="Index" method="get">

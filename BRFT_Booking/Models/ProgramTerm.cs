@@ -46,7 +46,7 @@ namespace BRTF_Booking.Models
         }
 
         [Display(Name = "Academic Plan")]
-        [Required(ErrorMessage = "Academic Plan is required.")]
+        [Required(ErrorMessage = "Academic Plan is required!")]
         public string AcadPlan { get; set; }
 
         [Display(Name = "Program")]
@@ -58,15 +58,18 @@ namespace BRTF_Booking.Models
         public int? UserID { get; set; }
 
         [Display(Name = "Start Level")]
-        [Required(ErrorMessage = "Start Level is required.")]
+        [Required(ErrorMessage = "Start Level is required!")]
+        [Range(1, 9, ErrorMessage = "Start Level required 1 digit only!")]
         public int StrtLevel { get; set; }
 
-        [Display(Name = "Last Level")]
-        [Required(ErrorMessage = "Last Level is required.")]
+        [Display(Name = "Last Level (Y/N)")]
+        [Required(ErrorMessage = "Last Level is required!")]
+        [StringLength(1, MinimumLength = 1, ErrorMessage = "Last Level is required!")]
         public string LastLevel { get; set; }
 
         [Display(Name = "Term")]
-        [Required(ErrorMessage = "Term is required.")]
+        [Required(ErrorMessage = "Term is required!")]
+        [Range(1000, 9999, ErrorMessage = "Term number must be 4 digits only!")]
         public int Term { get; set; }
     }
 }

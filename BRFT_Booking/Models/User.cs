@@ -18,13 +18,14 @@ namespace BRTF_Booking.Models
                     + LName;
 
         [Display(Name = "Student ID")]
-        [StringLength(7, ErrorMessage = "Your student ID must be 7 numbers long")]
-        [Range(0, 9999999, ErrorMessage = "Your student ID must only contain numerical values.")]
+        [StringLength(7, ErrorMessage = "Your student ID must be 7 numbers long!")]
+        [Range(0, 9999999, ErrorMessage = "Your student ID must only contain numerical values!")]
         [Required(ErrorMessage = "User must have a student ID.")]
         public string StudentID { get; set; }
 
         [Display(Name = "First Name")]
         [Required(ErrorMessage = "User must have a first name.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "First name need to be between 2 and 50 characters!")]
         public string FName { get; set; }
 
         [Display(Name = "Middle Name")]
@@ -32,13 +33,17 @@ namespace BRTF_Booking.Models
 
         [Display(Name = "Last Name")]
         [Required(ErrorMessage = "User must have a last name.")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Last name need to be between 2 and 100 characters!")]
         public string LName { get; set; }
 
         [Display(Name = "Role")]
         public string Role { get; set; }
 
         [Display(Name = "Email")]
-        [Required(ErrorMessage = "User must have an email.")]
+        [Required(ErrorMessage = "Email is required!")]
+        [DataType(DataType.EmailAddress)]
+        [MaxLength(50)]
+        [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Please enter a valid email address!")]
         public string Email { get; set; }
 
         [Display(Name = "Password")]

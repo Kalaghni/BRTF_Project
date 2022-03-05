@@ -1,4 +1,3 @@
-C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.csproj.AssemblyReference.cache
 C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.AssemblyInfoInputs.cache
 C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.AssemblyInfo.cs

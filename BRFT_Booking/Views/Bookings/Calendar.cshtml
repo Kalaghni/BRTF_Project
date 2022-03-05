@@ -41,11 +41,11 @@
                 events: '@Url.RouteUrl(new { action = "GetEvents", controller = "Bookings" })',
                 eventOverlap: false,
                 selectable: true,
-                editable: true,
+                editable: false,
                 dateClick: function (info) {
                     location.href = '@Url.RouteUrl(new { action = "Request", controller = "Bookings"})';
                 },
-                eventDragStop: function (info) {
+                eventDragStop: false@*function (info) {
                     const myJSON = JSON.stringify(info.event);
                     console.log(myJSON);
                     $.ajax({
@@ -54,7 +54,7 @@
                         data: { jsonData: myJSON },
                         contentType: "application/json; charset=utf-8"
                     });
-                }
+                }*@
             });
             calendar.render();
         });
