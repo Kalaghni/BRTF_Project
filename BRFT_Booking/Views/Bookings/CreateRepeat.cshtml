@@ -1,0 +1,57 @@
+﻿@model BRTF_Booking.Models.Booking
+
+@{
+    ViewData["Title"] = "CreateRepeat";
+}
+
+
+<h1>Create</h1>
+
+<h4>Booking</h4>
+<hr />
+<div class="row" style="color: black">
+    <div class="col-md-4">
+        <form asp-action="CreateRepeat">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="User" class="control-label"></label>
+                <input type="hidden" id="UserID" name="UserID">
+                <p>@Html.DisplayFor(model => model.User.FullName)</p>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Area:</label>
+                <input type="hidden" id="AreaID" name="AreaID">
+                <p>@Html.DisplayFor(model => model.Room.Area.Name)</p>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Room" class="control-label"></label>
+                <input type="hidden" id="Name" name="Name">
+                <p>@Html.DisplayFor(model => model.Room.Name)</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input type="hidden" id="StartDate" name="StartDate">
+                <p>@Html.DisplayFor(model => model.StartDate)</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input type="hidden" id="EndDate" name="EndDate">
+                <p>@Html.DisplayFor(model => model.EndDate)</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input type="hidden" id="Status" name="Status">
+                <p>@Html.DisplayFor(model => model.Status)</p>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

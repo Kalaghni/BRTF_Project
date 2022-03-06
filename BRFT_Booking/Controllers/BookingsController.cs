@@ -58,12 +58,96 @@ namespace BRTF_Booking.Controllers
             return View(booking);
         }
 
+
+
+
+
+        [Authorize(Roles = "Admin, Top-Level Admin")]
+        [HttpGet]
+        // GET: Bookings/Create
+        public IActionResult CreateRepeat(int? id)
+        {
+            if (id != null)
+            {
+                Booking booking = _context.Bookings
+                    .Include(b => b.Room).ThenInclude(b => b.Area)
+                    .Include(b => b.User)
+                    .Where(b => b.ID == id)
+                    .FirstOrDefault();
+
+                booking.StartDate = booking.StartDate.AddDays(7);
+                booking.EndDate = booking.EndDate.AddDays(7);
+
+
+                ViewData["UserID"] = new SelectList(_context.Users.Where(u => u.ID == booking.UserID), "ID", "FullName");
+                //ViewData["AreaID"] = new SelectList(_context.Areas.Where(a => a.ID == booking.Room.AreaID), "ID", "Name");
+                ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.ID == booking.RoomID), "ID", "Name");
+
+                return View(booking);
+            }
+            else
+            {
+                PopulateDropDownLists();
+
+                return View();
+            }
+
+
+
+        }
+
+        [Authorize(Roles = "Admin, Top-Level Admin")]
+        // POST: Bookings/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRepeat([Bind("ID,UserID,RoomID,StartDate,EndDate,Status")] Booking booking)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    booking.BookingRequested = DateTime.Today;
+                    _context.Add(booking);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+
+            PopulateDropDownLists();
+            return View(booking);
+        }
+
+
+
         [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            PopulateDropDownLists();
-            return View();
+            if (id != null)
+            {
+                Booking booking = _context.Bookings.FindAsync(id).Result;
+                booking.StartDate = booking.StartDate.AddDays(7);
+                booking.EndDate = booking.EndDate.AddDays(7);
+
+                
+                ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
+                ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
+                //ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
+
+                return View(booking);
+            }
+            else
+            {
+                PopulateDropDownLists();
+
+                return View();
+            }
         }
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
@@ -212,6 +296,7 @@ namespace BRTF_Booking.Controllers
             {
                 booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
                 booking.BookingRequested = DateTime.Today;
+                booking.Status = "Awaiting";
                 _context.Add(booking);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Calendar));
