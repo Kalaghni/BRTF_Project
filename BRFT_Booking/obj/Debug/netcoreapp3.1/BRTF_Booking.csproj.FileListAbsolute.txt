@@ -1139,3 +1139,4 @@ C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\net
 C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Bookings\Request.cshtml.g.cs
 C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Bookings\CreateRepeat.cshtml.g.cs
 C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Bookings\CreateRepeat.cshtml.g.cs
+C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.csproj.AssemblyReference.cache
