@@ -9,68 +9,68 @@
     <link rel="stylesheet" href="~/css/home.css" />
 </head>
 <body style="background-color: #F0F4EF">
-    
-        <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow mb-3">
-                <div class="container">
-                    <!--<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BRFT Booking</a>-->
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                        <partial name="_LoginPartial" />
-                        <ul class="navbar-nav flex-grow-1">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                                </li>
-                            }
-                            @if (User.IsInRole("Student"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Bookings" asp-action="Calendar">My Bookings</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="Index">View Rooms</a>
-                                </li>
-                            }
 
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Admin Menu<b class="caret"></b>
-                                    </a>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom box-shadow mb-3">
+            <div class="container">
+                <!--<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BRFT Booking</a>-->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Bookings" asp-action="Calendar">My Bookings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="Index">View Rooms</a>
+                            </li>
+                        }
 
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Bookings</a>
-                                    </div>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin Menu<b class="caret"></b>
+                                </a>
 
-                                </li>
-                            }
-                            @if (User.IsInRole("Top-Level Admin"))
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Admin Menu<b class="caret"></b>
-                                    </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Bookings</a>
+                                </div>
 
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Bookings</a>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Admins" asp-action="Index">Manage Admins</a>
-                                    </div>
+                            </li>
+                        }
+                        @if (User.IsInRole("Top-Level Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin Menu<b class="caret"></b>
+                                </a>
 
-                                </li>
-                            }
-                        </ul>
-                    </div>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Bookings</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Admins" asp-action="Index">Manage Admins</a>
+                                </div>
+
+                            </li>
+                        }
+                    </ul>
                 </div>
+            </div>
         </nav>
     </header>
     <div class="container">
@@ -87,6 +87,9 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @*Script for logos on the landing page*@
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

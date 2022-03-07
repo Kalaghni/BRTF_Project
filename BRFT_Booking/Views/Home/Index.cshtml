@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<BRTF_Booking.Models.User>
 @inject BRTF_Booking.Data.BRTFContext context
 
-@{
+@{ 
     ViewData["Title"] = "Home Page";
     string EventString = "";
     if (User.IsInRole("Student"))
@@ -26,111 +26,195 @@
         EventString += "</ul>";
     }
 }
-<body style="background-color:lightsteelblue;">
-    <!--
-    <div class="text-center">
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <h1 style="color: black; font-size: 80px; font-weight: 500;" class="display-4">Welcome BRFT users</h1>
-        <br />
-        <br />
-        <br />
-        <a class="nav-link font-weight-bolder" style="color: black; font-size: 55px" asp-area="" asp-controller="Users" asp-action="Index">Get Started</a>
-        <!--<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>  DO NOT DELETE link could be useful for later
-    </div>
-    -->
-    <section class="hero">
-        <div class="container">
-            @if (User.IsInRole("Admin"))
-            {
-                <h1 class="hero-title mt-0">Admin Panel</h1>
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Create">Create a Booking</a>
+<body>
+    @if (User.IsInRole("Admin"))
+    {
+        <section class="hero">
+            <div class="container">
+                <div class="hero-inner">
+                    <div class="hero-copy">
+                        <h1 class="hero-title mt-0">Dashboard</h1>
+                        <p class="hero-paragraph">Doors must be open by department faculty during school hours (M-F 8:30am to 5:30pm). Security will only open doors during off hours.</p>
+                        <div class="hero-cta">
+                            <a class="button button-primary" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
+                        </div>
+                    </div>
+                    <div class="hero-figure anime-element">
+                        <svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
+                            <rect width="528" height="396" style="fill:transparent;" />
+                        </svg>
+                        <div class="hero-figure-box hero-figure-box-01" data-rotation="45deg"></div>
+                        <div class="hero-figure-box hero-figure-box-02" data-rotation="-45deg"></div>
+                        @*<div class="hero-figure-box hero-figure-box-03" data-rotation="0deg"></div>*@
+                        <div class="hero-figure-box hero-figure-box-04" data-rotation="-135deg"></div>
+                        <div class="hero-figure-box hero-figure-box-05"></div>
+                        <div class="hero-figure-box hero-figure-box-06"></div>
+                        <div class="hero-figure-box hero-figure-box-07"></div>
+                        <div class="hero-figure-box hero-figure-box-08" data-rotation="-22deg"></div>
+                        <div class="hero-figure-box hero-figure-box-09" data-rotation="-52deg"></div>
+                        <div class="hero-figure-box hero-figure-box-10" data-rotation="-50deg"></div>
+                    </div>
                 </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Existing Bookings</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="ProgramTerms" asp-action="Index">Manage Program Terms</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Areas" asp-action="Index">Manage Areas</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="" asp-action="">Accept Bookings</a>
-                </div>
+            </div>
+        </section>
 
-            }
+        <section class="features section">
+            <div class="container">
+                <div class="features-inner section-inner has-bottom-divider">
+                    <div class="features-wrap">
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <a asp-area="" asp-controller="Bookings" asp-action="Index">
+                                        <img src="~/home_img/bookmarks.svg" alt="Feature 01">
+                                    </a>
+                                </div>
+                                <h4 class="feature-title mt-24">Manage Existing Bookings</h4>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <a asp-area="" asp-controller="Rooms" asp-action="Index">
+                                        <img src="~/home_img/feature-icon-03.svg" alt="Feature 03">
+                                    </a>
+                                </div>
+                                <h4 class="feature-title mt-24">Manage Rooms</h4>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <a asp-area="" asp-controller="ProgramTerms" asp-action="Index">
+                                        <img src="~/home_img/calendar-clear.svg" alt="Feature 04">
+                                    </a>
+                                </div>
+                                <h4 class="feature-title mt-24">Manage Program Terms</h4>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <a asp-area="" asp-controller="Areas" asp-action="Index">
+                                        <img src="~/home_img/map.svg" alt="Feature 05">
+                                    </a>
+                                </div>
+                                <h4 class="feature-title mt-24">Manage Areas</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    @if (User.IsInRole("Top-Level Admin"))
+    {
+        <section class="hero">
+            <div class="container">
+                <div class="hero-inner">
+                    <div class="hero-copy">
+                        <h1 class="hero-title mt-0">Dashboard</h1>
+                        <p class="hero-paragraph">Doors must be open by department faculty during school hours (M-F 8:30am to 5:30pm). Security will only open doors during off hours.</p>
+                        <div class="hero-cta">
+                            <a class="button button-primary" asp-area="" asp-controller="Admins" asp-action="Index">Manage Admin</a>
+                        </div>
+                    </div>
+                    <div class="hero-figure anime-element">
+                        <svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
+                            <rect width="528" height="396" style="fill:transparent;" />
+                        </svg>
+                        <div class="hero-figure-box hero-figure-box-01" data-rotation="45deg"></div>
+                        <div class="hero-figure-box hero-figure-box-02" data-rotation="-45deg"></div>
+                        @*<div class="hero-figure-box hero-figure-box-03" data-rotation="0deg"></div>*@
+                        <div class="hero-figure-box hero-figure-box-04" data-rotation="-135deg"></div>
+                        <div class="hero-figure-box hero-figure-box-05"></div>
+                        <div class="hero-figure-box hero-figure-box-06"></div>
+                        <div class="hero-figure-box hero-figure-box-07"></div>
+                        <div class="hero-figure-box hero-figure-box-08" data-rotation="-22deg"></div>
+                        <div class="hero-figure-box hero-figure-box-09" data-rotation="-52deg"></div>
+                        <div class="hero-figure-box hero-figure-box-10" data-rotation="-50deg"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-            @if (User.IsInRole("Top-Level Admin"))
-            {
-                <h1 class="hero-title mt-0">Admin Panel</h1>
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Create">Create a Booking</a>
+        <section class="features section">
+            <div class="container">
+                <div class="features-inner section-inner has-bottom-divider">
+                    <div class="features-wrap">
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <a asp-area="" asp-controller="Bookings" asp-action="Index">
+                                        <img src="~/home_img/bookmarks.svg" alt="Feature 01">
+                                    </a>
+                                </div>
+                                <h4 class="feature-title mt-24">Manage Existing Bookings</h4>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <a asp-area="" asp-controller="Users" asp-action="Index">
+                                        <img src="~/home_img/person-circle.svg" alt="Feature 02">
+                                    </a>
+                                </div>
+                                <h4 class="feature-title mt-24">Manage Users</h4>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <a asp-area="" asp-controller="Rooms" asp-action="Index">
+                                        <img src="~/home_img/feature-icon-03.svg" alt="Feature 03">
+                                    </a>
+                                </div>
+                                <h4 class="feature-title mt-24">Manage Rooms</h4>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <a asp-area="" asp-controller="ProgramTerms" asp-action="Index">
+                                        <img src="~/home_img/calendar-clear.svg" alt="Feature 04">
+                                    </a>
+                                </div>
+                                <h4 class="feature-title mt-24">Manage Program Terms</h4>
+                            </div>
+                        </div>
+                        <div class="feature text-center is-revealing">
+                            <div class="feature-inner">
+                                <div class="feature-icon">
+                                    <a asp-area="" asp-controller="Areas" asp-action="Index">
+                                        <img src="~/home_img/map.svg" alt="Feature 05">
+                                    </a>
+                                </div>
+                                <h4 class="feature-title mt-24">Manage Areas</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Existing Bookings</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="ProgramTerms" asp-action="Index">Manage Program Terms</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Areas" asp-action="Index">Manage Areas</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="" asp-action="">Accept Bookings</a>
-                </div>
-                <br />
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Admins" asp-action="Index">Manage Admins</a>
-                </div>
+            </div>
+        </section>
+     }
 
-            }
-
-            @if (User.IsInRole("Student"))
-            {
-                var activeUser = Model.Where(u => u.Email == User.Identity.Name).First();
-                <h1 class="hero-title mt-0">Hello @activeUser.FName!</h1>
-                <p class="hero-paragraph">Doors must be open by department faculty during school hours (M-F 8:30am to 5:30pm). Security will only open doors during off hours.</p>
-                <div class="hero-cta">
-                    <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Request">Request a Booking</a>
-                </div>
-                <br />
-                @if (activeUser.Bookings.Any())
-                {
-                    <h2>Your upcoming bookings</h2>
-                    <div id="events">@Html.Raw(EventString)</div>
-                }
-            }
+    @if (User.IsInRole("Student"))
+    {
+        var activeUser = Model.Where(u => u.Email == User.Identity.Name).First();
+        <h1 class="hero-title mt-0">Hello @activeUser.FName!</h1>
+        <p class="hero-paragraph">
+            Doors must be open by department faculty during school hours (M-F 8:30am to 5:30pm). Security will only open doors during off hours.
+        </p>
+        <div class="hero-cta">
+            <a class="button button-primary" asp-area="" asp-controller="Bookings" asp-action="Request">Request a Booking</a>
         </div>
-</section>
+        <br />
+        @if (activeUser.Bookings.Any())
+        {
+            <h2>Your upcoming bookings</h2>
+            <div id="events">@Html.Raw(EventString)</div>
+        }
+    }
 </body>
 
 <!--; width: fit-content;padding: 60px 190px-->
