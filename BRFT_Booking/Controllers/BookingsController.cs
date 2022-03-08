@@ -11,6 +11,11 @@ using BRTF_Booking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Storage;
 using Newtonsoft.Json;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
+using Microsoft.AspNetCore.Http.Features;
+using System.IO;
 
 namespace BRTF_Booking.Controllers
 {
@@ -276,6 +281,122 @@ namespace BRTF_Booking.Controllers
             _context.Bookings.Remove(booking);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Admin, Top-Level Admin")]
+        public IActionResult DownloadBookings()
+        {
+            //Get the Bookings
+            var bookings = from b in _context.Bookings
+                        .Include(b => b.User)
+                        .Include(b => b.Room)
+                        .ThenInclude(p => p.Area)
+                        orderby b.BookingRequested ascending
+                        select new
+                        {
+                            User = b.User.FullName,
+                            Area = b.Room.Area.Name,
+                            Room = b.Room.Name,
+                            Date = b.BookingRequested,
+                            Start = b.StartDate,
+                            End  = b.EndDate,
+                            b.Status
+                            
+                        };
+            //gets row count
+            int numRows = bookings.Count();
+
+            if (numRows > 0) //check for data
+            {
+                //Create a new spreadsheet
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+
+                    var workSheet = excel.Workbook.Worksheets.Add("Bookings");
+
+                    //Note: Cells[row, column]
+                    workSheet.Cells[3, 1].LoadFromCollection(bookings, true);
+
+                    //Style column for dates
+                    workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
+
+                    //Style column for dates
+                    workSheet.Column(5).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
+
+                    //Style column for dates
+                    workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
+                   
+                    
+                    //Set Style and backgound colour of headings
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
+                    {
+                        headings.Style.Font.Bold = true;
+                        var fill = headings.Style.Fill;
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.FromArgb(8, 124, 232));
+                    }
+
+                    
+
+                    //Autofit columns
+                    workSheet.Cells.AutoFitColumns();
+
+                    //manually set width of column
+                    
+
+                    //Add a title and timestamp at the top of the report
+                    workSheet.Cells[1, 1].Value = "Booking Report";
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    {
+                        Rng.Merge = true; //Merge columns start and end range
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 18;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+                    //Since the time zone where the server is running can be different, adjust to 
+                    //Local for us.
+                    DateTime utcDate = DateTime.UtcNow;
+                    TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                    DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
+                    using (ExcelRange Rng = workSheet.Cells[2, 6])
+                    {
+                        Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
+                            localDate.ToShortDateString();
+                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Size = 12;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    }
+
+                    
+                    var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
+                    if (syncIOFeature != null)
+                    {
+                        syncIOFeature.AllowSynchronousIO = true;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            Response.Headers["content-disposition"] = "attachment;  filename=Bookings Report " + DateTime.Now.ToString("yyyy/MM/dd") + ".xlsx";
+                            excel.SaveAs(memoryStream);
+                            memoryStream.WriteTo(Response.Body);
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Byte[] theData = excel.GetAsByteArray();
+                            string filename = "Bookings Report.xlsx";
+                            string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            return File(theData, mimeType, filename);
+                        }
+                        catch (Exception)
+                        {
+                            return NotFound();
+                        }
+                    }
+                }
+            }
+            return NotFound();
         }
 
         // GET: Bookings/Request
