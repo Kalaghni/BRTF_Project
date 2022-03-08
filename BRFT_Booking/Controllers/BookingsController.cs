@@ -286,7 +286,6 @@ namespace BRTF_Booking.Controllers
         [Authorize(Roles = "Admin, Top-Level Admin")]
         public IActionResult DownloadBookings()
         {
-            //Get the Bookings
             var bookings = from b in _context.Bookings
                         .Include(b => b.User)
                         .Include(b => b.Room)
@@ -303,31 +302,23 @@ namespace BRTF_Booking.Controllers
                             b.Status
                             
                         };
-            //gets row count
             int numRows = bookings.Count();
 
-            if (numRows > 0) //check for data
+            if (numRows > 0) 
             {
-                //Create a new spreadsheet
                 using (ExcelPackage excel = new ExcelPackage())
                 {
 
                     var workSheet = excel.Workbook.Worksheets.Add("Bookings");
 
-                    //Note: Cells[row, column]
                     workSheet.Cells[3, 1].LoadFromCollection(bookings, true);
 
-                    //Style column for dates
                     workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
 
-                    //Style column for dates
                     workSheet.Column(5).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
 
-                    //Style column for dates
                     workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
-                   
-                    
-                    //Set Style and backgound colour of headings
+                  
                     using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
                     {
                         headings.Style.Font.Bold = true;
@@ -336,25 +327,17 @@ namespace BRTF_Booking.Controllers
                         fill.BackgroundColor.SetColor(Color.FromArgb(8, 124, 232));
                     }
 
-                    
-
-                    //Autofit columns
                     workSheet.Cells.AutoFitColumns();
 
-                    //manually set width of column
-                    
-
-                    //Add a title and timestamp at the top of the report
                     workSheet.Cells[1, 1].Value = "Booking Report";
                     using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
                     {
-                        Rng.Merge = true; //Merge columns start and end range
-                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Merge = true; 
+                        Rng.Style.Font.Bold = true; 
                         Rng.Style.Font.Size = 18;
                         Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
-                    //Since the time zone where the server is running can be different, adjust to 
-                    //Local for us.
+                    
                     DateTime utcDate = DateTime.UtcNow;
                     TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                     DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
@@ -362,7 +345,7 @@ namespace BRTF_Booking.Controllers
                     {
                         Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
                             localDate.ToShortDateString();
-                        Rng.Style.Font.Bold = true; //Font should be bold
+                        Rng.Style.Font.Bold = true; 
                         Rng.Style.Font.Size = 12;
                         Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     }
