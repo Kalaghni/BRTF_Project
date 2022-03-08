@@ -24,21 +24,27 @@ namespace BRTF_Booking.Data.BRTFMigrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<string>("FName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<string>("LName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Admins");
                 });
@@ -50,7 +56,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
 
                     b.HasKey("ID");
 
@@ -121,7 +129,8 @@ namespace BRTF_Booking.Data.BRTFMigrations
 
                     b.Property<string>("LastLevel")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(1);
 
                     b.Property<int?>("ProgramDetailID")
                         .HasColumnType("INTEGER");
@@ -177,7 +186,8 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(2000);
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("INTEGER");
@@ -189,6 +199,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Rule")
@@ -212,15 +223,18 @@ namespace BRTF_Booking.Data.BRTFMigrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<string>("FName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
 
                     b.Property<string>("LName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
 
                     b.Property<string>("MName")
                         .HasColumnType("TEXT");

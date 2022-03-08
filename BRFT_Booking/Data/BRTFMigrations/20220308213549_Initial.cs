@@ -13,9 +13,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    FName = table.Column<string>(nullable: false),
-                    LName = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: false),
+                    FName = table.Column<string>(maxLength: 50, nullable: false),
+                    LName = table.Column<string>(maxLength: 100, nullable: false),
+                    Email = table.Column<string>(maxLength: 50, nullable: false),
                     Role = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -29,7 +29,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,11 +56,11 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     StudentID = table.Column<string>(maxLength: 7, nullable: false),
-                    FName = table.Column<string>(nullable: false),
+                    FName = table.Column<string>(maxLength: 50, nullable: false),
                     MName = table.Column<string>(nullable: true),
-                    LName = table.Column<string>(nullable: false),
+                    LName = table.Column<string>(maxLength: 100, nullable: false),
                     Role = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(nullable: true),
                     ProgramTermID = table.Column<int>(nullable: true),
                     Active = table.Column<bool>(nullable: false)
@@ -77,8 +77,8 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     AreaID = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Rule = table.Column<string>(nullable: true),
                     Limit = table.Column<int>(nullable: true),
                     MaxNumofBookings = table.Column<int>(nullable: true),
@@ -126,7 +126,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     ProgramDetailID = table.Column<int>(nullable: true),
                     UserID = table.Column<int>(nullable: true),
                     StrtLevel = table.Column<int>(nullable: false),
-                    LastLevel = table.Column<string>(nullable: false),
+                    LastLevel = table.Column<string>(maxLength: 1, nullable: false),
                     Term = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -176,6 +176,12 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Admins_Email",
+                table: "Admins",
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_RoomID",

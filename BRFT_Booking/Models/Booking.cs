@@ -39,12 +39,25 @@ namespace BRTF_Booking.Models
         [Display(Name = "Status")]
         public string Status { get; set; }
 
+        [Display(Name = "Time Limit")]
+        public string TimeLimit { get; }
+
         [ScaffoldColumn(false)]
         [Timestamp]
         public Byte[] RowVersion { get; set; }//Added for concurrency
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            if(this.EndDate.Minute != 30)
+                if(this.EndDate.Minute != 0)
+                {
+                    yield return new ValidationResult("The End time must be in 30 minute increments. ex. 9:00 or 9:30", new[] { "EndTime" });
+                }
+            if (this.StartDate.Minute != 30)
+                if (this.StartDate.Minute != 0)
+                {
+                    yield return new ValidationResult("The Start time must be in 30 minute increments. ex. 9:00 or 9:30", new[] { "EndTime" });
+                }
 
             if (this.StartDate > this.EndDate)
                 {
