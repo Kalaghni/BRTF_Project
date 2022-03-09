@@ -439,6 +439,25 @@ namespace BRTF_Booking.Controllers
             return Json(RoomCreateSelectList(ID, null));
         }
 
+        private SelectList RoomCreateRuleSelectList(int? AreaID, int? selectedId)
+        {
+
+            //The AreaID has been added so we can filter by it.
+            var query = from c in _context.Rooms
+                        .Include(c => c.Area)
+                        .Where(p => p.AreaID == AreaID)
+                        select c;
+            return new SelectList(query.OrderBy(p => p.Rule), "ID", "Rule", selectedId);
+        }
+
+        [HttpGet]
+        public JsonResult GetCreateRules(int? ID)
+        {
+            return Json(RoomCreateSelectList(ID, null));
+        }
+
+        
+
         private SelectList RoomEditSelectList(int? BookingID)
         {
             int AreaMatch = _context.Bookings.Include(b => b.Room).ThenInclude(b => b.Area).Where(p => p.ID == BookingID).FirstOrDefault().Room.AreaID;
@@ -447,7 +466,7 @@ namespace BRTF_Booking.Controllers
             var query = from c in _context.Rooms.Where(p => p.AreaID == AreaMatch)
                         select c;
 
-            return new SelectList(query.OrderBy(p => p.Name), "ID", "Name", BookingID);
+            return new SelectList(query.OrderBy(p => p.Name), "ID", "Name", BookingID,"Rule");
         }
 
         [HttpGet]
@@ -455,6 +474,7 @@ namespace BRTF_Booking.Controllers
         {
             return Json(RoomEditSelectList(ID));
         }
+
 
         public async Task<IActionResult> Calendar()
         {

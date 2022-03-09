@@ -48,9 +48,14 @@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label">Room Rules:</label>
+                <input type="text" asp-for="Room.Rule" id="Rule" name="Rule" asp-items="ViewBag.Rule" readonly>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+
     </div>
 </div>
 
@@ -62,12 +67,20 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/refreshDDL.js"></script>
     <script type="text/javascript">
-
         $('#AreaID').change(function () {
             var selectedArea = $("#AreaID").val();
             var URL = "/Bookings/GetCreateRooms/" + selectedArea;
             refreshDDL('RoomID', URL, true);
         });
     </script>
+    <script src="~/js/refreshRoomRule.js"></script>
+    <script type="text/javascript">
+        $('#RoomRule').change(function () {
+            var selectedArea = $("#AreaID").val();
+            var URL = "/Bookings/GetCreateRooms/" + selectedArea;
+            refreshRoomRule('RoomID', URL, true);
+        });
+    </script>
+
 }
 

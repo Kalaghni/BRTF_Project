@@ -23,6 +23,8 @@ namespace BRTF_Booking.Models
         [DataType(DataType.MultilineText)]
         public string? Description { get; set; }
 
+        [Display(Name = "Room Rules")]
+        [DisplayFormat(NullDisplayText = "This room has no booking rules.")]
         public string? Rule { get; set; }
 
         [Range(1, 99, ErrorMessage = "Room limit between 1 and 99 only!")]
