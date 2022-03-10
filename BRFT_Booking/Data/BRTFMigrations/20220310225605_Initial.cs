@@ -82,7 +82,10 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     Rule = table.Column<string>(nullable: true),
                     Limit = table.Column<int>(nullable: true),
                     MaxNumofBookings = table.Column<int>(nullable: true),
-                    Enabled = table.Column<bool>(nullable: false)
+                    Enabled = table.Column<bool>(nullable: false),
+                    StartOpenWindow = table.Column<DateTime>(nullable: true),
+                    CloseWindow = table.Column<DateTime>(nullable: true),
+                    AvailibleTo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

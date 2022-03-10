@@ -167,10 +167,18 @@ namespace BRTF_Booking.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    booking.BookingRequested = DateTime.Today;
-                    _context.Add(booking);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    if(booking.User.ProgramTerm.Group == booking.Room.AvailibleTo)
+                    {
+                        booking.BookingRequested = DateTime.Today;
+                        _context.Add(booking);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        throw new Exception("You do not have access to this room. If you should have access, please contact your system administrator.");
+                    }
+                    
                 }
             }
             catch (DbUpdateException)

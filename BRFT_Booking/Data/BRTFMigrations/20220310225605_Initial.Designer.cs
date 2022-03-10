@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Booking.Data.BRTFMigrations
 {
     [DbContext(typeof(BRTFContext))]
-    [Migration("20220308213549_Initial")]
+    [Migration("20220310225605_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -187,6 +187,12 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.Property<int>("AreaID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AvailibleTo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CloseWindow")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasColumnType("TEXT")
                         .HasMaxLength(2000);
@@ -205,6 +211,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Rule")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartOpenWindow")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");

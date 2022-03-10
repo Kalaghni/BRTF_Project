@@ -34,6 +34,12 @@ namespace BRTF_Booking.Models
 
         public bool Enabled { get; set; }
 
+        public DateTime? StartOpenWindow { get; set; }
+
+        public DateTime? CloseWindow { get; set; }
+
+        public string? AvailibleTo { get; set; }
+
         public ICollection<Booking> Bookings { get; set; }
 
         public Room()

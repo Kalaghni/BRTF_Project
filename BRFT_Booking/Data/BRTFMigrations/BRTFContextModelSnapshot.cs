@@ -185,6 +185,12 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.Property<int>("AreaID")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AvailibleTo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CloseWindow")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasColumnType("TEXT")
                         .HasMaxLength(2000);
@@ -203,6 +209,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Rule")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartOpenWindow")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
