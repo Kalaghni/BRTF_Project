@@ -151,23 +151,30 @@ namespace BRTF_Booking.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(user);
-                    await _context.SaveChangesAsync();
+                    if (user.Email.Substring(Math.Max(0, user.Email.Length - 17)) == "niagaracollege.ca") {
+                        _context.Add(user);
+                        await _context.SaveChangesAsync();
 
-                    if (_userManager.FindByEmailAsync(user.Email).Result == null)
-                    {
-                        IdentityUser Iuser = new IdentityUser
+                        if (_userManager.FindByEmailAsync(user.Email).Result == null)
                         {
-                            UserName = user.Email,
-                            Email = user.Email
-                        };
+                            IdentityUser Iuser = new IdentityUser
+                            {
+                                UserName = user.Email,
+                                Email = user.Email
+                            };
 
-                        IdentityResult result = _userManager.CreateAsync(Iuser, Password).Result;
+                            IdentityResult result = _userManager.CreateAsync(Iuser, Password).Result;
 
-                        if (result.Succeeded)
-                        {
-                            _userManager.AddToRoleAsync(Iuser, "Student").Wait();
+                            if (result.Succeeded)
+                            {
+                                _userManager.AddToRoleAsync(Iuser, "Student").Wait();
+                            }
                         }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Email", "Unable to save changes. Email must be a niagaracollege.ca address.");
+                        return View(user);
                     }
 
                     return RedirectToAction(nameof(Index));
