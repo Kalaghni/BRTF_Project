@@ -63,10 +63,6 @@ namespace BRTF_Booking.Controllers
             return View(booking);
         }
 
-
-
-
-
         [Authorize(Roles = "Admin, Top-Level Admin")]
         [HttpGet]
         // GET: Bookings/Create
@@ -93,12 +89,8 @@ namespace BRTF_Booking.Controllers
             else
             {
                 PopulateDropDownLists();
-
                 return View();
             }
-
-
-
         }
 
         [Authorize(Roles = "Admin, Top-Level Admin")]

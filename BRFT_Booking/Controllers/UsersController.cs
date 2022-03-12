@@ -32,7 +32,7 @@ namespace BRTF_Booking.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(string SearchName, int? ProgramTermID, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
+        public async Task<IActionResult> Index(string SearchName, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
@@ -47,11 +47,6 @@ namespace BRTF_Booking.Controllers
                         .AsNoTracking()
                         select u;
 
-            if (ProgramTermID.HasValue)
-            {
-                users = users.Where(u => u.StudentID == ProgramTermID.ToString());
-                ViewData["Filtering"] = " show";
-            }
             if (!String.IsNullOrEmpty(SearchName))
             {
                 users = users.Where(u => u.LName.ToUpper().Contains(SearchName.ToUpper())

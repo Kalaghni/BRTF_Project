@@ -24,10 +24,11 @@
                             <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Area:</label>
+                            <label class="control-label">Area</label>
                             <select asp-for="Room.AreaID" id="AreaID" name="AreaID" class="form-control" asp-items="ViewBag.AreaID">
                                 <option>Select An Area:</option>
                             </select>
+                            <select asp-for="RoomID" id="RoomID" name="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
                         </div>
                         <div class="form-group">
                             <label asp-for="Room" class="control-label"></label>
@@ -35,12 +36,12 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="StartDate" class="control-label"></label>
-                            <input asp-for="StartDate" id="StartDate" name="StartDate" class="form-control" readonly />
+                            <input asp-for="StartDate" id="StartDate" name="StartDate" class="form-control" />
                             <span asp-validation-for="StartDate" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="EndDate" class="control-label"></label>
-                            <input asp-for="EndDate" id="EndDate" name="EndDate" class="form-control" readonly />
+                            <input asp-for="EndDate" id="EndDate" name="EndDate" class="form-control" />
                             <span asp-validation-for="EndDate" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -140,7 +141,5 @@
 
         });
     </script>
-
-
 }
 

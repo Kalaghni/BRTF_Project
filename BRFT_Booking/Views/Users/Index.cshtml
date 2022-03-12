@@ -7,17 +7,14 @@
 <p>
     <a class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; " asp-action="Create">New User</a>
 </p>
-<br />
 <div class="row">
     <div class="col-md-12">
         <form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
-            @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
             @using (Html.BeginForm("Index", "Users", FormMethod.Post))
             {
                 <div class="form-group">
                     <label class="control-label">Upload Excel File:</label>
                     <input type="file" class="" name="theExcel" /><br />
-                    @*<span id="error"></span>*@
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Upload Data" class="btn btn-primary" onclick="errorMessage()" />
@@ -36,10 +33,6 @@
         <div class="collapse" id="collapseFilter">
             <div class="card card-body bg-light">
                 <div class="row">
-                    <div class="form-group col-md-4">
-                        <label class="control-label">Select by Plan:</label>
-                        @Html.DropDownList("ProgramTermID", null, "All Plans", htmlAttributes: new { @class = "form-control" })
-                    </div>
                     <div class="form-group col-md-4">
                         <label class="control-label">Search Student:</label>
                         @Html.TextBox("SearchName", null, new { @class = "form-control" })

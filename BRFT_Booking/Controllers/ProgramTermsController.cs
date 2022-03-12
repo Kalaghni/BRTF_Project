@@ -23,8 +23,7 @@ namespace BRTF_Booking.Controllers
         }
 
         // GET: ProgramTerms
-        public async Task<IActionResult> Index(string SearchDescription, int? page, int? pageSizeID,
-            string actionButton, string sortDirection = "asc", string sortField = "ProgramTerms")
+        public async Task<IActionResult> Index(string SearchProgram, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "ProgramTerms")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
@@ -35,9 +34,9 @@ namespace BRTF_Booking.Controllers
 
             string[] sortOptions = new[] { "Academic Plan", "Program" };
 
-            if (!String.IsNullOrEmpty(SearchDescription))
+            if (!String.IsNullOrEmpty(SearchProgram))
             {
-                terms = terms.Where(t => t.ProgramDetail.Name.ToUpper().Contains(SearchDescription.ToUpper()));
+                terms = terms.Where(t => t.ProgramDetail.Name.ToUpper().Contains(SearchProgram.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
 

@@ -8,7 +8,6 @@ namespace BRTF_Booking.Models
 {
     public class Booking : IValidatableObject
     {
-
         public TimeSpan timeSpan => new TimeSpan(EndDate.Ticks - StartDate.Ticks);
 
         public int ID { get; set; }
@@ -26,7 +25,6 @@ namespace BRTF_Booking.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Date Requested")]
         public DateTime BookingRequested { get; set; }
-
 
         [Required(ErrorMessage = "You must enter a Start date!")]
         [Display(Name = "Start")]
@@ -46,26 +44,30 @@ namespace BRTF_Booking.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if(this.EndDate.Minute != 30)
-                if(this.EndDate.Minute != 0)
+            if (this.EndDate.Minute != 30)
+            {
+                if (this.EndDate.Minute != 0)
                 {
-                    yield return new ValidationResult("The End time must be in 30 minute increments. ex. 9:00 or 9:30", new[] { "EndTime" });
+                    yield return new ValidationResult("The End time must be in 30 minute increments. ex. 9:00 or 9:30", new[] { "EndDate" });
                 }
+            }
+
             if (this.StartDate.Minute != 30)
+            {
                 if (this.StartDate.Minute != 0)
                 {
-                    yield return new ValidationResult("The Start time must be in 30 minute increments. ex. 9:00 or 9:30", new[] { "EndTime" });
+                    yield return new ValidationResult("The Start time must be in 30 minute increments. ex. 9:00 or 9:30", new[] { "StartDate" });
                 }
+            }
 
             if (this.StartDate > this.EndDate)
-                {
-                yield return new ValidationResult("The Start time cannot be after the end time.", new[] { "StartTime" });
+            {
+                yield return new ValidationResult("The Start time cannot be after the end time.", new[] { "StartDate" });
             }
             if (this.StartDate < DateTime.Today)
             {
-                yield return new ValidationResult("The Start time cannot be after today.", new[] { "StartTime" });
+                yield return new ValidationResult("The Start time cannot be after today.", new[] { "StartDate" });
             }
-
         }
     }
 }
