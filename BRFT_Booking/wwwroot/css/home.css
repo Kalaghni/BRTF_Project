@@ -940,13 +940,13 @@ body {
 @media (min-width: 641px) {
     .hero {
         text-align: left;
-        padding-top: 64px;
-        padding-bottom: 88px
+        padding-top: 32px;
+        padding-bottom: 44px
     }
 
     .hero-inner {
         display: flex;
-        justify-content: space-between;
+        /*justify-content: space-between;*/
         align-items: center
     }
 
@@ -991,8 +991,8 @@ body {
 
 .feature {
     padding: 16px 32px;
-    width: 380px;
-    max-width: 380px;
+    width: 190px;
+    max-width: 190px;
     flex-grow: 1
 }
 
@@ -1217,7 +1217,7 @@ main {
 
 @media (min-width: 641px) {
     .section-inner {
-        padding-top: 88px;
+        padding-top: 44px;
         padding-bottom: 88px
     }
 }

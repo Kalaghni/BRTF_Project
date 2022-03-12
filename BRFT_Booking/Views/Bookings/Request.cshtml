@@ -6,8 +6,6 @@
 }
 
 <h1>Request Booking</h1>
-
-<h4>Booking</h4>
 <hr />
 <table>
     <tr>
@@ -17,9 +15,9 @@
         </th>
     </tr>
     <tr>
-        <td style="width: 600px">
-            <div class="row" style="width: 600px">
-                <div style="width: 500px">
+        <td style="width:600px">
+            <div class="row">
+                <div class="col-md-8">
                     <form asp-action="Request">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" id="limit" />
@@ -48,7 +46,6 @@
                             <input type="submit" value="Request" class="btn btn-primary" />
                         </div>
                     </form>
-
                 </div>
             </div>
         </td>

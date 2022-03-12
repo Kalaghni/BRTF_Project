@@ -5,9 +5,7 @@
 }
 
 
-<h1>Create</h1>
-
-<h4>Booking</h4>
+<h1>Create New Booking</h1>
 <hr />
 <table>
     <tr>
@@ -17,8 +15,8 @@
     </tr>
     <tr>
         <td style="width: 600px">
-            <div class="row" style="width: 600px">
-                <div style="width: 500px">
+            <div class="row">
+                <div class="col-md-8">
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
@@ -31,7 +29,6 @@
                                 <option>Select An Area:</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label asp-for="Room" class="control-label"></label>
                             <select asp-for="RoomID" id="RoomID" name="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
@@ -55,7 +52,6 @@
                             </select>
                             <span asp-validation-for="Status" class="text-danger"></span>
                         </div>
-
                         <div class="form-group">
                             <input type="submit" value="Create" class="btn btn-primary" />
                         </div>
