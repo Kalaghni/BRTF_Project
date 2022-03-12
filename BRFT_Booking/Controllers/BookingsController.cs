@@ -128,8 +128,6 @@ namespace BRTF_Booking.Controllers
             return View(booking);
         }
 
-
-
         [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings/Create
         public IActionResult Create(int? id)

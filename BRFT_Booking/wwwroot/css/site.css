@@ -15,15 +15,14 @@ a {
 
 .btn-primary {
     color: #fff;
-    background: #09ea23;
-    background: linear-gradient(65deg, #02d73b 0, #0ffd5e 100%);
-    border-color: #63ff75;
+    background-color: #1dc21d;
+    border-color: #18ac18;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles

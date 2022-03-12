@@ -32,9 +32,7 @@ namespace BRTF_Booking.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(string SearchName, int? ProgramTermID,
-            int? page, int? pageSizeID,
-            string actionButton, string sortDirection = "asc", string sortField = "User")
+        public async Task<IActionResult> Index(string SearchName, int? ProgramTermID, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
@@ -307,55 +305,67 @@ namespace BRTF_Booking.Controllers
             return View(user);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> InsertFromExcel(IFormFile theExcel)
         {
-            //TODO Add Error Handling to the files. Prevent duplication
-            ExcelPackage excel;
-            using (var memoryStream = new MemoryStream())
+            try
             {
-                await theExcel.CopyToAsync(memoryStream);
-                excel = new ExcelPackage(memoryStream);
+                ExcelPackage excel;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await theExcel.CopyToAsync(memoryStream);
+                    excel = new ExcelPackage(memoryStream);
+                }
+                var workSheet = excel.Workbook.Worksheets[0];
+                var start = workSheet.Dimension.Start;
+                var end = workSheet.Dimension.End;
+
+                //Start a new list to hold imported objects
+                List<User> userList = new List<User>();
+                List<ProgramTerm> userPrograms = new List<ProgramTerm>();
+
+                for (int row = start.Row + 1; row <= end.Row; row++)
+                {
+                    // Row by row...
+                    User u = new User
+                    {
+                        StudentID = workSheet.Cells[row, 1].Text,
+                        FName = workSheet.Cells[row, 2].Text,
+                        MName = workSheet.Cells[row, 3].Text,
+                        LName = workSheet.Cells[row, 4].Text,
+                        Email = workSheet.Cells[row, 7].Text,
+                    };
+                    ProgramTerm p = new ProgramTerm
+                    {
+                        User = _context.Users.Where(u => u.StudentID == workSheet.Cells[row, 1].Text).FirstOrDefault(), //studentID
+                        AcadPlan = workSheet.Cells[row, 5].Text,
+                        ProgramDetail = _context.ProgramDetails.Where(p => p.Name == workSheet.Cells[row, 6].Text).FirstOrDefault(),
+                        StrtLevel = Int32.Parse(workSheet.Cells[row, 8].Text),
+                        LastLevel = workSheet.Cells[row, 9].Text,
+                        Term = Int32.Parse(workSheet.Cells[row, 10].Text),
+                    };
+                    userList.Add(u);
+                    userPrograms.Add(p);
+                }
+                _context.Users.AddRange(userList);
+                //_context.ProgramTerms.AddRange(userPrograms);
+                _context.SaveChanges();
+
+                _context.ProgramTerms.AddRange(userPrograms);
+                _context.SaveChanges();
+                return RedirectToAction("Index", "Users");
             }
-            var workSheet = excel.Workbook.Worksheets[0];
-            var start = workSheet.Dimension.Start;
-            var end = workSheet.Dimension.End;
-
-            //Start a new list to hold imported objects
-            List<User> userList = new List<User>();
-            List<ProgramTerm> userPrograms = new List<ProgramTerm>();
-
-            for (int row = start.Row + 1; row <= end.Row; row++)
+            catch (NullReferenceException ex)
             {
-                // Row by row...
-                User u = new User
+                if (ex.GetBaseException().Message.Contains("Object reference not set to an instance of an object."))
                 {
-                    StudentID = workSheet.Cells[row, 1].Text,
-                    FName = workSheet.Cells[row, 2].Text,
-                    MName = workSheet.Cells[row, 3].Text,
-                    LName = workSheet.Cells[row, 4].Text,
-                    Email = workSheet.Cells[row, 7].Text,
-                };
-                ProgramTerm p = new ProgramTerm
+                    ModelState.AddModelError("", "Unable to upload file. Please select an Excel file before pressing Upload");
+                }
+                else
                 {
-                    User = _context.Users.Where(u => u.StudentID == workSheet.Cells[row, 1].Text).FirstOrDefault(), //studentID
-                    AcadPlan = workSheet.Cells[row, 5].Text,
-                    ProgramDetail = _context.ProgramDetails.Where(p => p.Name == workSheet.Cells[row, 6].Text).FirstOrDefault(),
-                    StrtLevel = Int32.Parse(workSheet.Cells[row, 8].Text),
-                    LastLevel = workSheet.Cells[row, 9].Text,
-                    Term = Int32.Parse(workSheet.Cells[row, 10].Text),
-                };
-                userList.Add(u);
-                userPrograms.Add(p);
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
             }
-            _context.Users.AddRange(userList);
-            //_context.ProgramTerms.AddRange(userPrograms);
-            _context.SaveChanges();
-
-            _context.ProgramTerms.AddRange(userPrograms);
-            _context.SaveChanges();
             return RedirectToAction("Index", "Users");
         }
 
