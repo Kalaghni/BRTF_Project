@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BRTF_Booking.Models
 {
     public class Room
     {
+
         public int ID { get; set; }
 
         [Display(Name = "Area")]
@@ -30,15 +32,13 @@ namespace BRTF_Booking.Models
         [Range(1, 99, ErrorMessage = "Room limit between 1 and 99 only!")]
         public int? Limit { get; set; }
 
+        public string? ApprovalName { get; set; }
+        public string? ApprovalEmail { get; set; }
+
         public int? MaxNumofBookings { get; set; }
 
         public bool Enabled { get; set; }
 
-        public DateTime? StartOpenWindow { get; set; }
-
-        public DateTime? CloseWindow { get; set; }
-
-        public string? AvailibleTo { get; set; }
 
         public ICollection<Booking> Bookings { get; set; }
 

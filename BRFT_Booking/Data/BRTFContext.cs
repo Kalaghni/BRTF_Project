@@ -22,6 +22,7 @@ namespace BRTF_Booking.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<ProgramTermGroup> ProgramTermGroups { get; set; }
         public DbSet<ProgramDetail> ProgramDetails { get; set; }
+        public DbSet<ProgramTermGroupArea> ProgramTermGroupAreas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -68,6 +69,27 @@ namespace BRTF_Booking.Data
                 .WithOne(b => b.User)
                 .HasForeignKey<ProgramTerm>(b => b.UserID);
 
+           /* modelBuilder.Entity<ProgramTermGroupArea>()
+               .HasOne(u => u.Area)
+               .WithOne(b => b.ProgramTermGroupArea)
+               .HasForeignKey<Area>(b => b.ProgramTermGroupAreaID);
+
+            modelBuilder.Entity<ProgramTermGroupArea>()
+                .HasOne(u => u.ProgramTermGroup)
+                .WithOne(b => b.ProgramTermGroupArea)
+                .HasForeignKey<ProgramTermGroup>(b => b.ProgramTermGroupAreaID);
+
+            modelBuilder.Entity<Area>()
+                .HasOne(u => u.ProgramTermGroupArea)
+                .WithOne(b => b.Area)
+                .HasForeignKey<ProgramTermGroupArea>(b => b.AreaID);
+
+            modelBuilder.Entity<ProgramTermGroup>()
+               .HasOne(u => u.ProgramTermGroupArea)
+               .WithOne(b => b.ProgramTermGroup)
+               .HasForeignKey<ProgramTermGroupArea>(b => b.ProgramTermGroupID);*/
+
+            
         }
     }
 }

@@ -19,5 +19,9 @@ namespace BRTF_Booking.Models
 
         [Display(Name = "Level")]
         public int Level { get; set; }
+
+      /*  public ProgramTermGroupArea ProgramTermGroupArea { get; set; }
+        public int? ProgramTermGroupAreaID { get; set; }*/
+
     }
 }

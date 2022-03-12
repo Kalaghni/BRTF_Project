@@ -305,6 +305,14 @@ namespace BRTF_Booking.Controllers
             return View(room);
         }
 
+        [HttpGet]
+        public JsonResult GetRoomRules(int? roomID)
+        {
+            Room room = _context.Rooms.FindAsync(roomID).Result;
+
+            return Json(room);
+        }
+
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();

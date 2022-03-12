@@ -81,11 +81,10 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Rule = table.Column<string>(nullable: true),
                     Limit = table.Column<int>(nullable: true),
+                    ApprovalName = table.Column<string>(nullable: true),
+                    ApprovalEmail = table.Column<string>(nullable: true),
                     MaxNumofBookings = table.Column<int>(nullable: true),
-                    Enabled = table.Column<bool>(nullable: false),
-                    StartOpenWindow = table.Column<DateTime>(nullable: true),
-                    CloseWindow = table.Column<DateTime>(nullable: true),
-                    AvailibleTo = table.Column<string>(nullable: true)
+                    Enabled = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,6 +179,32 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ProgramTermGroupAreas",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProgramTermGroupID = table.Column<int>(nullable: true),
+                    AreaID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProgramTermGroupAreas", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_ProgramTermGroupAreas_Areas_AreaID",
+                        column: x => x.AreaID,
+                        principalTable: "Areas",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProgramTermGroupAreas_ProgramTermGroups_ProgramTermGroupID",
+                        column: x => x.ProgramTermGroupID,
+                        principalTable: "ProgramTermGroups",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Admins_Email",
                 table: "Admins",
@@ -195,6 +220,16 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 name: "IX_Bookings_UserID",
                 table: "Bookings",
                 column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramTermGroupAreas_AreaID",
+                table: "ProgramTermGroupAreas",
+                column: "AreaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramTermGroupAreas_ProgramTermGroupID",
+                table: "ProgramTermGroupAreas",
+                column: "ProgramTermGroupID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProgramTermGroups_ProgramDetailID",
@@ -239,7 +274,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 name: "Bookings");
 
             migrationBuilder.DropTable(
-                name: "ProgramTermGroups");
+                name: "ProgramTermGroupAreas");
 
             migrationBuilder.DropTable(
                 name: "ProgramTerms");
@@ -248,13 +283,16 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "ProgramDetails");
+                name: "ProgramTermGroups");
 
             migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Areas");
+
+            migrationBuilder.DropTable(
+                name: "ProgramDetails");
         }
     }
 }

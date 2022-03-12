@@ -14,5 +14,11 @@ namespace BRTF_Booking.Models
         [Required(ErrorMessage = "Name of an area is required!")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "First name need to be between 2 and 100 characters!")]
         public string Name { get; set; }
+
+        
+
+
+      /*  public ProgramTermGroupArea ProgramTermGroupArea { get; set; }
+        public int? ProgramTermGroupAreaID { get; set; }*/
     }
 }

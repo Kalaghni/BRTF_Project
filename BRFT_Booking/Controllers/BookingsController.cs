@@ -167,17 +167,10 @@ namespace BRTF_Booking.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if(booking.User.ProgramTerm.Group == booking.Room.AvailibleTo)
-                    {
                         booking.BookingRequested = DateTime.Today;
                         _context.Add(booking);
                         await _context.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
-                    }
-                    else
-                    {
-                        throw new Exception("You do not have access to this room. If you should have access, please contact your system administrator.");
-                    }
                     
                 }
             }
@@ -393,7 +386,7 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings/Request
         public IActionResult Request()
         {
-            PopulateDropDownLists();
+            ViewData["AreaID"] = AreaSelectList();
             return View();
         }
 
@@ -423,16 +416,46 @@ namespace BRTF_Booking.Controllers
         }
 
 
-        private SelectList AreaSelectList(int? selectedId)
+        private SelectList AreaSelectList()
         {
-            return new SelectList(_context.Areas.OrderBy(d => d.Name), "ID", "Name", selectedId);
+
+            int groupID = _context.Users
+                        .Include(u => u.ProgramTerm)
+                        .ThenInclude(u => u.ProgramDetail)
+                        .ThenInclude(u => u.ProgramTermGroups)
+                        .AsNoTracking()
+                        .Where(u => u.Email == User.Identity.Name)
+                        .FirstOrDefault().ProgramTerm.ID;
+
+
+            List<Area> areas = new List<Area>();
+
+            foreach (ProgramTermGroupArea pGroupArea in _context.ProgramTermGroupAreas.Include(p => p.Area).Include(p => p.ProgramTermGroup))
+            {
+                if (pGroupArea.ID == groupID)
+                {
+                    Console.WriteLine(_context.Areas.FindAsync(pGroupArea.AreaID).Result.Name);
+                    areas.Add(_context.Areas.FindAsync(pGroupArea.AreaID).Result);
+                }
+            }
+            foreach (Area area in _context.Areas)
+            {
+                if (!areas.Contains(area) && !_context.ProgramTermGroupAreas.Where(p => p.AreaID == area.ID).Any())
+                {
+                    areas.Add(area);
+                }
+            }
+
+            return new SelectList(areas.OrderBy(d => d.Name), "ID", "Name");
         }
 
 
         private SelectList RoomCreateSelectList(int? AreaID, int? selectedId)
         {
 
-            //The AreaID has been added so we can filter by it.
+            var rooms = _context.Rooms.Where(r => r.AreaID == AreaID);
+
+            //Find rooms that the user is within the same program term group
             var query = from c in _context.Rooms
                         .Include(c => c.Area)
                         .Where(p => p.AreaID == AreaID)
@@ -458,9 +481,12 @@ namespace BRTF_Booking.Controllers
             return new SelectList(query.OrderBy(p => p.Rule), "ID", "Rule", selectedId);
         }
 
+
         [HttpGet]
         public JsonResult GetCreateRules(int? ID)
         {
+
+
             return Json(RoomCreateSelectList(ID, null));
         }
 

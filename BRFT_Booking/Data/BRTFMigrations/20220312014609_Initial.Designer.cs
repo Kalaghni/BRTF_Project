@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Booking.Data.BRTFMigrations
 {
     [DbContext(typeof(BRTFContext))]
-    [Migration("20220310225605_Initial")]
+    [Migration("20220312014609_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,20 +178,41 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.ToTable("ProgramTermGroups");
                 });
 
+            modelBuilder.Entity("BRTF_Booking.Models.ProgramTermGroupArea", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AreaID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ProgramTermGroupID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("AreaID");
+
+                    b.HasIndex("ProgramTermGroupID");
+
+                    b.ToTable("ProgramTermGroupAreas");
+                });
+
             modelBuilder.Entity("BRTF_Booking.Models.Room", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ApprovalEmail")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ApprovalName")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("AreaID")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("AvailibleTo")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("CloseWindow")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT")
@@ -211,9 +232,6 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Rule")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("StartOpenWindow")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -307,6 +325,17 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .WithMany("ProgramTermGroups")
                         .HasForeignKey("ProgramDetailID")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("BRTF_Booking.Models.ProgramTermGroupArea", b =>
+                {
+                    b.HasOne("BRTF_Booking.Models.Area", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaID");
+
+                    b.HasOne("BRTF_Booking.Models.ProgramTermGroup", "ProgramTermGroup")
+                        .WithMany()
+                        .HasForeignKey("ProgramTermGroupID");
                 });
 
             modelBuilder.Entity("BRTF_Booking.Models.Room", b =>

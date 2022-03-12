@@ -39,8 +39,6 @@ namespace BRTF_Booking.Models
         [Display(Name = "Status")]
         public string Status { get; set; }
 
-        [Display(Name = "Time Limit")]
-        public string TimeLimit { get; }
 
         [ScaffoldColumn(false)]
         [Timestamp]
@@ -67,6 +65,7 @@ namespace BRTF_Booking.Models
             {
                 yield return new ValidationResult("The Start time cannot be after today.", new[] { "StartTime" });
             }
+
         }
     }
 }

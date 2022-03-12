@@ -30,7 +30,7 @@ function refreshDDL(ddl_ID, URL, showNoDataMsg, noDataMsg, addDefault, defaultTe
                     }));
                 });
                 theDDL.trigger("chosen:updated");
-            } else {
+            } else {           
                 if (showNoDataMsg) {
                     theDDL.empty();
                     if (noDataMsg == null || jQuery.isEmptyObject(noDataMsg)) {
@@ -43,6 +43,7 @@ function refreshDDL(ddl_ID, URL, showNoDataMsg, noDataMsg, addDefault, defaultTe
                     theDDL.trigger("chosen:updated");
                 }
             }
+            
         });
     });
     if (fadeOutIn) {
