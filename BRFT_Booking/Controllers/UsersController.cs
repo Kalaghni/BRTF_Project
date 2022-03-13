@@ -168,6 +168,11 @@ namespace BRTF_Booking.Controllers
                                 Email = user.Email
                             };
 
+                            if(Password == null)
+                            {
+                                Password = user.DateOfBirth.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                            }
+
                             IdentityResult result = _userManager.CreateAsync(Iuser, Password).Result;
 
                             if (result.Succeeded)
@@ -372,6 +377,10 @@ namespace BRTF_Booking.Controllers
                 {
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                 }
+            }
+            catch (IndexOutOfRangeException)
+            {
+                ModelState.AddModelError("", "Please make sure you are uploading an excel file. File type must be .csv or .xlsx");
             }
             return RedirectToAction("Index", "Users");
         }

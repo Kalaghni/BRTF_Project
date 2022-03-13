@@ -248,6 +248,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT")
