@@ -7,71 +7,61 @@
 
 <h1>Create New Booking</h1>
 <hr />
-<table>
-    <tr>
-        <th></th>
-        <th id="roomTitle">
-        </th>
-    </tr>
-    <tr>
-        <td style="width: 600px">
-            <div class="row">
-                <div class="col-md-8">
-                    <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="User" class="control-label"></label>
-                            <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Area</label>
-                            <select asp-for="Room.AreaID" id="AreaID" name="AreaID" class="form-control" asp-items="ViewBag.AreaID">
-                                <option>Select An Area:</option>
-                            </select>
-                            <select asp-for="RoomID" id="RoomID" name="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Room" class="control-label"></label>
-                            <select asp-for="RoomID" id="RoomID" name="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="StartDate" class="control-label"></label>
-                            <input asp-for="StartDate" id="StartDate" name="StartDate" class="form-control" />
-                            <span asp-validation-for="StartDate" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="EndDate" class="control-label"></label>
-                            <input asp-for="EndDate" id="EndDate" name="EndDate" class="form-control" />
-                            <span asp-validation-for="EndDate" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Status" class="control-label"></label>
-                            <select id="Status" name="Status" class="form-control">
-                                <option style="color: #E2C044;" value="Awaiting">Awaiting</option>
-                                <option style="color: #D52941;" value="Declined">Declined</option>
-                                <option style="color: #44CF6C;" value="Accepted">Accepted</option>
-                            </select>
-                            <span asp-validation-for="Status" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Create" class="btn btn-primary" />
-                        </div>
-                    </form>
-                </div>
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="User" class="control-label"></label>
+                <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
             </div>
-        </td>
-        <td>
+            <div class="form-group">
+                <label class="control-label">Area</label>
+                <select asp-for="Room.AreaID" id="AreaID" name="AreaID" class="form-control" asp-items="ViewBag.AreaID">
+                    <option>Select An Area:</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Room" class="control-label"></label>
+                <select asp-for="RoomID" id="RoomID" name="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" id="StartDate" name="StartDate" class="form-control" readonly />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" id="EndDate" name="EndDate" class="form-control" readonly />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select id="Status" name="Status" class="form-control">
+                    <option style="color: #44CF6C;" value="Accepted">Accepted</option>
+                    <option style="color: #E2C044;" value="Awaiting">Awaiting</option>
+                    <option style="color: #D52941;" value="Declined">Declined</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+        <div class="col-md-8">
             <div class="container">
+                <hr />
+                <label class="control-label">- Booking is only available Mon-Friday between 8:30am to 5:30pm</label>
+                <label class="control-label" id="roomTitle"></label>
                 <div id='calendar'></div>
             </div>
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
+</form>
 
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -113,10 +103,10 @@
                 var selectedRoom = data[0].value;
                 $.getJSON("/Rooms/GetRoomRules?roomID=" + selectedRoom, function (data) {
                     if (data.limit != null) {
-                        $('#roomTitle').text("Select an available time block up to " + data.limit + " hours");
+                        $('#roomTitle').text("- Click and Drag to select an available time block up to " + data.limit + " hours");
                     }
                     else {
-                        $('#roomTitle').text("Select an available time block");
+                        $('#roomTitle').text("- Click and Drag to select an available time block");
                     }
                 });
 
@@ -126,10 +116,6 @@
                     $('#calendar').fullCalendar('addEventSource', data);
                 });
             });
-
-
-
-
         });
         $('#RoomID').change(function () {
             var selectedRoom = $('#RoomID').val();
