@@ -32,7 +32,7 @@ namespace BRTF_Booking.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(string SearchName, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
+        public async Task<IActionResult> Index(string SearchName, string SearchNumber, string SearchEmail, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
@@ -53,6 +53,18 @@ namespace BRTF_Booking.Controllers
                                        || u.FName.ToUpper().Contains(SearchName.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
+            if (!String.IsNullOrEmpty(SearchNumber))
+            {
+                users = users.Where(u => u.StudentID.Contains(SearchNumber));
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(SearchEmail))
+            {
+                users = users.Where(u => u.Email.Contains(SearchEmail));
+                ViewData["Filtering"] = " show";
+            }
+
+
 
 
             if (!String.IsNullOrEmpty(actionButton))

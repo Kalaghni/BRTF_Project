@@ -37,6 +37,14 @@
                         <label class="control-label">Search Student:</label>
                         @Html.TextBox("SearchName", null, new { @class = "form-control" })
                     </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Search By Student Number:</label>
+                        @Html.TextBox("SearchNumber", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Search Email:</label>
+                        @Html.TextBox("SearchEmail", null, new { @class = "form-control" })
+                    </div>
                     <div class="form-group col-md-4 align-self-end">
                         <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
                         <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
