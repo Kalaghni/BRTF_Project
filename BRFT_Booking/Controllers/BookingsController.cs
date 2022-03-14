@@ -16,6 +16,7 @@ using OfficeOpenXml.Style;
 using System.Drawing;
 using Microsoft.AspNetCore.Http.Features;
 using System.IO;
+using OfficeOpenXml.Drawing.Chart;
 
 namespace BRTF_Booking.Controllers
 {
@@ -275,42 +276,77 @@ namespace BRTF_Booking.Controllers
         }
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
-        public IActionResult DownloadBookings()
+        public IActionResult DownloadBookings()//DateTime start, DateTime end)
         {
-            var bookings = from b in _context.Bookings
-                        .Include(b => b.User)
-                        .Include(b => b.Room)
-                        .ThenInclude(p => p.Area)
-                        orderby b.BookingRequested ascending
-                        select new
-                        {
-                            User = b.User.FullName,
-                            Area = b.Room.Area.Name,
-                            Room = b.Room.Name,
-                            Date = b.BookingRequested,
-                            Start = b.StartDate,
-                            End  = b.EndDate,
-                            b.Status
-                            
-                        };
+
+            //main page
+            var bookings = (from b in _context.Bookings
+                         .Include(b => b.User)
+                         .Include(b => b.Room)
+                         .ThenInclude(p => p.Area)
+                                //.Where(a => a.StartDate >= start && a.EndDate < end)
+                            orderby b.BookingRequested ascending
+                            select new
+                            {
+                                User = b.User.FullName,
+                                Area = b.Room.Area.Name,
+                                Room = b.Room.Name,
+                                Date = b.BookingRequested,
+                                Start = b.StartDate,
+                                End = b.EndDate,
+                                Hours = (b.EndDate - b.StartDate).TotalHours,
+                                b.Status
+                            }).AsNoTracking().ToList();
+
+            //for chart
+            var roomBookings = bookings
+               .GroupBy(a => new { a.Area, a.Room })
+               .Select(grp => new
+               {
+                   grp.Key.Area,
+                   grp.Key.Room,
+                   Number_Of_Bookings = grp.Count(),
+                   Total_Hours = (int)grp.Sum(a => a.Hours)
+               });
+
             int numRows = bookings.Count();
 
-            if (numRows > 0) 
+            if (numRows > 0)
             {
                 using (ExcelPackage excel = new ExcelPackage())
                 {
 
                     var workSheet = excel.Workbook.Worksheets.Add("Bookings");
+                    var workSheetBookings = excel.Workbook.Worksheets.Add("Room Bookings");
 
                     workSheet.Cells[3, 1].LoadFromCollection(bookings, true);
+                    workSheetBookings.Cells[3, 1].LoadFromCollection(roomBookings, true);
 
                     workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
 
                     workSheet.Column(5).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
 
                     workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
-                  
-                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 7])
+
+
+
+                    //Start Chart
+
+                    var barChart = (ExcelBarChart)workSheetBookings.Drawings.AddChart("Bookings", eChartType.BarClustered);
+                    barChart.SetPosition(5, 25, 6, 25);
+                    barChart.SetSize(500, 500);
+                    int rowcount = workSheetBookings.Dimension.End.Row;
+
+                    barChart.Series.Add("D4:D" + rowcount, "B4:B" + rowcount);
+                    //barChart.WorkSheet.Calculate("=SUM(9,4,G4:G10)");
+                    barChart.YAxis.Title.Text = "Hours Booked";
+                    barChart.XAxis.Title.Text = "Rooms";
+                    //barChart.DataLabel.ShowCategory = false;
+                    //barChart.DataLabel.ShowPercent = false;
+                    barChart.Legend.Remove();
+
+
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 8])
                     {
                         headings.Style.Font.Bold = true;
                         var fill = headings.Style.Fill;
@@ -319,29 +355,34 @@ namespace BRTF_Booking.Controllers
                     }
 
                     workSheet.Cells.AutoFitColumns();
+                    workSheetBookings.Cells.AutoFitColumns();
 
                     workSheet.Cells[1, 1].Value = "Booking Report";
-                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 6])
+                    workSheetBookings.Cells[1, 1].Value = "Booking Report";
+
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 8])
                     {
-                        Rng.Merge = true; 
-                        Rng.Style.Font.Bold = true; 
+                        Rng.Merge = true;
+                        Rng.Style.Font.Bold = true;
                         Rng.Style.Font.Size = 18;
                         Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
-                    
+
                     DateTime utcDate = DateTime.UtcNow;
                     TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                     DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
-                    using (ExcelRange Rng = workSheet.Cells[2, 6])
+                    using (ExcelRange Rng = workSheet.Cells[2, 8])
                     {
                         Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
                             localDate.ToShortDateString();
-                        Rng.Style.Font.Bold = true; 
+                        Rng.Style.Font.Bold = true;
                         Rng.Style.Font.Size = 12;
                         Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     }
 
-                    
+
+
+
                     var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
                     if (syncIOFeature != null)
                     {
