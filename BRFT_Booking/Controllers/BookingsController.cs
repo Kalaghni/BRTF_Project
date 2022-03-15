@@ -17,6 +17,7 @@ using System.Drawing;
 using Microsoft.AspNetCore.Http.Features;
 using System.IO;
 using OfficeOpenXml.Drawing.Chart;
+using BRTF_Booking.Utilities;
 
 namespace BRTF_Booking.Controllers
 {
@@ -34,14 +35,47 @@ namespace BRTF_Booking.Controllers
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchName, DateTime SearchDate, DateTime SearchStartTime, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
         {
-            var bRFTContext = _context.Bookings
-                .Include(b => b.User)
-                .Include(b => b.Room)
-                .ThenInclude(b => b.Area);
+            ViewData["Filtering"] = "btn-outline-secondary";
 
-            return View(await bRFTContext.ToListAsync());
+            string[] sortOptions = new[] { "" };
+
+            var bookings = from b in _context.Bookings
+                            .Include(b => b.User)
+                            .Include(b => b.Room)
+                            .ThenInclude(b => b.Area)
+                            .AsNoTracking()
+                           select b;
+
+            if (!String.IsNullOrEmpty(SearchName))
+            {
+                bookings = bookings.Where(b => b.User.LName.ToUpper().Contains(SearchName.ToUpper())
+                                       || b.User.FName.ToUpper().Contains(SearchName.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+            if (SearchDate != DateTime.MinValue)
+            {
+                bookings = bookings.Where(b => b.BookingRequested == SearchDate);
+                ViewData["Filtering"] = " show";
+            }
+            if (SearchStartTime != DateTime.MinValue)
+            {
+                bookings = bookings.Where(b => b.StartDate == SearchStartTime);
+                ViewData["Filtering"] = " show";
+            }
+
+            ViewData["sortField"] = sortField;
+            ViewData["sortDirection"] = sortDirection;
+
+            ViewBag.sortFieldID = new SelectList(sortOptions, sortField.ToString());
+
+            int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
+            ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
+
+            var pagedData = await PaginatedList<Booking>.CreateAsync(bookings.AsNoTracking(), page ?? 1, pageSize);
+
+            return View(pagedData);
         }
 
         // GET: Bookings/Details/5
@@ -679,6 +713,11 @@ namespace BRTF_Booking.Controllers
 
             }
             return Json(events.ToArray());
+        }
+
+        private string ControllerName()
+        {
+            return this.ControllerContext.RouteData.Values["controller"].ToString();
         }
 
         private void PopulateDropDownLists()

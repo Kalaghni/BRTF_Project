@@ -63,10 +63,6 @@ namespace BRTF_Booking.Controllers
                 users = users.Where(u => u.Email.Contains(SearchEmail));
                 ViewData["Filtering"] = " show";
             }
-
-
-
-
             if (!String.IsNullOrEmpty(actionButton))
             {
                 page = 1;
