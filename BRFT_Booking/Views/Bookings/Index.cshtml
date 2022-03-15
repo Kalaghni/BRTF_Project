@@ -47,22 +47,22 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.User)
+                    <input type="submit" name="actionButton" value="User" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Room)
+                    <input type="submit" name="actionButton" value="Room" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.BookingRequested)
+                    <input type="submit" name="actionButton" value="Date Requested" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.StartDate)
+                    <input type="submit" name="actionButton" value="Start" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.EndDate)
+                    <input type="submit" name="actionButton" value="End" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Status)
+                    <input type="submit" name="actionButton" value="Status" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -81,10 +81,12 @@
                         @Html.DisplayFor(modelItem => item.BookingRequested)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
+                        @Convert.ToString(string.Format("{0:hh:mm tt}", item.StartDate))
+                        @*@Html.DisplayFor(modelItem => item.StartDate)*@
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.EndDate)
+                        @Convert.ToString(string.Format("{0:hh:mm tt}", item.EndDate))
+                        @*@Html.DisplayFor(modelItem => item.EndDate)*@
                     </td>
                     <th>
                         @Html.DisplayFor(modelItem => item.Status)

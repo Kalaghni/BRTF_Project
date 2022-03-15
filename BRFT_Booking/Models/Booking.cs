@@ -27,12 +27,10 @@ namespace BRTF_Booking.Models
         public DateTime BookingRequested { get; set; }
 
         [Required(ErrorMessage = "You must enter a Start date!")]
-        [DataType(DataType.Time)]
         [Display(Name = "Start")]
         public DateTime StartDate { get; set; }
 
         [Required(ErrorMessage = "You must enter a End date!")]
-        [DataType(DataType.Time)]
         [Display(Name = "End")]
         public DateTime EndDate { get; set; }
 

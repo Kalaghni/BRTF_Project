@@ -35,17 +35,16 @@ namespace BRTF_Booking.Controllers
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings
-        public async Task<IActionResult> Index(string SearchName, DateTime SearchDate, DateTime SearchStartTime, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
+        public async Task<IActionResult> Index(string SearchName, DateTime SearchDate, DateTime SearchStartTime, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "Booking")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
-            string[] sortOptions = new[] { "" };
+            string[] sortOptions = new[] { "User", "Room", "Date Requested", "Start", "End", "Status" };
 
             var bookings = from b in _context.Bookings
                             .Include(b => b.User)
                             .Include(b => b.Room)
                             .ThenInclude(b => b.Area)
-                            .AsNoTracking()
                            select b;
 
             if (!String.IsNullOrEmpty(SearchName))
@@ -61,8 +60,86 @@ namespace BRTF_Booking.Controllers
             }
             if (SearchStartTime != DateTime.MinValue)
             {
-                bookings = bookings.Where(b => b.StartDate == SearchStartTime);
+                bookings = bookings.Where(b => b.StartDate.TimeOfDay == SearchStartTime.TimeOfDay);
                 ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(actionButton))
+            {
+                page = 1;
+                if (actionButton != "Filter")
+                {
+                    if (actionButton == sortField)
+                    {
+                        sortDirection = sortDirection == "asc" ? "desc" : "asc";
+                    }
+                    sortField = actionButton;
+                }
+            }
+            if (sortField == "Room")
+            {
+                if (sortDirection == "asc")
+                {
+                    bookings = bookings.OrderByDescending(b => b.Room);
+                }
+                else
+                {
+                    bookings = bookings.OrderBy(b => b.Room);
+                }
+            }
+            if (sortField == "Date Requested")
+            {
+                if (sortDirection == "asc")
+                {
+                    bookings = bookings.OrderByDescending(b => b.BookingRequested);
+                }
+                else
+                {
+                    bookings = bookings.OrderBy(b => b.BookingRequested);
+                }
+            }
+            if (sortField == "Start")
+            {
+                if (sortDirection == "asc")
+                {
+                    bookings = bookings.OrderByDescending(b => b.StartDate);
+                }
+                else
+                {
+                    bookings = bookings.OrderBy(b => b.StartDate);
+                }
+            }
+            if (sortField == "End")
+            {
+                if (sortDirection == "asc")
+                {
+                    bookings = bookings.OrderByDescending(b => b.EndDate);
+                }
+                else
+                {
+                    bookings = bookings.OrderBy(b => b.EndDate);
+                }
+            }
+            if (sortField == "Status")
+            {
+                if (sortDirection == "asc")
+                {
+                    bookings = bookings.OrderByDescending(b => b.Status);
+                }
+                else
+                {
+                    bookings = bookings.OrderBy(b => b.Status);
+                }
+            }
+            else
+            {
+                if (sortDirection == "asc")
+                {
+                    bookings = bookings.OrderBy(b => b.User.LName).ThenBy(b => b.User.FName);
+                }
+                else
+                {
+                    bookings = bookings.OrderByDescending(b => b.User.LName).ThenByDescending(b => b.User.FName);
+                }
             }
 
             ViewData["sortField"] = sortField;
@@ -358,9 +435,9 @@ namespace BRTF_Booking.Controllers
 
                     workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
 
-                    workSheet.Column(5).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
+                    workSheet.Column(5).Style.Numberformat.Format = "hh:mm";
 
-                    workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
+                    workSheet.Column(6).Style.Numberformat.Format = "hh:mm";
 
 
 

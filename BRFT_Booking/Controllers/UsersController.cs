@@ -44,7 +44,6 @@ namespace BRTF_Booking.Controllers
                         .Include(u => u.ProgramTerm)
                         .ThenInclude(u => u.ProgramDetail)
                         .ThenInclude(u => u.ProgramTermGroups)
-                        .AsNoTracking()
                         select u;
 
             if (!String.IsNullOrEmpty(SearchName))
