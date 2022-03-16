@@ -49,7 +49,9 @@ namespace BRTF_Booking.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        [Display(Name = "Program Term")]
+
+        public DateTime? DateOfBirth { get; set; }
 
         [Display(Name = "Program Term")]
         public ProgramTerm? ProgramTerm { get; set; }

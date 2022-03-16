@@ -165,7 +165,13 @@ namespace BRTF_Booking.Controllers
 
                             if(Password == null)
                             {
-                                Password = user.DateOfBirth.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                                if (user.DateOfBirth != null)
+                                {
+                                    Password = ((DateTime)user.DateOfBirth).ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                                }
+                                else {
+                                    Password = "password";
+                                }
                             }
 
                             IdentityResult result = _userManager.CreateAsync(Iuser, Password).Result;

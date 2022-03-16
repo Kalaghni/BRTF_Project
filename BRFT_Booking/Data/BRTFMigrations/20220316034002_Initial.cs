@@ -62,7 +62,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     Role = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(nullable: true),
-                    DateOfBirth = table.Column<DateTime>(nullable: false),
+                    DateOfBirth = table.Column<DateTime>(nullable: true),
                     ProgramTermID = table.Column<int>(nullable: true),
                     Active = table.Column<bool>(nullable: false)
                 },
