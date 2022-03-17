@@ -30,6 +30,7 @@ namespace BRTF_Booking
                     BRTFSeedData.Initialize(services);
 
                     var identityContext = services.GetRequiredService<ApplicationDbContext>();
+                    identityContext.Database.Migrate();
                     ApplicationSeedData.SeedAsync(context, identityContext, services).Wait();
 
                     BRTFSeedData.InitializeAdmins(services);
