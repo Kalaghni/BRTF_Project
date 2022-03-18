@@ -7,17 +7,43 @@
 <h1>Bookings</h1>
 
 <p>
-    <a class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; " asp-action="Create">New Booking</a>
-    @if (User.IsInRole("Top-Level Admin") || User.IsInRole("Admin"))
-    {
-        <a asp-action="DownloadBookings" class="btn btn-info float-right" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; ">Download Booking Report</a>
-    }
+    <div class="form-horizontal">
+        <a class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; " asp-action="Create">New Booking</a>
+    </div>
 </p>
+@if (User.IsInRole("Top-Level Admin") || User.IsInRole("Admin"))
+{
+    <form asp-action="DownloadBookings">
+        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="reportToggle" data-target="#collapsereport" aria-expanded="false" aria-controls="collapseFilter">
+            Download Bookings Report
+        </button>
+        <div class="collapse" id="collapsereport">
+            <div class="card card-body bg-light">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Set Start Date:</label>
+                        <input type="date" id="reportStart" name="reportStart" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Set End Date:</label>
+                        <input type="date" id="reportEnd" name="reportEnd" class="form-control" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="submit" value="Download" class="btn btn-primary" />
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </form>
+}
 <form asp-action="Index" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
-        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+        <button class="btn @(ViewData["Filtering"])" style=" margin-top: 10px;" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
             Filter/Search
         </button>
         <div class="collapse" id="collapseFilter">

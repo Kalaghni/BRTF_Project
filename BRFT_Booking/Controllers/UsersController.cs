@@ -145,13 +145,14 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StudentID,FName,MName,LName,Email")] User user, string? Password)
+        public async Task<IActionResult> Create([Bind("ID,StudentID,FName,MName,LName,Email,DateOfBirth")] User user, string? Password)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (user.Email.Substring(Math.Max(0, user.Email.Length - 17)) == "niagaracollege.ca") {
+                    if (user.Email.Substring(Math.Max(0, user.Email.Length - 17)) == "niagaracollege.ca")
+                    {
                         _context.Add(user);
                         await _context.SaveChangesAsync();
 
@@ -163,13 +164,14 @@ namespace BRTF_Booking.Controllers
                                 Email = user.Email
                             };
 
-                            if(Password == null)
+                            if (Password == null || Password == "")
                             {
                                 if (user.DateOfBirth != null)
                                 {
-                                    Password = ((DateTime)user.DateOfBirth).ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                                    Password = ((DateTime)user.DateOfBirth).ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
                                 }
-                                else {
+                                else
+                                {
                                     Password = "password";
                                 }
                             }
@@ -190,7 +192,7 @@ namespace BRTF_Booking.Controllers
 
                     return RedirectToAction(nameof(Index));
                 }
-                
+
             }
             catch (DbUpdateException dex)
             {
@@ -236,9 +238,9 @@ namespace BRTF_Booking.Controllers
                 return NotFound();
             }
 
-            if (await TryUpdateModelAsync<User>(userToUpdate, "", u => u.StudentID, u => u.FName, 
+            if (await TryUpdateModelAsync<User>(userToUpdate, "", u => u.StudentID, u => u.FName,
                 u => u.MName, u => u.LName))
-            {          
+            {
                 try
                 {
                     await _context.SaveChangesAsync();
@@ -296,7 +298,7 @@ namespace BRTF_Booking.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            
+
             try
             {
                 await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
@@ -407,6 +409,6 @@ namespace BRTF_Booking.Controllers
             return _context.Users.Any(e => e.ID == id);
         }
 
-        
+
     }
 }

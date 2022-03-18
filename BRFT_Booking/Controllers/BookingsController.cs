@@ -175,7 +175,7 @@ namespace BRTF_Booking.Controllers
             return View(booking);
         }
 
-
+        [Authorize]
         [HttpGet]
         // GET: Bookings/Create
         public async Task<IActionResult> CreateRepeat(int? id)
@@ -209,6 +209,7 @@ namespace BRTF_Booking.Controllers
         // POST: Bookings/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRepeat(int? id, [Bind("UserID,RoomID,StartDate,EndDate,Status,AreaID")] Booking bookings)
@@ -392,16 +393,21 @@ namespace BRTF_Booking.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         [Authorize(Roles = "Admin, Top-Level Admin")]
-        public IActionResult DownloadBookings()//DateTime start, DateTime end)
+        public IActionResult DownloadBookings(DateTime reportStart, DateTime reportEnd)
         {
+            if (reportEnd == DateTime.MinValue)
+            {
+                reportEnd = DateTime.MaxValue;
+            }
 
             //main page
             var bookings = (from b in _context.Bookings
                          .Include(b => b.User)
                          .Include(b => b.Room)
                          .ThenInclude(p => p.Area)
-                                //.Where(a => a.StartDate >= start && a.EndDate < end)
+                         .Where(a => a.StartDate >= reportStart.Date && a.EndDate < reportEnd.Date)
                             orderby b.BookingRequested ascending
                             select new
                             {
@@ -426,6 +432,7 @@ namespace BRTF_Booking.Controllers
                    Total_Hours = (int)grp.Sum(a => a.Hours)
                });
 
+           
             int numRows = bookings.Count();
 
             if (numRows > 0)
@@ -441,9 +448,9 @@ namespace BRTF_Booking.Controllers
 
                     workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
 
-                    workSheet.Column(5).Style.Numberformat.Format = "hh:mm";
+                    workSheet.Column(5).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
 
-                    workSheet.Column(6).Style.Numberformat.Format = "hh:mm";
+                    workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
 
 
 
@@ -455,7 +462,6 @@ namespace BRTF_Booking.Controllers
                     int rowcount = workSheetBookings.Dimension.End.Row;
 
                     barChart.Series.Add("D4:D" + rowcount, "B4:B" + rowcount);
-                    //barChart.WorkSheet.Calculate("=SUM(9,4,G4:G10)");
                     barChart.YAxis.Title.Text = "Hours Booked";
                     barChart.XAxis.Title.Text = "Rooms";
                     //barChart.DataLabel.ShowCategory = false;
@@ -528,7 +534,7 @@ namespace BRTF_Booking.Controllers
                     }
                 }
             }
-            return NotFound();
+            return NotFound("No Bookings found during Time frame");
         }
 
         // GET: Bookings/Request
