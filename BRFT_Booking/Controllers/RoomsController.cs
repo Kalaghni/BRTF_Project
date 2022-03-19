@@ -23,8 +23,7 @@ namespace BRTF_Booking.Controllers
         }
 
         // GET: Rooms
-        public async Task<IActionResult> Index(string SearchRoom, int? AreaID, int? page, int? pageSizeID,
-            string? enabled, string actionButton, string sortDirection = "asc", string sortField = "Room")
+        public async Task<IActionResult> Index(string SearchRoom, int? AreaID, int? page, int? pageSizeID, string? enabled, string actionButton, string sortDirection = "asc", string sortField = "Room")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
@@ -295,7 +294,7 @@ namespace BRTF_Booking.Controllers
             {
                 if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
                 {
-                    ModelState.AddModelError("", "Unable to Delete Room. Remember, you cannot delete a Room with existing Bookings.");
+                    ModelState.AddModelError("", "Unable to delete. This room still have existing bookings!");
                 }
                 else
                 {
@@ -320,8 +319,7 @@ namespace BRTF_Booking.Controllers
 
         private SelectList AreaSelectList(int? selectedId)
         {
-            return new SelectList(_context.Areas
-                .OrderBy(d => d.Name), "ID", "Name", selectedId);
+            return new SelectList(_context.Areas.OrderBy(d => d.Name), "ID", "Name", selectedId);
         }
 
         private void PopulateDropDownLists(Room rooms = null)

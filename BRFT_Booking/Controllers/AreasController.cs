@@ -199,9 +199,25 @@ namespace BRTF_Booking.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var area = await _context.Areas.FindAsync(id);
-            _context.Areas.Remove(area);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                _context.Areas.Remove(area);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to delete. Other students are currently using this area!");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            return View(area);
         }
 
         private string ControllerName()

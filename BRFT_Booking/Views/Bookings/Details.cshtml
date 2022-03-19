@@ -49,9 +49,8 @@
         </dd>
     </dl>
 </div>
+
 <div>
-
-
     @if (User.IsInRole("Admin") || User.IsInRole("Top-Level Admin"))
     {
         <a asp-route-id="@Model.ID" asp-action="CreateRepeat">Repeat Booking</a>
@@ -61,10 +60,9 @@
     }
     @if (User.IsInRole("Student"))
     {
-<a asp-route-id="@Model.ID" asp-action="CreateRepeat">Request Repeat Booking</a>
+        <a asp-route-id="@Model.ID" asp-action="CreateRepeat">Request Repeat Booking</a>
         <br />
         <br />
         <a asp-action="Calendar">Back to Calendar</a>
     }
-
 </div>

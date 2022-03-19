@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace BRTF_Booking.Models
 {
-    public class Admin
+    public class Admin : IValidatableObject
     {
         public int ID { get; set; }
+
+        [Display(Name = "Admin")]
+        public string FullName => $"{FName} {LName}";
 
         [Display(Name="First Name")]
         [Required(ErrorMessage = "First Name is required!")]
@@ -28,7 +31,15 @@ namespace BRTF_Booking.Models
         public string Email { get; set; }
 
         [Display(Name = "Role")]
-        [Required(ErrorMessage = "Role is required!")]
+        //[Required(ErrorMessage = "Role is required!")]
         public string Role { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Email.Substring(Math.Max(0, Email.Length - 17)) != "niagaracollege.ca")
+            {
+                yield return new ValidationResult("Email must be a niagaracollege.ca address!", new[] { "Email" });
+            }
+        }
     }
 }

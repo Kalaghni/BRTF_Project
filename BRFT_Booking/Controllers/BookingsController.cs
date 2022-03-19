@@ -178,7 +178,7 @@ namespace BRTF_Booking.Controllers
         [Authorize]
         [HttpGet]
         // GET: Bookings/Create
-        public async Task<IActionResult> CreateRepeat(int? id)
+        public IActionResult CreateRepeat(int? id)
         {
             if (id != null)
             {
@@ -273,8 +273,6 @@ namespace BRTF_Booking.Controllers
         {
             try
             {
-
-
                 if (ModelState.IsValid)
                 {
                     booking.BookingRequested = DateTime.Today;
@@ -388,13 +386,22 @@ namespace BRTF_Booking.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var booking = await _context.Bookings.FindAsync(id);
-            _context.Bookings.Remove(booking);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Bookings.Remove(booking);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to delete record. Try again, and if the problem persists see your system administrator.");
+            }
+            return View(booking);
         }
 
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
+        // GET: Bookings/DownloadBookings
         public IActionResult DownloadBookings(DateTime reportStart, DateTime reportEnd)
         {
             if (reportEnd == DateTime.MinValue)
@@ -503,9 +510,6 @@ namespace BRTF_Booking.Controllers
                         Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     }
 
-
-
-
                     var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
                     if (syncIOFeature != null)
                     {
@@ -538,7 +542,7 @@ namespace BRTF_Booking.Controllers
         }
 
         // GET: Bookings/Request
-        public IActionResult Request()
+        public new IActionResult Request()
         {
             ViewData["AreaID"] = AreaSelectList();
             return View();
@@ -549,7 +553,7 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Request([Bind("ID,RoomID,StartDate,EndDate")] Booking booking)
+        public new async Task<IActionResult> Request([Bind("ID,RoomID,StartDate,EndDate")] Booking booking)
         {
             if (ModelState.IsValid)
             {
@@ -572,7 +576,6 @@ namespace BRTF_Booking.Controllers
 
         private SelectList AreaSelectList()
         {
-
             int groupID = _context.Users
                         .Include(u => u.ProgramTerm)
                         .ThenInclude(u => u.ProgramDetail)
@@ -606,7 +609,6 @@ namespace BRTF_Booking.Controllers
 
         private SelectList RoomCreateSelectList(int? AreaID, int? selectedId)
         {
-
             var rooms = _context.Rooms.Where(r => r.AreaID == AreaID);
 
             //Find rooms that the user is within the same program term group
@@ -639,12 +641,8 @@ namespace BRTF_Booking.Controllers
         [HttpGet]
         public JsonResult GetCreateRules(int? ID)
         {
-
-
             return Json(RoomCreateSelectList(ID, null));
         }
-
-
 
         private SelectList RoomEditSelectList(int? BookingID)
         {
@@ -664,7 +662,7 @@ namespace BRTF_Booking.Controllers
         }
 
 
-        public async Task<IActionResult> Calendar()
+        public IActionResult Calendar()
         {
             return View();
         }

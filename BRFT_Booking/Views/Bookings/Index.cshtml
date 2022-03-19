@@ -8,13 +8,13 @@
 
 <p>
     <div class="form-horizontal">
-        <a class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; " asp-action="Create">New Booking</a>
+        <a asp-action="Create" class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; ">New Booking</a>
     </div>
 </p>
 @if (User.IsInRole("Top-Level Admin") || User.IsInRole("Admin"))
 {
     <form asp-action="DownloadBookings">
-        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="reportToggle" data-target="#collapsereport" aria-expanded="false" aria-controls="collapseFilter">
+        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="reportToggle" data-target="#collapsereport" aria-expanded="false" aria-controls="collapseFilter" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; ">
             Download Bookings Report
         </button>
         <div class="collapse" id="collapsereport">
@@ -32,10 +32,7 @@
                         <input type="submit" value="Download" class="btn btn-primary" />
                     </div>
                 </div>
-
-
             </div>
-
         </div>
     </form>
 }
@@ -107,12 +104,12 @@
                         @Html.DisplayFor(modelItem => item.BookingRequested)
                     </td>
                     <td>
-                        @Convert.ToString(string.Format("{0:hh:mm tt}", item.StartDate))
-                        @*@Html.DisplayFor(modelItem => item.StartDate)*@
+                        @*@Convert.ToString(string.Format("{0:hh:mm tt}", item.StartDate))*@
+                        @Html.DisplayFor(modelItem => item.StartDate)
                     </td>
                     <td>
-                        @Convert.ToString(string.Format("{0:hh:mm tt}", item.EndDate))
-                        @*@Html.DisplayFor(modelItem => item.EndDate)*@
+                        @*@Convert.ToString(string.Format("{0:hh:mm tt}", item.EndDate))*@
+                        @Html.DisplayFor(modelItem => item.EndDate)
                     </td>
                     <th>
                         @Html.DisplayFor(modelItem => item.Status)

@@ -1,0 +1,20 @@
+﻿@model BRTF_Booking.Models.User
+
+@{ ViewData["Title"] = "InserFromExcel"; }
+
+<h1>Upload Error:</h1>
+<hr />
+<form asp-action="InsertFromExcel">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <p>
+        <a asp-action="ExcelUploadTemplate" class="btn btn-primary float-right" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; ">Download Upload Example</a>
+    </p>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

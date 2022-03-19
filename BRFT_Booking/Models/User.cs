@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BRTF_Booking.Models
 {
-    public class User
+    public class User : IValidatableObject
     {
         public int ID { get; set; }
 
@@ -64,6 +64,14 @@ namespace BRTF_Booking.Models
         {
             Active = true;
             this.Bookings = new HashSet<Booking>();
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Email.Substring(Math.Max(0, Email.Length - 17)) != "niagaracollege.ca")
+            {
+                yield return new ValidationResult("Email must be a niagaracollege.ca address!", new[] { "Email" });
+            }
         }
     }
 }

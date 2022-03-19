@@ -245,16 +245,9 @@ namespace BRTF_Booking.Controllers
                 await _context.SaveChangesAsync();
                 return Redirect(Url.RouteUrl(new { Controller = "Users", Action = "Details" }) + $"/{programTerm.UserID}");
             }
-            catch (DbUpdateException dex)
+            catch (DbUpdateException)
             {
-                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
-                {
-                    ModelState.AddModelError("", "Unable to Delete ProgramTerm. Remember, you cannot delete a Program with existing Users.");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-                }
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
             return View(programTerm);
         }

@@ -151,43 +151,35 @@ namespace BRTF_Booking.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (user.Email.Substring(Math.Max(0, user.Email.Length - 17)) == "niagaracollege.ca")
+                    _context.Add(user);
+                    await _context.SaveChangesAsync();
+
+                    if (_userManager.FindByEmailAsync(user.Email).Result == null)
                     {
-                        _context.Add(user);
-                        await _context.SaveChangesAsync();
-
-                        if (_userManager.FindByEmailAsync(user.Email).Result == null)
+                        IdentityUser Iuser = new IdentityUser
                         {
-                            IdentityUser Iuser = new IdentityUser
-                            {
-                                UserName = user.Email,
-                                Email = user.Email
-                            };
+                            UserName = user.Email,
+                            Email = user.Email
+                        };
 
-                            if (Password == null || Password == "")
+                        if (Password == null || Password == "")
+                        {
+                            if (user.DateOfBirth != null)
                             {
-                                if (user.DateOfBirth != null)
-                                {
-                                    Password = ((DateTime)user.DateOfBirth).ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
-                                }
-                                else
-                                {
-                                    Password = "password";
-                                }
+                                Password = ((DateTime)user.DateOfBirth).ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
                             }
-
-                            IdentityResult result = _userManager.CreateAsync(Iuser, Password).Result;
-
-                            if (result.Succeeded)
+                            else
                             {
-                                _userManager.AddToRoleAsync(Iuser, "Student").Wait();
+                                Password = "password";
                             }
                         }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("Email", "Unable to save changes. Email must be a niagaracollege.ca address.");
-                        return View(user);
+
+                        IdentityResult result = _userManager.CreateAsync(Iuser, Password).Result;
+
+                        if (result.Succeeded)
+                        {
+                            _userManager.AddToRoleAsync(Iuser, "Student").Wait();
+                        }
                     }
 
                     return RedirectToAction(nameof(Index));
@@ -198,7 +190,11 @@ namespace BRTF_Booking.Controllers
             {
                 if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Users.StudentID"))
                 {
-                    ModelState.AddModelError("StudentID", "Unable to save changes. Remember, you cannot have duplicate Student ID numbers.");
+                    ModelState.AddModelError("StudentID", "This ID already exists. Please try a different one!");
+                }
+                else if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Users.Email"))
+                {
+                    ModelState.AddModelError("Email", "This email already exists. Please try a different one!");
                 }
                 else
                 {
@@ -261,7 +257,7 @@ namespace BRTF_Booking.Controllers
                 {
                     if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed"))
                     {
-                        ModelState.AddModelError("StudentID", "Unable to save changes. Remember, you cannot have duplicate student ID.");
+                        ModelState.AddModelError("StudentID", "This ID already exists. Please try a different one!");
                     }
                     else
                     {
@@ -301,7 +297,7 @@ namespace BRTF_Booking.Controllers
 
             try
             {
-                await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
+                //await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -310,7 +306,7 @@ namespace BRTF_Booking.Controllers
             {
                 if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
                 {
-                    ModelState.AddModelError("", "Unable to Delete User. Remember, you cannot delete a User with existing Bookings.");
+                    ModelState.AddModelError("", "Unable to delete. This user still have existing bookings!");
                 }
                 else
                 {
@@ -321,6 +317,7 @@ namespace BRTF_Booking.Controllers
         }
 
         [HttpPost]
+        // POST: Users/InsertFromExcel
         public async Task<IActionResult> InsertFromExcel(IFormFile theExcel)
         {
             try
@@ -374,7 +371,7 @@ namespace BRTF_Booking.Controllers
             {
                 if (ex.GetBaseException().Message.Contains("Object reference not set to an instance of an object."))
                 {
-                    ModelState.AddModelError("", "Unable to upload file. Please select an Excel file before pressing Upload");
+                    ModelState.AddModelError("", "Please select an Excel file to upload. File type must be .csv or .xlsx!");
                 }
                 else
                 {
@@ -383,9 +380,9 @@ namespace BRTF_Booking.Controllers
             }
             catch (IndexOutOfRangeException)
             {
-                ModelState.AddModelError("", "Please make sure you are uploading an excel file. File type must be .csv or .xlsx");
+                ModelState.AddModelError("", "Please make sure you are uploading an excel file. File type must be .csv or .xlsx!");
             }
-            return RedirectToAction("Index", "Users");
+            return View();
         }
 
         private string ControllerName()

@@ -51,11 +51,11 @@ namespace BRTF_Booking.Controllers
         // GET: Admins/Create
         public IActionResult Create()
         {
-            List<string> roles = new List<string>();
-            roles.Add("Admin");
-            roles.Add("Top-Level Admin");
+            //List<string> roles = new List<string>();
+            //roles.Add("Admin");
+            //roles.Add("Top-Level Admin");
 
-            ViewData["Role"] = new SelectList(roles);
+            //ViewData["Role"] = new SelectList(roles);
             return View();
         }
 
@@ -104,7 +104,7 @@ namespace BRTF_Booking.Controllers
             {
                 if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed"))
                 {
-                    ModelState.AddModelError("Email", "Unable to save changes. Remember, you cannot have duplicate admin emails.");
+                    ModelState.AddModelError("Email", "Email already exists. Please try a different one!");
                 }
                 else
                 {
@@ -155,6 +155,7 @@ namespace BRTF_Booking.Controllers
                         await _userManager.AddToRoleAsync(user, "Top-Level Admin");
                         _context.Update(adminToUpdate);
                         await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
@@ -206,10 +207,18 @@ namespace BRTF_Booking.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var admin = await _context.Admins.FindAsync(id);
-            await _userManager.DeleteAsync(_userManager.FindByEmailAsync(admin.Email).Result);
-            _context.Admins.Remove(admin);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _userManager.DeleteAsync(_userManager.FindByEmailAsync(admin.Email).Result);
+                _context.Admins.Remove(admin);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to delete record. Try again, and if the problem persists see your system administrator.");
+            }
+            return View(admin);
         }
 
         private bool AdminExists(int id)
