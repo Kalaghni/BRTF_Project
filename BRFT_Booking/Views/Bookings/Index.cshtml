@@ -51,6 +51,14 @@
                         @Html.TextBox("SearchName", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-4">
+                        <label class="control-label">Search Room:</label>
+                        @Html.TextBox("SearchRoom", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Search Area:</label>
+                        @Html.TextBox("SearchArea", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
                         <label class="control-label">Search By Date:</label>
                         <input type="date" id="SearchDate" name="SearchDate" class="form-control" />
                     </div>
@@ -76,6 +84,9 @@
                     <input type="submit" name="actionButton" value="Room" class="btn btn-link" />
                 </th>
                 <th>
+                    <input type="submit" name="actionButton" value="Area" class="btn btn-link" />
+                </th>
+                <th>
                     <input type="submit" name="actionButton" value="Date Requested" class="btn btn-link" />
                 </th>
                 <th>
@@ -93,33 +104,36 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.User.FullName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Room.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.BookingRequested)
-                    </td>
-                    <td>
-                        @*@Convert.ToString(string.Format("{0:hh:mm tt}", item.StartDate))*@
-                        @Html.DisplayFor(modelItem => item.StartDate)
-                    </td>
-                    <td>
-                        @*@Convert.ToString(string.Format("{0:hh:mm tt}", item.EndDate))*@
-                        @Html.DisplayFor(modelItem => item.EndDate)
-                    </td>
-                    <th>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </th>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Cancel</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Room.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Room.Area.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookingRequested)
+                </td>
+                <td>
+                    @*@Convert.ToString(string.Format("{0:hh:mm tt}", item.StartDate))*@
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @*@Convert.ToString(string.Format("{0:hh:mm tt}", item.EndDate))*@
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </th>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

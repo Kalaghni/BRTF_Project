@@ -35,11 +35,11 @@ namespace BRTF_Booking.Controllers
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings
-        public async Task<IActionResult> Index(string SearchName, DateTime SearchDate, DateTime SearchStartTime, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "Booking")
+        public async Task<IActionResult> Index(string SearchName, string SearchRoom, string SearchArea, DateTime SearchDate, DateTime SearchStartTime, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "Booking")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
-            string[] sortOptions = new[] { "User", "Room", "Date Requested", "Start", "End", "Status" };
+            string[] sortOptions = new[] { "User", "Room", "Area", "Date Requested", "Start", "End", "Status" };
 
             var bookings = from b in _context.Bookings
                             .Include(b => b.User)
@@ -51,6 +51,16 @@ namespace BRTF_Booking.Controllers
             {
                 bookings = bookings.Where(b => b.User.LName.ToUpper().Contains(SearchName.ToUpper())
                                        || b.User.FName.ToUpper().Contains(SearchName.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(SearchRoom))
+            {
+                bookings = bookings.Where(b => b.Room.Name.ToUpper().Contains(SearchRoom.ToUpper()));
+                ViewData["Filtering"] = " show";
+            }
+            if (!String.IsNullOrEmpty(SearchArea))
+            {
+                bookings = bookings.Where(b => b.Room.Area.Name.ToUpper().Contains(SearchArea.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
             if (SearchDate != DateTime.MinValue)
@@ -86,7 +96,7 @@ namespace BRTF_Booking.Controllers
                     bookings = bookings.OrderBy(b => b.Room);
                 }
             }
-            if (sortField == "Date Requested")
+            else if (sortField == "Date Requested")
             {
                 if (sortDirection == "asc")
                 {
@@ -97,7 +107,7 @@ namespace BRTF_Booking.Controllers
                     bookings = bookings.OrderBy(b => b.BookingRequested);
                 }
             }
-            if (sortField == "Start")
+            else if (sortField == "Start")
             {
                 if (sortDirection == "asc")
                 {
@@ -108,7 +118,7 @@ namespace BRTF_Booking.Controllers
                     bookings = bookings.OrderBy(b => b.StartDate);
                 }
             }
-            if (sortField == "End")
+            else if (sortField == "End")
             {
                 if (sortDirection == "asc")
                 {
@@ -119,7 +129,7 @@ namespace BRTF_Booking.Controllers
                     bookings = bookings.OrderBy(b => b.EndDate);
                 }
             }
-            if (sortField == "Status")
+            else if (sortField == "Status")
             {
                 if (sortDirection == "asc")
                 {
@@ -128,6 +138,17 @@ namespace BRTF_Booking.Controllers
                 else
                 {
                     bookings = bookings.OrderBy(b => b.Status);
+                }
+            }
+            else if (sortField == "Area")
+            {
+                if (sortDirection == "asc")
+                {
+                    bookings = bookings.OrderByDescending(b => b.Room.Area.Name);
+                }
+                else
+                {
+                    bookings = bookings.OrderBy(b => b.Room.Area.Name);
                 }
             }
             else
@@ -245,11 +266,10 @@ namespace BRTF_Booking.Controllers
             if (id != null)
             {
                 Booking booking = _context.Bookings.FindAsync(id).Result;
-                booking.StartDate = booking.StartDate.AddDays(7);
-                booking.EndDate = booking.EndDate.AddDays(7);
+                booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
 
 
-                ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
+                //ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
                 ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
                 //ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
 
@@ -275,6 +295,7 @@ namespace BRTF_Booking.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    //booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
                     booking.BookingRequested = DateTime.Today;
                     _context.Add(booking);
                     await _context.SaveChangesAsync();
