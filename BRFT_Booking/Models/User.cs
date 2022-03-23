@@ -12,10 +12,8 @@ namespace BRTF_Booking.Models
         public int ID { get; set; }
 
         [Display(Name = "Full Name")]
-        public string FullName => FName
-                    + (string.IsNullOrEmpty(MName) ? " " :
-                        (" " + (char?)MName[0] + ". ").ToUpper())
-                    + LName;
+        public string FullName => FName + (string.IsNullOrEmpty(MName) ? " " :
+                        (" " + (char?)MName[0] + ". ").ToUpper()) + LName;
 
         [Display(Name = "Student ID")]
         [StringLength(7, ErrorMessage = "Your student ID must be 7 numbers long!")]
@@ -68,6 +66,19 @@ namespace BRTF_Booking.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            int output;
+            if (Int32.TryParse(FName, out output) == true)
+            {
+                yield return new ValidationResult("First name can't be numbers!", new[] { "FName" });
+            }
+            if (Int32.TryParse(MName, out output) == true)
+            {
+                yield return new ValidationResult("Middle name can't be numbers!", new[] { "MName" });
+            }
+            if (Int32.TryParse(LName, out output) == true)
+            {
+                yield return new ValidationResult("Last name can't be numbers!", new[] { "LName" });
+            }
             if (Email.Substring(Math.Max(0, Email.Length - 17)) != "niagaracollege.ca")
             {
                 yield return new ValidationResult("Email must be a niagaracollege.ca address!", new[] { "Email" });

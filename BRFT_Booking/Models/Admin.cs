@@ -36,6 +36,15 @@ namespace BRTF_Booking.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            int output;
+            if (Int32.TryParse(FName, out output) == true)
+            {
+                yield return new ValidationResult("First name can't be numbers!", new[] { "FName" });
+            }
+            if (Int32.TryParse(LName, out output) == true)
+            {
+                yield return new ValidationResult("Last name can't be numbers!", new[] { "LName" });
+            }
             if (Email.Substring(Math.Max(0, Email.Length - 17)) != "niagaracollege.ca")
             {
                 yield return new ValidationResult("Email must be a niagaracollege.ca address!", new[] { "Email" });
