@@ -16,7 +16,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     FName = table.Column<string>(maxLength: 50, nullable: false),
                     LName = table.Column<string>(maxLength: 100, nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
-                    Role = table.Column<string>(nullable: false)
+                    Role = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -159,7 +159,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     RoomID = table.Column<int>(nullable: false),
                     BookingRequested = table.Column<DateTime>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
+                    StartTime = table.Column<TimeSpan>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
+                    EndTime = table.Column<TimeSpan>(nullable: false),
                     Status = table.Column<string>(nullable: true),
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },

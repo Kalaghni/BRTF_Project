@@ -233,7 +233,7 @@ namespace BRTF_Booking.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRepeat(int? id, [Bind("UserID,RoomID,StartDate,EndDate,Status,AreaID")] Booking bookings)
+        public async Task<IActionResult> CreateRepeat(int? id, [Bind("UserID,RoomID,StartDate,StartTime,EndDate,EndTime,Status,AreaID")] Booking bookings)
         {
 
             Booking booking = _context.Bookings.FindAsync(id).Result;
@@ -289,7 +289,7 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,EndDate,Status")] Booking booking, DateTime[] selectedTimes)
+        public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,StartTime,EndDate,EndTime,Status")] Booking booking, DateTime[] selectedTimes)
         {
             try
             {
@@ -574,7 +574,7 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public new async Task<IActionResult> Request([Bind("ID,RoomID,StartDate,EndDate")] Booking booking)
+        public new async Task<IActionResult> Request([Bind("ID,RoomID,StartDate,StartTime,EndDate,EndTime")] Booking booking)
         {
             if (ModelState.IsValid)
             {

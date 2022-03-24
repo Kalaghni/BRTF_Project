@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Booking.Data.BRTFMigrations
 {
     [DbContext(typeof(BRTFContext))]
-    [Migration("20220316034002_Initial")]
+    [Migration("20220324204448_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,6 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasMaxLength(100);
 
                     b.Property<string>("Role")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -79,6 +78,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("RoomID")
                         .HasColumnType("INTEGER");
 
@@ -88,6 +90,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("BLOB");
 
                     b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeSpan>("StartTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")

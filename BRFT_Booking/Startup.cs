@@ -33,7 +33,7 @@ namespace BRTF_Booking
 
             services.AddDbContext<BRTFContext>(options =>
                 options.UseSqlite(
-                    Configuration.GetConnectionString("BRFTContext")));
+                    Configuration.GetConnectionString("BRTFContext")));
 
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false) 

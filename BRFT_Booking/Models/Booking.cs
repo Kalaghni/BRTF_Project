@@ -8,6 +8,9 @@ namespace BRTF_Booking.Models
 {
     public class Booking : IValidatableObject
     {
+        private DateTime startDate;
+        private DateTime endDate;
+
         public TimeSpan timeSpan => new TimeSpan(EndDate.Ticks - StartDate.Ticks);
 
         public int ID { get; set; }
@@ -28,11 +31,45 @@ namespace BRTF_Booking.Models
 
         [Required(ErrorMessage = "You must enter a Start date!")]
         [Display(Name = "Start")]
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate
+        {
+            get
+            {
+                if (StartTime == TimeSpan.Parse("0:00:00"))
+                {
+                    return startDate;
+                }
+                else
+                {
+                    return startDate.Date.Add(StartTime);
+                }
+            }
+            set => startDate = value;
+        }
+
+        [Display(Name = "Start Time")]
+        public TimeSpan StartTime { get; set; }
 
         [Required(ErrorMessage = "You must enter a End date!")]
         [Display(Name = "End")]
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate
+        {
+            get
+            {
+                if (EndTime == TimeSpan.Parse("0:00:00"))
+                {
+                    return endDate;
+                }
+                else
+                {
+                    return endDate.Date.Add(EndTime);
+                }
+            }
+            set => endDate = value;
+        }
+
+        [Display(Name = "End Time")]
+        public TimeSpan EndTime { get; set; }
 
         [Display(Name = "Status")]
         public string Status { get; set; }
@@ -62,11 +99,16 @@ namespace BRTF_Booking.Models
 
             if (this.StartDate > this.EndDate)
             {
-                yield return new ValidationResult("The Start time cannot be after the end time.", new[] { "StartDate" });
+                yield return new ValidationResult("The Start time cannot be after the end time.", new[] { "StartTime" });
             }
             if (this.StartDate < DateTime.Today)
             {
                 yield return new ValidationResult("The Start time cannot be after today.", new[] { "StartDate" });
+            }
+
+            if (this.StartTime > this.EndTime)
+            {
+                yield return new ValidationResult("The Start time cannot be after the end time.", new[] { "StartTime" });
             }
         }
     }
