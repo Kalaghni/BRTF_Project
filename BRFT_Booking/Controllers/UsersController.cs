@@ -295,25 +295,29 @@ namespace BRTF_Booking.Controllers
         {
             var user = await _context.Users.FindAsync(id);
 
-            try
-            {
-                //await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateException dex)
-            {
-                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
-                {
-                    ModelState.AddModelError("", "Unable to delete. This user still have existing bookings!");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-                }
-            }
-            return View(user);
+            //await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            //try
+            //{
+            //    //await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
+            //    _context.Users.Remove(user);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //catch (DbUpdateException dex)
+            //{
+            //    if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+            //    {
+            //        ModelState.AddModelError("", "Unable to delete. This user still have existing bookings!");
+            //    }
+            //    else
+            //    {
+            //        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            //    }
+            //}
+            //return View(user);
         }
 
         [HttpPost]

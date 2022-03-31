@@ -448,6 +448,7 @@ namespace BRTF_Booking.Data
                     );
                     context.SaveChanges();
                 }
+
                 if (!context.Rooms.Any())
                 {
                     context.Rooms.AddRange(
@@ -1150,6 +1151,7 @@ namespace BRTF_Booking.Data
                     );
                     context.SaveChanges();
                 }
+
                 if (!context.ProgramTermGroupAreas.Any())
                 {
                     context.ProgramTermGroupAreas.AddRange(
