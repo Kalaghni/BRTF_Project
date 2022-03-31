@@ -580,7 +580,7 @@ namespace BRTF_Booking.Controllers
             {
                 booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
                 booking.BookingRequested = DateTime.Today;
-                booking.Status = "Awaiting";
+                booking.Status = "Accepted";
                 _context.Add(booking);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Calendar));
