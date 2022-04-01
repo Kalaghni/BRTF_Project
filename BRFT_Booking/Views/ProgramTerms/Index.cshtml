@@ -6,33 +6,31 @@
 }
 
 <h1>Programs & Terms</h1>
+<p class="text-danger">@TempData["Message"]</p>
 
-<p>
-    <a class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; " asp-action="Create">New Program Term</a>
-</p>
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="InsertFromExcel" asp-controller="Users" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label class="control-label">Upload Excel File:</label>
-                <input type="file" class="" name="theExcel" /><br />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Upload Data" class="btn btn-primary" onclick="errorMessage()" />
-            </div>
-            @*@using (Html.BeginForm("Index", "ProgramTerms", FormMethod.Post))
-            {
+<div class="float-right">
+    <form asp-action="InsertFromExcelProgTerm" asp-controller="ProgramTerms" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="control-label">Upload Excel File:</label>
+            <input type="file" class="" name="theExcel" /><br />
+        </div>
+        <div class="row">
+            <div class="col-md-4">
                 <div class="form-group">
-                    <label class="control-label">Upload Excel File:</label>
-                    <input type="file" class="" name="theExcel" /><br />
+                    <input type="submit" value="Upload Data ↑" class="btn btn-primary" />
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
-                    <input type="submit" value="Upload Data" class="btn btn-primary" onclick="errorMessage()" />
+                    <a href="~/example_excel/user_upload_sample.xlsx">View Excel Template</a>
                 </div>
-            }*@
-        </form>
-    </div>
+            </div>
+        </div>
+    </form>
 </div>
+<p>
+    <a asp-action="Create" class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; ">New Program Term</a>
+</p>
 <form asp-action="Index" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
@@ -112,15 +110,3 @@
     </table>
     <partial name="_PagingNavBar" />
 </form>
-
-@*<script type="text/javascript">
-    function errorMessage(error) {
-        alert("Error: " + "Unable to upload file. Please select an Excel file before pressing Upload!");
-    };
-</script>
-@if (ViewBag.JavaScriptFunction != null)
-{
-    <script type="text/javascript">
-            @Html.Raw(ViewBag.JavaScriptFunction)
-    </script>
-}*@

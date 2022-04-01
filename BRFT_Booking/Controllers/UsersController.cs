@@ -295,35 +295,42 @@ namespace BRTF_Booking.Controllers
         {
             var user = await _context.Users.FindAsync(id);
 
-            //await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-            //try
-            //{
-            //    //await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
-            //    _context.Users.Remove(user);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //catch (DbUpdateException dex)
-            //{
-            //    if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
-            //    {
-            //        ModelState.AddModelError("", "Unable to delete. This user still have existing bookings!");
-            //    }
-            //    else
-            //    {
-            //        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-            //    }
-            //}
-            //return View(user);
+            try
+            {
+                //await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
+                {
+                    ModelState.AddModelError("", "Unable to delete. This user still have existing bookings!");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            return View(user);
         }
 
         [HttpPost]
         // POST: Users/InsertFromExcel
-        public async Task<IActionResult> InsertFromExcel(IFormFile theExcel)
+        public async Task<IActionResult> InsertFromExcelUser(IFormFile theExcel)
         {
+            //Make sure file is uploaded
+            if (theExcel == null)
+            {
+                TempData["Message"] = "Please select an Excel file to upload. File type must be .csv or .xlsx!";
+                return RedirectToAction(nameof(Index));
+            }
+
+            string uploadMessage = "";
+            int i = 0;//Counter for inserted records
+            int j = 0;//Counter for duplicates
+
             try
             {
                 ExcelPackage excel;
@@ -369,24 +376,20 @@ namespace BRTF_Booking.Controllers
 
                 _context.ProgramTerms.AddRange(userPrograms);
                 _context.SaveChanges();
-                return RedirectToAction("Index", "Users");
+                return RedirectToAction(nameof(Index));
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
-                if (ex.GetBaseException().Message.Contains("Object reference not set to an instance of an object."))
-                {
-                    ModelState.AddModelError("", "Please select an Excel file to upload. File type must be .csv or .xlsx!");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
-                }
+                Console.WriteLine(ex.GetBaseException().Message);
+                uploadMessage = "Failed to import data.  Check that file type is .csv or .xlsx!";
             }
-            catch (IndexOutOfRangeException)
+            if (String.IsNullOrEmpty(uploadMessage))
             {
-                ModelState.AddModelError("", "Please make sure you are uploading an excel file. File type must be .csv or .xlsx!");
+                uploadMessage = "Imported " + (i + j).ToString() + " records, with "
+                    + j.ToString() + " rejected as duplicates and " + i.ToString() + " inserted.";
             }
-            return View();
+            TempData["Message"] = uploadMessage;
+            return RedirectToAction(nameof(Index));
         }
 
         private string ControllerName()

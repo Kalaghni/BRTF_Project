@@ -47,9 +47,9 @@
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
                 <select id="Status" name="Status" class="form-control">
-                    <option style="color: #E2C044;" value="Awaiting">Awaiting</option>
-                    <option style="color: #D52941;" value="Declined">Declined</option>
                     <option style="color: #44CF6C;" value="Accepted">Accepted</option>
+                    <option style="color: #E2C044;" value="Waiting">Awaiting Approval</option>
+                    <option style="color: #D52941;" value="Declined">Declined</option>
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>

@@ -9,6 +9,9 @@ using BRTF_Booking.Data;
 using BRTF_Booking.Models;
 using BRTF_Booking.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
+using System.IO;
 
 namespace BRTF_Booking.Controllers
 {
@@ -250,6 +253,82 @@ namespace BRTF_Booking.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
             return View(programTerm);
+        }
+
+        [HttpPost]
+        // POST: Users/InsertFromExcel
+        public async Task<IActionResult> InsertFromExcelProgTerm(IFormFile theExcel)
+        {
+            //Make sure file is uploaded
+            if (theExcel == null)
+            {
+                TempData["Message"] = "Please select an Excel file to upload. File type must be .csv or .xlsx!";
+                return RedirectToAction(nameof(Index));
+            }
+
+            string uploadMessage = "";
+            int i = 0;//Counter for inserted records
+            int j = 0;//Counter for duplicates
+
+            try
+            {
+                ExcelPackage excel;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await theExcel.CopyToAsync(memoryStream);
+                    excel = new ExcelPackage(memoryStream);
+                }
+                var workSheet = excel.Workbook.Worksheets[0];
+                var start = workSheet.Dimension.Start;
+                var end = workSheet.Dimension.End;
+
+                //Start a new list to hold imported objects
+                List<User> userList = new List<User>();
+                List<ProgramTerm> userPrograms = new List<ProgramTerm>();
+
+                for (int row = start.Row + 1; row <= end.Row; row++)
+                {
+                    // Row by row...
+                    User u = new User
+                    {
+                        StudentID = workSheet.Cells[row, 1].Text,
+                        FName = workSheet.Cells[row, 2].Text,
+                        MName = workSheet.Cells[row, 3].Text,
+                        LName = workSheet.Cells[row, 4].Text,
+                        Email = workSheet.Cells[row, 7].Text,
+                    };
+                    ProgramTerm p = new ProgramTerm
+                    {
+                        User = _context.Users.Where(u => u.StudentID == workSheet.Cells[row, 1].Text).FirstOrDefault(), //studentID
+                        AcadPlan = workSheet.Cells[row, 5].Text,
+                        ProgramDetail = _context.ProgramDetails.Where(p => p.Name == workSheet.Cells[row, 6].Text).FirstOrDefault(),
+                        StrtLevel = Int32.Parse(workSheet.Cells[row, 8].Text),
+                        LastLevel = workSheet.Cells[row, 9].Text,
+                        Term = Int32.Parse(workSheet.Cells[row, 10].Text),
+                    };
+                    userList.Add(u);
+                    userPrograms.Add(p);
+                }
+                _context.Users.AddRange(userList);
+                //_context.ProgramTerms.AddRange(userPrograms);
+                _context.SaveChanges();
+
+                _context.ProgramTerms.AddRange(userPrograms);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.GetBaseException().Message);
+                uploadMessage = "Failed to import data.  Check that file type is .csv or .xlsx!";
+            }
+            if (String.IsNullOrEmpty(uploadMessage))
+            {
+                uploadMessage = "Imported " + (i + j).ToString() + " records, with "
+                    + j.ToString() + " rejected as duplicates and " + i.ToString() + " inserted.";
+            }
+            TempData["Message"] = uploadMessage;
+            return RedirectToAction(nameof(Index));
         }
 
         private void PopulateDropDownLists()
