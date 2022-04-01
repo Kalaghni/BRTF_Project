@@ -37,7 +37,6 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="Index">View Rooms</a>
                             </li>
                         }
-
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
@@ -46,9 +45,11 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Bookings</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="ProgramTerms" asp-action="Index">Manage Program Terms</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Areas" asp-action="Index">Manage Areas</a>
                                 </div>
 
                             </li>
@@ -61,10 +62,13 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Admins" asp-action="Index">Manage Admins</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Bookings" asp-action="Index">Manage Bookings</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
                                     <a class="dropdown-item" asp-area="" asp-controller="Rooms" asp-action="Index">Manage Rooms</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="ProgramTerms" asp-action="Index">Manage Program Terms</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Areas" asp-action="Index">Manage Areas</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Admins" asp-action="Index">Manage Admins</a>
                                 </div>
 
                             </li>

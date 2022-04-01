@@ -4,6 +4,32 @@
     ViewData["Title"] = "Index";
 }
 
+<style>
+    .btn-primary {
+        color: #fff;
+        background-color: #1dc21d;
+        border-color: #1aab1a;
+    }
+
+        .btn-primary:hover {
+            background-color: #21db21;
+            border-color: #1dc41d;
+        }
+
+    .btn-primary-special {
+        background: #097dea;
+        background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%);
+        color: #fff !important;
+        border-width: 1px;
+        border-radius: .25rem;
+    }
+
+        .btn-primary-special:hover {
+            background: #0a82f5;
+            background: linear-gradient(65deg, #027df0 0, #288bfc 100%);
+        }
+</style>
+
 <h1>Bookings</h1>
 
 <p>
@@ -12,22 +38,22 @@
 @if (User.IsInRole("Top-Level Admin") || User.IsInRole("Admin"))
 {
     <form asp-action="DownloadBookings">
-        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="reportToggle" data-target="#collapsereport" aria-expanded="false" aria-controls="collapseFilter" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-width: 1px; border-radius: .25rem; ">
+        <button class="btn @(ViewData["Filtering"]) btn-primary-special" style=" margin-bottom: 1rem; " type="button" data-toggle="collapse" id="reportToggle" data-target="#collapsereport" aria-expanded="false" aria-controls="collapseFilter" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: .25rem; ">
             Get Bookings Report
         </button>
-        <div class="collapse" id="collapsereport">
+        <div class="collapse" id="collapsereport" style=" margin-bottom: 1rem; ">
             <div class="card card-body bg-light">
                 <div class="row">
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Set Start Date:</label>
                         <input type="date" id="reportStart" name="reportStart" class="form-control" />
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Set End Date:</label>
                         <input type="date" id="reportEnd" name="reportEnd" class="form-control" />
                     </div>
                     <div class="form-group align-self-end">
-                        <input type="submit" value="Download" class="btn btn-primary-special" />
+                        <input type="submit" value="Download" class="btn btn-primary" />
                     </div>
                 </div>
             </div>
@@ -38,33 +64,33 @@
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
-        <button class="btn @(ViewData["Filtering"])" style=" margin-top: 10px;" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+        <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
             Filter/Search
         </button>
         <div class="collapse" id="collapseFilter">
             <div class="card card-body bg-light">
                 <div class="row">
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Search Student:</label>
                         @Html.TextBox("SearchName", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Search Room:</label>
                         @Html.TextBox("SearchRoom", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Search Area:</label>
                         @Html.TextBox("SearchArea", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Date Request:</label>
                         <input type="date" id="SearchDate" name="SearchDate" class="form-control" />
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Search Start Time:</label>
                         <input type="time" id="SearchStartTime" name="SearchStartTime" class="form-control" />
                     </div>
-                    <div class="form-group col-md-4 align-self-end">
+                    <div class="form-group col-md-3 align-self-end">
                         <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
                         <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
                     </div>
@@ -72,6 +98,7 @@
             </div>
         </div>
     </div>
+    <br />
     <table class="table">
         <thead>
             <tr>

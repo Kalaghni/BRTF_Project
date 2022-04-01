@@ -3,6 +3,12 @@
 @inject UserManager<IdentityUser> UserManager
 @inject BRTF_Booking.Data.BRTFContext context
 
+<style>
+    .btn-primary:hover {
+        background-color: #21db21;
+        border-color: #1dc41d;
+    }
+</style>
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))

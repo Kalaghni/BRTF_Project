@@ -4,14 +4,42 @@
     ViewData["Title"] = "Calendar";
 }
 
+<style>
+    .btn-primary {
+        color: #fff;
+        background-color: #1dc21d;
+        border-color: #1aab1a;
+    }
+
+        .btn-primary:hover {
+            background-color: #21db21;
+            border-color: #1dc41d;
+        }
+
+    .btn-primary-special {
+        background: #097dea;
+        background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%);
+        color: #fff !important;
+        border-width: 1px;
+        border-radius: .25rem;
+    }
+
+        .btn-primary-special:hover {
+            background: #0a82f5;
+            background: linear-gradient(65deg, #027df0 0, #288bfc 100%);
+        }
+</style>
+
 <h1>Bookings</h1>
 <p>
-    <a class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; " asp-action="Request">Request Booking</a>
+    <a asp-action="Request" class="btn btn-primary-special">Request Booking</a>
 </p>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
-<div class="container">
-    <hr/>
-    <div id='calendar'></div>
+<div class="card md-sm-3">
+    <div class="card-header"></div>
+    <div class="card-body">
+        <div id='calendar'></div>
+    </div>
 </div>
 <input id="hiddenDate" type="hidden" />
 @section Scripts {

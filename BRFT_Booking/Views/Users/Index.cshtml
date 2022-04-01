@@ -1,6 +1,34 @@
 ﻿@model IEnumerable<BRTF_Booking.Models.User>
 
-@{ ViewData["Title"] = "Index";}
+@{ 
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .btn-primary {
+        color: #fff;
+        background-color: #1dc21d;
+        border-color: #1aab1a;
+    }
+
+        .btn-primary:hover {
+            background-color: #21db21;
+            border-color: #1dc41d;
+        }
+
+    .btn-primary-special {
+        background: #097dea;
+        background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%);
+        color: #fff !important;
+        border-width: 1px;
+        border-radius: .25rem;
+    }
+
+        .btn-primary-special:hover {
+            background: #0a82f5;
+            background: linear-gradient(65deg, #027df0 0, #288bfc 100%);
+        }
+</style>
 
 <h1>Users</h1>
 <p class="text-danger">@TempData["Message"]</p>
@@ -40,19 +68,19 @@
         <div class="collapse" id="collapseFilter">
             <div class="card card-body bg-light">
                 <div class="row">
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Search Student:</label>
                         @Html.TextBox("SearchName", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Search By ID:</label>
                         @Html.TextBox("SearchNumber", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="control-label">Search Email:</label>
                         @Html.TextBox("SearchEmail", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-4 align-self-end">
+                    <div class="form-group col-md-3 align-self-end">
                         <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
                         <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
                     </div>
