@@ -6,7 +6,7 @@
 @if (User.IsInRole("Admin") || User.IsInRole("Top-Level Admin"))
 {
     <p>
-        <a class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; " asp-action="Create">New Room</a>
+        <a asp-action="Create" class="btn btn-primary-special">New Room</a>
     </p>
 }
 <form asp-action="Index" method="get">
@@ -19,15 +19,15 @@
         <div class="collapse" id="collapseFilter">
             <div class="card card-body bg-light">
                 <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2">
                         <label class="control-label">Select by Area:</label>
                         @Html.DropDownList("AreaID", null, "All Locations", htmlAttributes: new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2">
                         <label class="control-label">Search Room:</label>
                         @Html.TextBox("SearchRoom", null, new { @class = "form-control" })
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2">
                         <label class="control-label">Enabled?</label>
                         <select name="enabled" id="enabled">
                             <option value="neither">N/A</option>

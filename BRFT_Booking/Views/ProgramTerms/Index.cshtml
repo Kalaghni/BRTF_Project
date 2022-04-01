@@ -29,7 +29,7 @@
     </form>
 </div>
 <p>
-    <a asp-action="Create" class="btn btn-primary" style=" background: #097dea; background: linear-gradient(65deg, #0270D7 0, #0F8AFD 100%); color: #fff !important; border: none; border-radius: 2px; ">New Program Term</a>
+    <a asp-action="Create" class="btn btn-primary-special">New Program/Term</a>
 </p>
 <form asp-action="Index" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
@@ -38,10 +38,12 @@
         <button class="btn @(ViewData["Filtering"])" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
             Filter/Search
         </button>
+        <br />
+        <br />
         <div class="collapse" id="collapseFilter">
             <div class="card card-body bg-light">
                 <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2">
                         <label class="control-label">Search Program:</label>
                         @Html.TextBox("SearchProgram", null, new { @class = "form-control" })
                     </div>
