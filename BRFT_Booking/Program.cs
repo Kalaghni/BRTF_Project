@@ -35,6 +35,8 @@ namespace BRTF_Booking
 
                     BRTFSeedData.InitializeAdmins(services);
                     ApplicationSeedData.SeedAdminsAsync(context, identityContext, services).Wait();
+
+
                 }
                 catch (Exception ex)
                 {

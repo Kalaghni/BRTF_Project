@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Settings";
+}
+
+<style>
+    .btn-primary {
+        color: #fff;
+        background-color: #1dc21d;
+        border-color: #1aab1a;
+    }
+
+        .btn-primary:hover {
+            background-color: #21db21;
+            border-color: #1dc41d;
+        }
+</style>
+
+<h1>Settings</h1>
+<hr />
+    <div class="row">
+        <div class="col-sm-6">
+            <table id="settingTable"
+                   class="table table-bordered
+                  table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Office Hours Start</td>
+                        <td>
+                            <input type="time" id="officeStart" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Office Hours End</td>
+                        <td>
+                            <input type="time" id="officeEnd" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email Extension</td>
+                        <td>
+                            <input type="text" id="emailExtension" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Term Start Date</td>
+                        <td>
+                            <input type="date" id="termStart" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Term End Date</td>
+                        <td>
+                            <input type="date" id="termEnd" />
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+            <input type="button" id="btnPost" value="Save Changes" class="btn btn-primary" /><a href="/" style="float: right">Back to Home</a>
+        </div>
+    </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        $.getJSON('/Home/GetSettings', function (data) {
+            $('#officeStart').val(data.officeStartHours);
+            $('#officeEnd').val(data.officeEndHours);
+            $('#emailExtension').val(data.emailExtension);
+            $('#termStart').val(data.termStart);
+            $('#termEnd').val(data.termEnd);
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('#btnPost').click(function () {
+                var alertStr = "";
+                if ($('#officeStart').val() == "") {
+                    alertStr += "Please enter a start time for Office Hours\r\n";
+                }
+                if ($('#officeEnd').val() == "") {
+                    alertStr += "Please enter an end time for Office Hours\r\n";
+                }
+                if ($('#emailExtension').val() == "") {
+                    alertStr += "Please enter an email extension\r\n";
+                }
+                if ($('#termStart').val() == "") {
+                    alertStr += "Please enter a start date for the Term\r\n";
+                }
+                if ($('#termEnd').val() == "") {
+                    alertStr += "Please enter an end date for the Term\r\n";
+                }
+                if ($('#officeStart').val() == "" || $('#officeEnd').val() == "" || $('#emailExtension').val() == "" || $('#termStart').val() == "" || $('#termEnd').val() == "") {
+                    alert(alertStr);
+                }
+                else {
+                    console.log($('#officeStart').val());
+                    data = {
+                        "OfficeStartHours": $('#officeStart').val(),
+                        "OfficeEndHours": $('#officeEnd').val(),
+                        "EmailExtension": $('#emailExtension').val(),
+                        "TermStart": $('#termStart').val(),
+                        "TermEnd": $('#termEnd').val()
+                    }
+                    $.post("/Home/PostSettings/",
+                        data,
+                        function (response) {
+                            alert('Changes Saved')
+                        });
+                }
+            });
+        });
+    </script>
+}

@@ -1,4 +1,5 @@
 ﻿using BRTF_Booking.Models;
+using BRTF_Booking.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace BRTF_Booking.Data
         public DbSet<ProgramTermGroup> ProgramTermGroups { get; set; }
         public DbSet<ProgramDetail> ProgramDetails { get; set; }
         public DbSet<ProgramTermGroupArea> ProgramTermGroupAreas { get; set; }
+        public DbSet<SettingsViewModel> SettingsViewModels { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

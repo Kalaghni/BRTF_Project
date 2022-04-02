@@ -50,6 +50,23 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SettingsViewModels",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OfficeStartHours = table.Column<string>(nullable: true),
+                    OfficeEndHours = table.Column<string>(nullable: true),
+                    EmailExtension = table.Column<string>(nullable: true),
+                    TermStart = table.Column<string>(nullable: true),
+                    TermEnd = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SettingsViewModels", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -281,6 +298,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
 
             migrationBuilder.DropTable(
                 name: "ProgramTerms");
+
+            migrationBuilder.DropTable(
+                name: "SettingsViewModels");
 
             migrationBuilder.DropTable(
                 name: "Rooms");

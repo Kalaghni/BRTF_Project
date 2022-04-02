@@ -350,7 +350,7 @@ namespace BRTF_Booking.Data
 
                 if (!context.ProgramTermGroups.Any())
                 {
-                    context.ProgramTermGroups.AddRange(                      
+                    context.ProgramTermGroups.AddRange(
                         new ProgramTermGroup
                         {
                             Name = "combo1",
@@ -459,7 +459,7 @@ namespace BRTF_Booking.Data
                         Description = "This Suite Contains: Media Composer, Adobe Suite, DaVinci Resolve, Pro Tools.",
                         Rule = "Suites are restricted to 4th TERM FILM/TV or 5th TERM TV STUDENTS ONLY. You can book UP TO 4 hours at a time and have UP TO 3 future booking time-blocks",
                         Limit = 4,
-                        
+
                         MaxNumofBookings = 3,
                         Enabled = true
                     },
@@ -470,7 +470,7 @@ namespace BRTF_Booking.Data
                         Description = "Media Composer, Pro Tools, DaVinci Resolve, Creative Suite",
                         Rule = "Suites are bookable by 4th term Film/TV students, or 5th term TV students. You can book UP TO 4 hours at a time.",
                         Limit = 4,
-                        
+
                         Enabled = true
                     },
                     new Room
@@ -918,7 +918,7 @@ namespace BRTF_Booking.Data
                         Description = "All Studios have phone access for interviews",
                         Rule = "You can book up to 2 hours in a studio",
                         Limit = 2,
-                        
+
                         Enabled = true,
 
                     },
@@ -929,7 +929,7 @@ namespace BRTF_Booking.Data
                         Description = "All Studios have phone access for interviews",
                         Rule = "You can book up to 2 hours in a studio",
                         Limit = 2,
-                        
+
                         Enabled = true,
 
                     },
@@ -940,7 +940,7 @@ namespace BRTF_Booking.Data
                         Description = "All Studios have phone access for interviews",
                         Rule = "You can book up to 2 hours in a studio",
                         Limit = 2,
-                        
+
                         Enabled = true,
 
                     },
@@ -951,7 +951,7 @@ namespace BRTF_Booking.Data
                         Description = "All Studios have phone access for interviews",
                         Rule = "You can book up to 2 hours in a studio",
                         Limit = 2,
-                        
+
                         Enabled = true,
 
                     },
@@ -962,7 +962,7 @@ namespace BRTF_Booking.Data
                         Description = "All Studios have phone access for interviews",
                         Rule = "You can book up to 2 hours in a studio",
                         Limit = 2,
-                        
+
                         Enabled = true,
 
                     },
@@ -973,7 +973,7 @@ namespace BRTF_Booking.Data
                         Description = "All Studios have phone access for interviews",
                         Rule = "You can book up to 2 hours in a studio",
                         Limit = 2,
-                        
+
                         Enabled = true,
 
                     },
@@ -984,7 +984,7 @@ namespace BRTF_Booking.Data
                         Description = "1st Year Students may reserve the Studio as per their Professor's instructions. ALL Others must obtain approval through Alysha Henderson.",
                         Rule = "V2 TV Studio, Max Bookable Hours 2",
                         Limit = 2,
-                        
+
                         ApprovalName = "Alysha Henderson",
                         ApprovalEmail = "ahenderson@niagaracollege.ca",
                         Enabled = true,
@@ -996,7 +996,7 @@ namespace BRTF_Booking.Data
                         Description = "1st Year Students may reserve the Studio as per their Professor's instructions. ALL Others must obtain approval through Alysha Henderson.",
                         Rule = "V2 GreenRoom, Max Bookable Hours 6",
                         Limit = 6,
-                        
+
                         ApprovalName = "Alysha Henderson",
                         ApprovalEmail = "ahenderson@niagaracollege.ca",
                         Enabled = true,
@@ -1009,7 +1009,7 @@ namespace BRTF_Booking.Data
                         Description = "1st Year Students may reserve the Studio as per their Professor's instructions. ALL Others must obtain approval through Alysha Henderson.",
                         Rule = "V1 (Old Studio), Max Bookable Hours 2",
                         Limit = 2,
-                        
+
                         ApprovalName = "Alysha Henderson",
                         ApprovalEmail = "ahenderson@niagaracollege.ca",
                         Enabled = true,
@@ -1022,7 +1022,7 @@ namespace BRTF_Booking.Data
                         Description = "1st Year Students may reserve the Studio as per their Professor's instructions. ALL Others must obtain approval through Alysha Henderson.",
                         Rule = "TV Studio Control Room, Upstairs Control Room, Max Bookable Hours 2",
                         Limit = 2,
-                        
+
                         ApprovalName = "Alysha Henderson",
                         ApprovalEmail = "ahenderson@niagaracollege.ca",
                         Enabled = true,
@@ -1032,7 +1032,7 @@ namespace BRTF_Booking.Data
                     {
                         Area = context.Areas.Where(a => a.Name == "V110").FirstOrDefault(),
                         Name = "V110",
-                        
+
                         Enabled = true,
 
                     },
@@ -1043,7 +1043,7 @@ namespace BRTF_Booking.Data
                         Description = "Booking is OFF LIMITS from 12:30am to the end of classes Mon-Fri. For exceptions, approval must be granted by Lori Ravensborg",
                         Rule = "You can book UP TO 2 hours at a time.",
                         Limit = 2,
-                        
+
                         ApprovalName = "Lori Ravensborg",
                         ApprovalEmail = "lravensborg@niagaracollege.ca",
                         Enabled = true,
@@ -1075,7 +1075,7 @@ namespace BRTF_Booking.Data
                         Name = "V204p Production Planning",
                         Description = "BRTF project meeting room. Booking is only available Mon-Friday between 8:30am to 5:30pm",
                         Rule = "You can book up to 1 hour",
-                        Limit = 1,                        
+                        Limit = 1,
                         Enabled = true,
 
                     },
@@ -1083,7 +1083,7 @@ namespace BRTF_Booking.Data
                     {
                         Area = context.Areas.Where(a => a.Name == "Camera Test").FirstOrDefault(),
                         Name = "Red Camera 1",
-                        
+
                         Enabled = false,
 
                     },
@@ -1094,7 +1094,7 @@ namespace BRTF_Booking.Data
                         Description = "This Suites Contains: P2 Reader, Digitize/Log/Print Deck, SoundTrack, Avid, Final Cut Pro, DiffMerge, Adobe CS Suite, Aspera Connect",
                         Rule = "Suites are restricted to 4th TERM FILM/TV or 5th TERM TV STUDENTS ONLY. You can book UP TO 4 hours at a time.",
                         Limit = 4,
-                        
+
                         Enabled = false
                     },
                     new Room
@@ -1104,7 +1104,7 @@ namespace BRTF_Booking.Data
                         Description = "This Suites Contains: Mixing Board, Attached Audio Booth, SoundTrack Pro. NOTE: Sountrack Pro is on all of the Edit Suites and MAC Lab",
                         Rule = "You can book UP TO 2 hours at a time.",
                         Limit = 2,
-                        
+
                         Enabled = false,
 
                     },
@@ -1114,7 +1114,7 @@ namespace BRTF_Booking.Data
                         Name = "V011 Assignment/Offload",
                         Description = "Assignment finishing (as opposed to interrupting Mac lab classes) and footage offload before returning your camera media to the Equipment Room. Open Access space for finishing or media transfer.",
                         Rule = "Not bookable for meetings.",
-                        
+
                         Enabled = false,
 
                     },
@@ -1124,7 +1124,7 @@ namespace BRTF_Booking.Data
                         Name = "V2 Acting",
                         Rule = "You can book UP TO 1 hour at a time.",
                         Limit = 1,
-                        
+
                         Enabled = false,
 
                     },
@@ -1134,7 +1134,7 @@ namespace BRTF_Booking.Data
                         Name = "S339",
                         Rule = "You can book UP TO 1 hour at a time.",
                         Limit = 1,
-                        
+
                         Enabled = false,
 
                     },
@@ -1144,7 +1144,7 @@ namespace BRTF_Booking.Data
                         Name = "V3 Demonstration Lab",
                         Rule = "You can book UP TO 6 hours at a time.",
                         Limit = 6,
-                        
+
                         Enabled = false,
 
                     }
@@ -1184,7 +1184,7 @@ namespace BRTF_Booking.Data
                         {
                             ProgramTermGroup = context.ProgramTermGroups.Where(p => p.Name == "tv5").FirstOrDefault(),
                             Area = context.Areas.Where(a => a.Name == "Edit 15 BRTF1435, Term 5").FirstOrDefault()
-                        }, 
+                        },
                         new ProgramTermGroupArea
                         {
                             ProgramTermGroup = context.ProgramTermGroups.Where(p => p.Name == "pres3").FirstOrDefault(),
@@ -1226,29 +1226,41 @@ namespace BRTF_Booking.Data
                                 Area = context.Areas.Where(a => a.Name == "Edit 9, 10 & 14 2nd Years").FirstOrDefault()
                             });
                         }
-                        
+
                     }
                     context.SaveChanges();
 
-                   /* foreach (ProgramTermGroupArea programTermGroupArea in context.ProgramTermGroupAreas)
+                    /* foreach (ProgramTermGroupArea programTermGroupArea in context.ProgramTermGroupAreas)
+                     {
+                         if (programTermGroupArea.AreaID != null)
+                         {
+                             var areaToUpdate = context.Areas.Where(u => programTermGroupArea.AreaID == u.ID).FirstOrDefault();
+                             areaToUpdate.ProgramTermGroupAreaID = programTermGroupArea.ID;
+                             areaToUpdate.ProgramTermGroupArea = programTermGroupArea;
+                             context.Update(areaToUpdate);
+                         }
+                         if (programTermGroupArea.ProgramTermGroupID != null)
+                         {
+                             var programTermToUpdate = context.ProgramTermGroups.Where(u => programTermGroupArea.ProgramTermGroupID == u.ID).FirstOrDefault();
+                             programTermToUpdate.ProgramTermGroupAreaID = programTermGroupArea.ID;
+                             programTermToUpdate.ProgramTermGroupArea = programTermGroupArea;
+                             context.Update(programTermToUpdate);
+                         }
+
+                     }
+                     context.SaveChanges();*/
+                }
+                if (!context.SettingsViewModels.Any())
+                {
+                    context.SettingsViewModels.Add(new ViewModels.SettingsViewModel 
                     {
-                        if (programTermGroupArea.AreaID != null)
-                        {
-                            var areaToUpdate = context.Areas.Where(u => programTermGroupArea.AreaID == u.ID).FirstOrDefault();
-                            areaToUpdate.ProgramTermGroupAreaID = programTermGroupArea.ID;
-                            areaToUpdate.ProgramTermGroupArea = programTermGroupArea;
-                            context.Update(areaToUpdate);
-                        }
-                        if (programTermGroupArea.ProgramTermGroupID != null)
-                        {
-                            var programTermToUpdate = context.ProgramTermGroups.Where(u => programTermGroupArea.ProgramTermGroupID == u.ID).FirstOrDefault();
-                            programTermToUpdate.ProgramTermGroupAreaID = programTermGroupArea.ID;
-                            programTermToUpdate.ProgramTermGroupArea = programTermGroupArea;
-                            context.Update(programTermToUpdate);
-                        }
-                        
-                    }
-                    context.SaveChanges();*/
+                        OfficeStartHours = "08:30:00",
+                        OfficeEndHours = "17:30:00",
+                        EmailExtension = "niagaracollege.ca",
+                        TermStart = "2022-01-04",
+                        TermEnd = "2022-04-20"
+                    } );
+                    context.SaveChanges();
                 }
             }
         }

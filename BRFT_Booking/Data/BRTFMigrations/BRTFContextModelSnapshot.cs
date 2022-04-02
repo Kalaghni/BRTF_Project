@@ -299,6 +299,32 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("BRTF_Booking.ViewModels.SettingsViewModel", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("EmailExtension")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OfficeEndHours")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OfficeStartHours")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TermEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TermStart")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("SettingsViewModels");
+                });
+
             modelBuilder.Entity("BRTF_Booking.Models.Booking", b =>
                 {
                     b.HasOne("BRTF_Booking.Models.Room", "Room")
