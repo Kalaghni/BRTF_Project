@@ -130,6 +130,13 @@ namespace BRTF_Booking.Controllers
                     rooms = rooms.OrderBy(r => r.Name);
                 }
             }
+            var settings = _context.SettingsViewModels.First();
+            Console.WriteLine(settings.OfficeStartHours);
+
+            if (User.IsInRole("Student"))
+            {
+                rooms = rooms.Where(a => a.Enabled);
+            }
 
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;

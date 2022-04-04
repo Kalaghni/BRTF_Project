@@ -72,7 +72,45 @@
         </div>
     </div>
     <br />
-    <table class="table">
+    <div class="container-fluid d-block">
+        <div class="card-deck-wrapper">
+            <div class="card-deck">
+                @foreach (var item in Model)
+                {
+                    //Make a card for each one
+                    <div class="card mb-sm-3" style="min-width: 18rem;">
+                        <h5 class="card-header"><strong>@Html.DisplayFor(modelItem => item.Area.Name)</strong></h5>
+                        <div class="card-body">
+                            <div class="media">
+
+                                <div class="media-body ml-2">
+                                    <p class="card-text">
+                                        <strong>Room:</strong> @Html.DisplayFor(modelItem => item.Name)<br />
+                                        <strong>Limit (hours):</strong> @Html.DisplayFor(modelItem => item.Limit)<br />
+                                        <!--<hr /> @Html.DisplayFor(modelItem => item.Description)-->
+                                        <strong>Enabled:</strong> @Html.DisplayFor(modelItem => item.Enabled)<br />
+
+                                    </p>
+
+                                </div>
+                            </div>
+                            
+                            @if (User.IsInRole("Admin") || User.IsInRole("Top-Level Admin"))
+                            {
+                                <div class="card-footer">
+                                    <a asp-action="Edit" asp-route-id="@item.ID">Edit |</a>
+                                    <a asp-action="Details" asp-route-id="@item.ID">Details |</a>
+                                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <table class="table d-none">
         <thead>
             <tr>
                 <th>
@@ -82,8 +120,8 @@
                     <input type="submit" name="actionButton" value="Room" class="btn btn-link" />
                 </th>
                 @*<th>
-                    <input type="submit" name="actionButton" value="Description" class="btn btn-link" />
-                </th>*@
+                        <input type="submit" name="actionButton" value="Description" class="btn btn-link" />
+                    </th>*@
                 <th>
                     <input type="submit" name="actionButton" value="Limit" class="btn btn-link" />
                 </th>
@@ -104,8 +142,8 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     @*<td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>*@
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>*@
                     <td>
                         @Html.DisplayFor(modelItem => item.Limit)
                     </td>
@@ -115,8 +153,8 @@
                     <td>
                         @if (User.IsInRole("Admin") || User.IsInRole("Top-Level Admin"))
                         {
-                            <a asp-action="Edit" asp-route-id="@item.ID">Edit |</a> 
-                            <a asp-action="Details" asp-route-id="@item.ID">Details |</a> 
+                            <a asp-action="Edit" asp-route-id="@item.ID">Edit |</a>
+                            <a asp-action="Details" asp-route-id="@item.ID">Details |</a>
                             <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                         }
                     </td>

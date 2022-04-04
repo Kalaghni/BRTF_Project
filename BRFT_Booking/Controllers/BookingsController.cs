@@ -576,14 +576,30 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public new async Task<IActionResult> Request([Bind("ID,RoomID,StartDate,StartTime,EndDate,EndTime")] Booking booking)
         {
+            var settings = _context.SettingsViewModels.First();
             if (ModelState.IsValid)
             {
-                booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
-                booking.BookingRequested = DateTime.Today;
-                booking.Status = "Accepted";
-                _context.Add(booking);
-                await _context.SaveChangesAsync();
+                //if (((Convert.ToInt64(booking.StartTime.ToString("HHmm")) > Convert.ToInt64(DateTime.Parse(settings.OfficeStartHours).ToString("HHmm"))) && (Convert.ToInt64(booking.StartTime.ToString("HHmm")) < Convert.ToInt64(DateTime.Parse(settings.OfficeEndHours).ToString("HHmm")))) && ((Convert.ToInt64(booking.EndTime.ToString("HHmm")) > Convert.ToInt64(DateTime.Parse(settings.OfficeStartHours).ToString("HHmm"))) && (Convert.ToInt64(booking.EndTime.ToString("HHmm")) < Convert.ToInt64(DateTime.Parse(settings.OfficeEndHours).ToString("HHmm")))))
+                //{
+                    booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
+                    booking.BookingRequested = DateTime.Today;
+                    booking.Status = "Accepted";
+                    _context.Add(booking);
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine(Convert.ToInt64(booking.StartDate.ToString("HHmm")));
+                    
                 return RedirectToAction(nameof(Calendar));
+                    
+
+                //}
+                //else
+                //{
+                    //ModelState.AddModelError("","Booking request outside of office hours");
+                    //PopulateDropDownLists();
+                    //return View(booking);
+                //}
+
+                
             }
             PopulateDropDownLists();
             return View(booking);
