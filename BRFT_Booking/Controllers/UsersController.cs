@@ -31,8 +31,29 @@ namespace BRTF_Booking.Controllers
             _identityContext = identityContext;
         }
 
+        /*[HttpPost]
+        public ActionResult Index(FormCollection formCollection)
+        {
+            //
+            string idd = formCollection["ID"];
+            string[] ids = idd.Split(new char[] { ',' });
+            //var user = User.FindFirst(id);
+            //this.db.FName.Remove(user);
+            foreach (string id in ids)
+            {
+                var employee = this.db.Users.Find(int.Parse(id));
+                this.db.Users.Remove(employee);
+                this.db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }*/
+
+
+
+
+
         // GET: Users
-        public async Task<IActionResult> Index(string SearchName, string SearchNumber, string SearchEmail, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
+        public async Task<IActionResult> Index(string[] chkDelete, string SearchName, string SearchNumber, string SearchEmail, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
@@ -110,6 +131,39 @@ namespace BRTF_Booking.Controllers
             ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
 
             var pagedData = await PaginatedList<User>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize);
+
+
+            //string selected = Request.Form["chkDelete"].ToString();
+            //string[] selectedList = selected.Split(',');
+            int countDelete = 0;
+            int failedDelete = 0;
+            foreach (var temp in chkDelete)
+            {
+                int strTemp = Convert.ToInt32(temp);
+                var deleteUser = _context.Users.FirstOrDefault(p => p.ID == strTemp);
+                try
+                {
+                    _context.Users.Remove(deleteUser);
+                    _context.SaveChanges();
+                    countDelete = countDelete + 1;
+                }
+                catch
+                {
+                    failedDelete = failedDelete + 1;
+                }
+
+                /*var user = await _context.Users.FindAsync(strTemp);
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();*/
+            }
+
+            if (failedDelete > 1)
+            {
+                ModelState.AddModelError("", "Unable to delete " + failedDelete + " users");
+                //ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert(\"" + message + "\");", true);
+            }
+
+            //var Users = _context.Users.Where(u => chkDelete.Contains(u.ID));
 
             return View(pagedData);
         }
@@ -306,7 +360,7 @@ namespace BRTF_Booking.Controllers
             {
                 if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
                 {
-                    ModelState.AddModelError("", "Unable to delete. This user still have existing bookings!");
+                    ModelState.AddModelError("", "Unable to delete. This user still have existing bookings or program terms!");
                 }
                 else
                 {
@@ -414,5 +468,23 @@ namespace BRTF_Booking.Controllers
         }
 
 
-    }
+        public ActionResult DeleteSelected()
+        {
+
+            string selected = Request.Form["chkDelete"].ToString();
+            string[] selectedList = selected.Split(',');
+            foreach (var temp in selectedList)
+            {
+                int strTemp = Convert.ToInt32(temp);
+                var deleteUser = _context.Users.FirstOrDefault(p => p.ID == strTemp);
+                _context.Users.Remove(deleteUser);
+                _context.SaveChanges();
+                /*var user = await _context.Users.FindAsync(strTemp);
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();*/
+            }
+            return RedirectToAction("Index");
+        }
+
+}
 }
