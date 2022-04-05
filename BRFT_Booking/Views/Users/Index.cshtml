@@ -109,7 +109,7 @@
             </div>
         </div>
     </div>
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div asp-validation-summary="ModelOnly"></div>
     <table class="table">
         <thead>
             <tr>
@@ -163,7 +163,7 @@
         </tbody>
     </table>
     <div>
-        <button type="submit" value="Delete" class="btn btn-sm btn-danger rounded-0" onclick="return confirm('Are you sure?')">
+        <button type="submit" value="Delete" class="btn btn-sm btn-danger rounded-0" onclick="return confirm('Are you sure? This will delete all checked users')">
             <i class="fa fa-trash-o"></i> Delete
         </button>
     </div>

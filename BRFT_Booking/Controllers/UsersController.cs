@@ -62,10 +62,12 @@ namespace BRTF_Booking.Controllers
             string[] sortOptions = new[] { "StudentID" };
 
             var users = from u in _context.Users
+                        .Include(u => u.Bookings)
                         .Include(u => u.ProgramTerm)
                         .ThenInclude(u => u.ProgramDetail)
                         .ThenInclude(u => u.ProgramTermGroups)
                         select u;
+
 
             if (!String.IsNullOrEmpty(SearchName))
             {
@@ -130,8 +132,6 @@ namespace BRTF_Booking.Controllers
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID, ControllerName());
             ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
 
-            var pagedData = await PaginatedList<User>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize);
-
 
             //string selected = Request.Form["chkDelete"].ToString();
             //string[] selectedList = selected.Split(',');
@@ -141,9 +141,24 @@ namespace BRTF_Booking.Controllers
             {
                 int strTemp = Convert.ToInt32(temp);
                 var deleteUser = _context.Users.FirstOrDefault(p => p.ID == strTemp);
+                var deleteTerm = _context.ProgramTerms.FirstOrDefault(p => p.UserID == strTemp);
+                var deleteBooking = _context.Bookings.Where(p => p.UserID == strTemp);
+                //var delete = _context.Bookings.AllAsync(p => p.UserID == strTemp);
                 try
                 {
+
+                    if (deleteTerm != null)
+                    {
+                        _context.ProgramTerms.Remove(deleteTerm);
+                    }
+
+                    foreach (var delete in deleteBooking)
+                    {
+                        _context.Bookings.Remove(delete);
+                    }
+
                     _context.Users.Remove(deleteUser);
+
                     _context.SaveChanges();
                     countDelete = countDelete + 1;
                 }
@@ -162,7 +177,11 @@ namespace BRTF_Booking.Controllers
                 ModelState.AddModelError("", "Unable to delete " + failedDelete + " users");
                 //ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert(\"" + message + "\");", true);
             }
-
+            else if (countDelete > 1)
+            {
+                ModelState.AddModelError("", "Successfully deleted " + countDelete + " users");
+            }
+            var pagedData = await PaginatedList<User>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize);
             //var Users = _context.Users.Where(u => chkDelete.Contains(u.ID));
 
             return View(pagedData);
@@ -486,5 +505,5 @@ namespace BRTF_Booking.Controllers
             return RedirectToAction("Index");
         }
 
-}
+    }
 }
