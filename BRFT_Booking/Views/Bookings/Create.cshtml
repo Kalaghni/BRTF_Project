@@ -100,26 +100,33 @@
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-            <div>
-                <a asp-action="Index">Back to List</a>
-            </div>
         </div>
         <div class="col-md-8">
             <div class="card md-sm-3">
-                <h5 class="card-header">Mon-Friday between 8:30am to 5:30pm</h5>
                 <div class="card-body">
+                    <label class="control-label" id="officeHours"></label>
                     <label class="control-label" id="roomTitle"></label>
                     <div id='calendar'></div>
+                    <h3 id="hours-counter"></h3>
                 </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="submit" value="Next" class="btn btn-primary" />
+            </div>
+            <div>
+                <a asp-action="Calendar">Back to calendar</a>
             </div>
         </div>
     </div>
 </form>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -131,8 +138,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js"></script>
 
     <script src="~/js/refreshDDL.js"></script>
+
     <script type="text/javascript">
+
         var calendarLoaded = false;
+        var start = "";
+        var end = "";
+        var URL3 = "/Bookings/GetSettings";
+        $.getJSON(URL3, function (data) {
+            $('#officeHours').text("Booking is only available Mon-Friday between " + data.officeStartHours + " to " + data.officeEndHours);
+            start = data.officeStartHours;
+            end = data.officeEndHours;
+        });
 
         $('#AreaID').change(function () {
             if (!calendarLoaded) {
@@ -142,14 +159,39 @@
                         center: 'title'
                     },
                     defaultView: 'agendaWeek',
-                    firstDay: 1,
+                    firstDay: 0,
                     slotMinutes: 60,
                     selectable: true,
-                    selectOverlap: true,
+                    selectOverlap: false,
+                    businessHours: {
+                        dow: [1, 2, 3, 4, 5],
+                        start: start,
+                        end: end
+                    },
+                    selectConstraint: {
+                        dow: [1, 2, 3, 4, 5],
+                        start: start,
+                        end: end
+                    },
+                    selectAllow: function (selectInfo) {
+                        var duration = moment.duration(selectInfo.end.diff(selectInfo.start));
+                        $("#hours-counter").text("Hours Selected: " + duration.asHours());
+                        if (selectInfo.start < Date.now()) {
+                            $("#hours-counter").text("");
+                            return false;
+                        }
+                        if (duration.asMinutes() > parseInt($("#limit").val()) * 60) {
+                            $("#hours-counter").text("");
+                            return false;
+                        }
+
+                    },
                     select: function (startDate, endDate) {
                         $('#StartDate').val(startDate.format());
                         $('#EndDate').val(endDate.format());
-                    }
+                    },
+                    selectHelper: true,
+                    unselectAuto: false
                 });
                 calendarLoaded = true;
             }
@@ -160,11 +202,19 @@
                 var selectedRoom = data[0].value;
                 $.getJSON("/Rooms/GetRoomRules?roomID=" + selectedRoom, function (data) {
                     if (data.limit != null) {
-                        $('#roomTitle').text("- Click and Drag to select an available time block up to " + data.limit + " hours");
+                        $('#roomTitle').text("Click and Drag to select an available time block up to " + data.limit + " hours");
+                        $('#limit').val(data.limit);
                     }
                     else {
-                        $('#roomTitle').text("- Click and Drag to select an available time block");
+                        $('#roomTitle').text("Click and Drag to select an available time block");
                     }
+                });
+
+                var URL3 = "/Bookings/GetSettings";
+                $.getJSON(URL3, function (data) {
+                    $('#officeHours').text("Booking is only available Mon-Friday between " + data.officeStartHours + " to " + data.officeEndHours);
+                    start = data.officeStartHours;
+                    end = data.officeEndHours;
                 });
 
                 var URL2 = "/Bookings/GetRoomEvents?roomID=" + selectedRoom;
@@ -172,6 +222,8 @@
                     $('#calendar').fullCalendar('removeEvents');
                     $('#calendar').fullCalendar('addEventSource', data);
                 });
+
+
             });
         });
         $('#RoomID').change(function () {
@@ -181,8 +233,7 @@
                 $('#calendar').fullCalendar('removeEvents');
                 $('#calendar').fullCalendar('addEventSource', data);
             });
-
         });
     </script>
-}
 
+}

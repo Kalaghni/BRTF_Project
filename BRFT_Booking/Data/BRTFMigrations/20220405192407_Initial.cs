@@ -190,7 +190,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         column: x => x.RoomID,
                         principalTable: "Rooms",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Bookings_Users_UserID",
                         column: x => x.UserID,

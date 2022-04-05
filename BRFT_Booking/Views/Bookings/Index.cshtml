@@ -75,20 +75,16 @@
                         @Html.TextBox("SearchName", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Search Room:</label>
-                        @Html.TextBox("SearchRoom", null, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-3">
                         <label class="control-label">Search Area:</label>
                         @Html.TextBox("SearchArea", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Date Request:</label>
-                        <input type="date" id="SearchDate" name="SearchDate" class="form-control" />
+                        <label class="control-label">Filter by Room:</label>
+                        @Html.DropDownList("RoomID", null, "None", htmlAttributes: new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="control-label">Search Start Time:</label>
-                        <input type="time" id="SearchStartTime" name="SearchStartTime" class="form-control" />
+                        <label class="control-label">Search Date:</label>
+                        <input type="date" id="SearchDate" name="SearchDate" class="form-control" />
                     </div>
                     <div class="form-group col-md-3 align-self-end">
                         <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
@@ -106,19 +102,16 @@
                     <input type="submit" name="actionButton" value="User" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Room" class="btn btn-link" />
-                </th>
-                <th>
                     <input type="submit" name="actionButton" value="Area" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Date Requested" class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="Room" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Start" class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="Date" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="End" class="btn btn-link" />
+                    @Html.DisplayNameFor(model => model.Duration)
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Status" class="btn btn-link" />
@@ -134,21 +127,16 @@
                     @Html.DisplayFor(modelItem => item.User.FullName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Room.Name)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Room.Area.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.BookingRequested)
+                    @Html.DisplayFor(modelItem => item.Room.Name)
                 </td>
                 <td>
-                    @*@Convert.ToString(string.Format("{0:hh:mm tt}", item.StartDate))*@
-                    @Html.DisplayFor(modelItem => item.StartDate)
+                    @Convert.ToString(string.Format("{0:MMMM dd, yyyy HH:mm tt}", item.StartDate))
                 </td>
                 <td>
-                    @*@Convert.ToString(string.Format("{0:hh:mm tt}", item.EndDate))*@
-                    @Html.DisplayFor(modelItem => item.EndDate)
+                    @Html.DisplayFor(modelItem => item.Duration)
                 </td>
                 <th>
                     @Html.DisplayFor(modelItem => item.Status)

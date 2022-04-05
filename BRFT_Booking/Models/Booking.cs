@@ -30,7 +30,7 @@ namespace BRTF_Booking.Models
         public DateTime BookingRequested { get; set; }
 
         [Required(ErrorMessage = "You must enter a Start date!")]
-        [Display(Name = "Start")]
+        [Display(Name = "Start Time")]
         public DateTime StartDate
         {
             get
@@ -51,7 +51,7 @@ namespace BRTF_Booking.Models
         public TimeSpan StartTime { get; set; }
 
         [Required(ErrorMessage = "You must enter a End date!")]
-        [Display(Name = "End")]
+        [Display(Name = "End Time")]
         public DateTime EndDate
         {
             get
@@ -71,9 +71,11 @@ namespace BRTF_Booking.Models
         [Display(Name = "End Time")]
         public TimeSpan EndTime { get; set; }
 
+        [Display(Name = "Duration (Hours)")]
+        public TimeSpan Duration => EndDate - StartDate;
+
         [Display(Name = "Status")]
         public string Status { get; set; }
-
 
         [ScaffoldColumn(false)]
         [Timestamp]

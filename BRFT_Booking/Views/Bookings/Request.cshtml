@@ -5,6 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .card-body {
+        flex: 1 1 auto;
+        padding: .5rem;
+    }
+</style>
+
 <h1>Request Booking</h1>
 <hr />
 <form asp-action="Request">
@@ -84,20 +91,26 @@
                 </select>
                 <span asp-validation-for="EndTime" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card md-sm-3">
+                <div class="card-body">
+                    <label class="control-label" id="officeHours"></label>
+                    <label class="control-label" id="roomTitle"></label>
+                    <div id='calendar'></div>
+                    <h3 id="hours-counter"></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
             <div class="form-group">
-                <input type="submit" value="Request" class="btn btn-primary" />
+                <input type="submit" value="Next" class="btn btn-primary" />
             </div>
             <div>
                 <a asp-action="Calendar">Back to calendar</a>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <hr />
-            <div class="card md-sm-3">
-                <label class="control-label" id="officeHours"></label>
-                <label class="control-label" id="roomTitle"></label>
-                <div id='calendar'></div>
-                <h3 id="hours-counter"></h3>
             </div>
         </div>
     </div>

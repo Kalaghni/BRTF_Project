@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Booking.Data.BRTFMigrations
 {
     [DbContext(typeof(BRTFContext))]
-    [Migration("20220402163506_Initial")]
+    [Migration("20220405192407_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -332,7 +332,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     b.HasOne("BRTF_Booking.Models.Room", "Room")
                         .WithMany("Bookings")
                         .HasForeignKey("RoomID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BRTF_Booking.Models.User", "User")
@@ -357,8 +357,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                 {
                     b.HasOne("BRTF_Booking.Models.ProgramDetail", "ProgramDetail")
                         .WithMany("ProgramTermGroups")
-                        .HasForeignKey("ProgramDetailID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ProgramDetailID");
                 });
 
             modelBuilder.Entity("BRTF_Booking.Models.ProgramTermGroupArea", b =>

@@ -10,10 +10,7 @@ namespace BRTF_Booking.Data
 {
     public class BRTFContext : DbContext
     {
-        public BRTFContext(DbContextOptions<BRTFContext> options)
-        : base(options)
-        {
-        }
+        public BRTFContext(DbContextOptions<BRTFContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<ProgramTerm> ProgramTerms { get; set; }

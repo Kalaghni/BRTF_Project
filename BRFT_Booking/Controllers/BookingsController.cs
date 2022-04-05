@@ -35,11 +35,11 @@ namespace BRTF_Booking.Controllers
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings
-        public async Task<IActionResult> Index(string SearchName, string SearchRoom, string SearchArea, DateTime SearchDate, DateTime SearchStartTime, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "Booking")
+        public async Task<IActionResult> Index(string SearchName, string SearchRoom, string SearchArea, DateTime SearchDate, int? RoomID, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "Booking")
         {
             ViewData["Filtering"] = "btn-outline-secondary";
 
-            string[] sortOptions = new[] { "User", "Room", "Area", "Date Requested", "Start", "End", "Status" };
+            string[] sortOptions = new[] { "User", "Room", "Area", "Date", "Status" };
 
             var bookings = from b in _context.Bookings
                             .Include(b => b.User)
@@ -47,6 +47,13 @@ namespace BRTF_Booking.Controllers
                             .ThenInclude(b => b.Area)
                            select b;
 
+            PopulateDropDownLists();
+
+            if (RoomID.HasValue)
+            {
+                bookings = bookings.Where(b => b.RoomID == RoomID);
+                ViewData["Filtering"] = " show";
+            }
             if (!String.IsNullOrEmpty(SearchName))
             {
                 bookings = bookings.Where(b => b.User.LName.ToUpper().Contains(SearchName.ToUpper())
@@ -65,12 +72,7 @@ namespace BRTF_Booking.Controllers
             }
             if (SearchDate != DateTime.MinValue)
             {
-                bookings = bookings.Where(b => b.BookingRequested == SearchDate);
-                ViewData["Filtering"] = " show";
-            }
-            if (SearchStartTime != DateTime.MinValue)
-            {
-                bookings = bookings.Where(b => b.StartDate.TimeOfDay == SearchStartTime.TimeOfDay);
+                bookings = bookings.Where(b => b.StartDate.Date == SearchDate.Date);
                 ViewData["Filtering"] = " show";
             }
             if (!String.IsNullOrEmpty(actionButton))
@@ -96,18 +98,7 @@ namespace BRTF_Booking.Controllers
                     bookings = bookings.OrderBy(b => b.Room);
                 }
             }
-            else if (sortField == "Date Requested")
-            {
-                if (sortDirection == "asc")
-                {
-                    bookings = bookings.OrderByDescending(b => b.BookingRequested);
-                }
-                else
-                {
-                    bookings = bookings.OrderBy(b => b.BookingRequested);
-                }
-            }
-            else if (sortField == "Start")
+            else if (sortField == "Date")
             {
                 if (sortDirection == "asc")
                 {
@@ -116,17 +107,6 @@ namespace BRTF_Booking.Controllers
                 else
                 {
                     bookings = bookings.OrderBy(b => b.StartDate);
-                }
-            }
-            else if (sortField == "End")
-            {
-                if (sortDirection == "asc")
-                {
-                    bookings = bookings.OrderByDescending(b => b.EndDate);
-                }
-                else
-                {
-                    bookings = bookings.OrderBy(b => b.EndDate);
                 }
             }
             else if (sortField == "Status")
@@ -859,8 +839,9 @@ namespace BRTF_Booking.Controllers
         private void PopulateDropDownLists()
         {
             //ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
-            ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
-            ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
+            ViewData["UserID"] = new SelectList(_context.Users.OrderBy(u => u.FName), "ID", "FullName");
+            ViewData["AreaID"] = new SelectList(_context.Areas.OrderBy(u => u.Name), "ID", "Name");
+            ViewData["RoomID"] = new SelectList(_context.Rooms.OrderBy(u => u.Name), "ID", "Name");
         }
     }
 }
