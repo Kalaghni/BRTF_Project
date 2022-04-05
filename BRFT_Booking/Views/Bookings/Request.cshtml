@@ -10,6 +10,8 @@
 <form asp-action="Request">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" id="limit" />
+    <input type="hidden" id="officeStart" />
+    <input type="hidden" id="officeEnd" />
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
@@ -90,21 +92,12 @@
             </div>
         </div>
         <div class="col-md-8">
-<<<<<<< Updated upstream
-            <div class="card md-sm-3">
-                <h5 class="card-header">Mon-Friday between 8:30am to 5:30pm</h5>
-                <div class="card-body">
-                    <label class="control-label" id="roomTitle"></label>
-                    <div id='calendar'></div>
-                </div>
-=======
             <hr />
-            <div class="container">
-                <label class="control-label">- Booking is only available Mon-Friday between 8:30am to 5:30pm</label>
+            <div class="card md-sm-3">
+                <label class="control-label" id="officeHours"></label>
                 <label class="control-label" id="roomTitle"></label>
                 <div id='calendar'></div>
                 <h3 id="hours-counter"></h3>
->>>>>>> Stashed changes
             </div>
         </div>
     </div>
@@ -127,6 +120,14 @@
     <script type="text/javascript">
 
         var calendarLoaded = false;
+        var start = "";
+        var end = "";
+        var URL3 = "/Bookings/GetSettings";
+        $.getJSON(URL3, function (data) {
+            $('#officeHours').text("Booking is only available Mon-Friday between " + data.officeStartHours + " to " + data.officeEndHours);
+            start = data.officeStartHours;
+            end = data.officeEndHours;
+        });
 
         $('#AreaID').change(function () {
             if (!calendarLoaded) {
@@ -136,37 +137,39 @@
                         center: 'title'
                     },
                     defaultView: 'agendaWeek',
-                    firstDay: 1,
+                    firstDay: 0,
                     slotMinutes: 60,
                     selectable: true,
                     selectOverlap: false,
+                    businessHours: {
+                        dow: [1, 2, 3, 4, 5],
+                        start: start,
+                        end: end
+                    },
+                    selectConstraint: {
+                        dow: [1, 2, 3, 4, 5],
+                        start: start,
+                        end: end
+                    },
+                    selectAllow: function (selectInfo) {
+                        var duration = moment.duration(selectInfo.end.diff(selectInfo.start));
+                        $("#hours-counter").text("Hours Selected: " + duration.asHours());
+                        if (selectInfo.start < Date.now()) {
+                            $("#hours-counter").text("");
+                            return false;
+                        }
+                        if (duration.asMinutes() > parseInt($("#limit").val()) * 60) {
+                            $("#hours-counter").text("");
+                            return false;
+                        }
+                        
+                    },
                     select: function (startDate, endDate) {
                         $('#StartDate').val(startDate.format());
                         $('#EndDate').val(endDate.format());
                     },
-                    selectAllow: function (selectInfo) {
-                        if (selectInfo.start < Date.now()) {
-                            return false;
-                        }
-                        var selectedArea = $("#AreaID").val();
-                        var URL = "/Bookings/GetCreateRooms/" + selectedArea;
-                        $.getJSON(URL, function (data) {
-                            var selectedRoom = data[0].value;
-                            $.getJSON("/Rooms/GetRoomRules?roomID=" + selectedRoom, function (data) {
-                                $('#limit').val(data.limit - selectInfo.end.diff(selectInfo.start, 'hours', true));
-                            });
-                        });
-                        if ($('#limit').val() <= 0) {
-                            return false;
-                        }
-                        else {
-                            try {
-                                $('#hours-counter').text("Hours Selected: " + selectInfo.end.diff(selectInfo.start, 'hours', true));
-                            }
-                            catch { }
-                            return true;
-                        }
-                    }
+                    selectHelper: true,
+                    unselectAuto: false
                 });
                 calendarLoaded = true;
             }
@@ -177,18 +180,28 @@
                 var selectedRoom = data[0].value;
                 $.getJSON("/Rooms/GetRoomRules?roomID=" + selectedRoom, function (data) {
                     if (data.limit != null) {
-                        $('#roomTitle').text("- Click and Drag to select an available time block up to " + data.limit + " hours");
+                        $('#roomTitle').text("Click and Drag to select an available time block up to " + data.limit + " hours");
+                        $('#limit').val(data.limit);
                     }
                     else {
-                        $('#roomTitle').text("- Click and Drag to select an available time block");
+                        $('#roomTitle').text("Click and Drag to select an available time block");
                     }
                 });
-                
+
+                var URL3 = "/Bookings/GetSettings";
+                $.getJSON(URL3, function (data) {
+                    $('#officeHours').text("Booking is only available Mon-Friday between " + data.officeStartHours + " to " + data.officeEndHours);
+                    start = data.officeStartHours;
+                    end = data.officeEndHours;
+                });
+
                 var URL2 = "/Bookings/GetRoomEvents?roomID=" + selectedRoom;
                 $.getJSON(URL2, function (data) {
                     $('#calendar').fullCalendar('removeEvents');
                     $('#calendar').fullCalendar('addEventSource', data);
                 });
+
+                
             });
         });
         $('#RoomID').change(function () {
@@ -198,7 +211,6 @@
                 $('#calendar').fullCalendar('removeEvents');
                 $('#calendar').fullCalendar('addEventSource', data);
             });
-
         });
     </script>
 

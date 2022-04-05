@@ -250,7 +250,6 @@ namespace BRTF_Booking.Controllers
             }
             catch (DbUpdateException EX)
             {
-                Console.WriteLine(EX.Message);
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
 
@@ -579,25 +578,30 @@ namespace BRTF_Booking.Controllers
             var settings = _context.SettingsViewModels.First();
             if (ModelState.IsValid)
             {
-                //if (((Convert.ToInt64(booking.StartTime.ToString("HHmm")) > Convert.ToInt64(DateTime.Parse(settings.OfficeStartHours).ToString("HHmm"))) && (Convert.ToInt64(booking.StartTime.ToString("HHmm")) < Convert.ToInt64(DateTime.Parse(settings.OfficeEndHours).ToString("HHmm")))) && ((Convert.ToInt64(booking.EndTime.ToString("HHmm")) > Convert.ToInt64(DateTime.Parse(settings.OfficeStartHours).ToString("HHmm"))) && (Convert.ToInt64(booking.EndTime.ToString("HHmm")) < Convert.ToInt64(DateTime.Parse(settings.OfficeEndHours).ToString("HHmm")))))
-                //{
-                    booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
-                    booking.BookingRequested = DateTime.Today;
-                    booking.Status = "Accepted";
-                    _context.Add(booking);
-                    await _context.SaveChangesAsync();
-                    Console.WriteLine(Convert.ToInt64(booking.StartDate.ToString("HHmm")));
-                    
-                return RedirectToAction(nameof(Calendar));
-                    
-
-                //}
-                //else
-                //{
-                    //ModelState.AddModelError("","Booking request outside of office hours");
-                    //PopulateDropDownLists();
-                    //return View(booking);
-                //}
+                if (((Convert.ToInt64(booking.StartDate.ToString("HHmm")) > Convert.ToInt64(DateTime.Parse(settings.OfficeStartHours).ToString("HHmm"))) && (Convert.ToInt64(booking.StartDate.ToString("HHmm")) < Convert.ToInt64(DateTime.Parse(settings.OfficeEndHours).ToString("HHmm")))) && ((Convert.ToInt64(booking.EndDate.ToString("HHmm")) > Convert.ToInt64(DateTime.Parse(settings.OfficeStartHours).ToString("HHmm"))) && (Convert.ToInt64(booking.EndDate.ToString("HHmm")) < Convert.ToInt64(DateTime.Parse(settings.OfficeEndHours).ToString("HHmm")))))
+                {
+                    if ((booking.StartDate > DateTime.Parse(settings.TermStart)) && (booking.StartDate < DateTime.Parse(settings.TermEnd)) && (booking.EndDate > DateTime.Parse(settings.TermStart)) && (booking.EndDate < DateTime.Parse(settings.TermEnd)))
+                    {
+                        booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
+                        booking.BookingRequested = DateTime.Today;
+                        booking.Status = "Accepted";
+                        _context.Add(booking);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Calendar));
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Booking request outside of current term");
+                        PopulateDropDownLists();
+                        return View(booking);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("","Booking request outside of office hours");
+                    PopulateDropDownLists();
+                    return View(booking);
+                }
 
                 
             }
@@ -628,7 +632,6 @@ namespace BRTF_Booking.Controllers
             {
                 if (pGroupArea.ID == groupID)
                 {
-                    Console.WriteLine(_context.Areas.FindAsync(pGroupArea.AreaID).Result.Name);
                     areas.Add(_context.Areas.FindAsync(pGroupArea.AreaID).Result);
                 }
             }
@@ -747,7 +750,6 @@ namespace BRTF_Booking.Controllers
         [HttpPost]
         public ActionResult PostEvents(string jsonData)
         {
-            Console.WriteLine(jsonData);
             EventViewModel bookingEvent = JsonConvert.DeserializeObject<EventViewModel>(jsonData);
             return View(nameof(Calendar));
         }
@@ -793,6 +795,16 @@ namespace BRTF_Booking.Controllers
             }
 
             return Json(events.ToArray());
+        }
+
+        [HttpGet]
+        public JsonResult GetSettings()
+        {
+            var settings = _context.SettingsViewModels.First();
+            settings.OfficeStartHours = DateTime.Parse(settings.OfficeStartHours).ToString("HH:mm");
+            settings.OfficeEndHours = DateTime.Parse(settings.OfficeEndHours).ToString("HH:mm");
+
+            return Json(settings);
         }
 
         [HttpGet]
