@@ -81,7 +81,44 @@
             </div>
         </div>
     </div>
-    <table class="table">
+    <div class="container-fluid d-block d-lg-none">
+        <div class="card-deck-wrapper">
+            <div class="card-deck">
+                @foreach (var item in Model)
+                {
+                    <div class="card mb-sm-3" style="min-width: 18rem;">
+                        <h5 class="card-header"><strong>@Html.DisplayFor(modelItem => item.User.FullName)</strong></h5>
+                        <div class="card-body">
+                            <div class="media-body ml-2">
+                                <p class="card-text">
+                                    <strong>Academic Plan:</strong> @Html.DisplayFor(modelItem => item.AcadPlan)<br />
+                                    <strong>Program:</strong> @Html.DisplayFor(modelItem => item.ProgramDetail.Name)<br />
+                                    <strong>Start Level:</strong> @Html.DisplayFor(modelItem => item.StrtLevel)<br />
+                                    <strong>Last Level (Y/N):</strong> @Html.DisplayFor(modelItem => item.LastLevel)<br />
+                                    <strong>Term:</strong> @Html.DisplayFor(modelItem => item.Term)<br />
+                                </p>
+                                <div class="card-footer">
+                                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <table class="table d-none d-lg-block">
+        <colgroup>
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+            <col />
+        </colgroup>
         <thead>
             <tr>
                 <th>
