@@ -1400,3 +1400,9 @@ C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\net
 C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Home\Settings.cshtml.g.cs
 C:\Users\Zac\OneDrive\Desktop\GitHub\1180\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Home\Settings.cshtml.g.cs
 C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Home\Settings.cshtml.g.cs
+C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\MailKit.dll
+C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\MimeKit.dll
+C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Home\Settings.cshtml.g.cs
+C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPassword.cshtml.g.cs
+C:\Users\Curtis\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\Index.cshtml.g.cs

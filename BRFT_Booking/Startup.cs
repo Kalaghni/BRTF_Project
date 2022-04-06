@@ -1,9 +1,12 @@
 using BRTF_Booking.Data;
+using BRTF_Booking.Utilities;
+using BRTF_Booking.ViewModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +38,10 @@ namespace BRTF_Booking
                 options.UseSqlite(
                     Configuration.GetConnectionString("BRTFContext")));
 
+            services.AddSingleton<IEmailConfiguration>(Configuration
+                .GetSection("EmailConfiguration").Get<EmailConfiguration>());
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false) 
                 .AddRoles<IdentityRole>()
