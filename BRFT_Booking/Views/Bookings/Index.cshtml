@@ -31,6 +31,7 @@
 </style>
 
 <h1>Bookings</h1>
+<p class="text-danger">@TempData["Message"]</p>
 
 <p>
     <a asp-action="Create" class="btn btn-primary-special">New Bookings</a>
@@ -191,3 +192,15 @@
     <partial name="_PagingNavBar" />
 </form>
 
+@section Styles {
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+}
+@section Scripts {
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $('#SearchArea').autocomplete({
+                minLength: 1,
+                source: '@Url.Action("GetAreas","Areas")'
+            });
+    </script>
+}

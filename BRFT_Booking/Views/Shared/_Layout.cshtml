@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/home.css" />
+    @RenderSection("Styles", required: false)
 </head>
 <body style="background-color: #F0F4EF">
 
@@ -87,7 +88,7 @@
 
     <footer class="border-top footer text-muted" style="background-color: ghostwhite">
         <div class="container">
-            &copy; 2022 - BRTF_Booking - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2022 - BRTF_Booking @*- <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>*@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

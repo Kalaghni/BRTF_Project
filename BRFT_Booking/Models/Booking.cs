@@ -25,12 +25,13 @@ namespace BRTF_Booking.Models
 
         [Required(ErrorMessage = "You must enter a day!")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MMMM dd, yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Date Requested")]
         public DateTime BookingRequested { get; set; }
 
         [Required(ErrorMessage = "You must enter a Start date!")]
-        [Display(Name = "Start Time")]
+        [DisplayFormat(DataFormatString = "{0:MMMM dd HH:mm tt}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Start Date")]
         public DateTime StartDate
         {
             get
@@ -51,7 +52,8 @@ namespace BRTF_Booking.Models
         public TimeSpan StartTime { get; set; }
 
         [Required(ErrorMessage = "You must enter a End date!")]
-        [Display(Name = "End Time")]
+        [DisplayFormat(DataFormatString = "{0:MMMM dd HH:mm tt}", ApplyFormatInEditMode = true)]
+        [Display(Name = "End Date")]
         public DateTime EndDate
         {
             get

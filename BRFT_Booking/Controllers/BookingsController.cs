@@ -431,7 +431,7 @@ namespace BRTF_Booking.Controllers
                          .Include(b => b.User)
                          .Include(b => b.Room)
                          .ThenInclude(p => p.Area)
-                         .Where(a => a.StartDate >= reportStart.Date && a.EndDate < reportEnd.Date)
+                         .Where(a => a.StartDate >= reportStart.Date && a.StartDate < reportEnd.Date)
                             orderby b.BookingRequested ascending
                             select new
                             {
@@ -555,7 +555,9 @@ namespace BRTF_Booking.Controllers
                     }
                 }
             }
-            return NotFound("No Bookings found during Time frame");
+            TempData["Message"] = "No bookings found during that time frame!";
+            return RedirectToAction(nameof(Index));
+            //return NotFound("No Bookings found during Time frame");
         }
 
         // GET: Bookings/Request
@@ -850,6 +852,15 @@ namespace BRTF_Booking.Controllers
 
             }
             return Json(events.ToArray());
+        }
+
+        public JsonResult GetAreas(string term)
+        {
+            var result = from a in _context.Areas
+                         where a.Name.ToUpper().Contains(term.ToUpper())
+                         orderby a.Name
+                         select new { value = a.Name };
+            return Json(result);
         }
 
         private string ControllerName()

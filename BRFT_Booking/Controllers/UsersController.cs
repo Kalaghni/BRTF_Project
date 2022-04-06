@@ -48,10 +48,6 @@ namespace BRTF_Booking.Controllers
             return RedirectToAction("Index");
         }*/
 
-
-
-
-
         // GET: Users
         public async Task<IActionResult> Index(string[] chkDelete, string SearchName, string SearchNumber, string SearchEmail, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
         {
@@ -395,7 +391,7 @@ namespace BRTF_Booking.Controllers
             {
                 if (dex.GetBaseException().Message.Contains("FOREIGN KEY constraint failed"))
                 {
-                    ModelState.AddModelError("", "Unable to delete. This user still have existing bookings or program terms!");
+                    ModelState.AddModelError("", "Unable to delete. This user still have existing bookings!");
                 }
                 else
                 {
