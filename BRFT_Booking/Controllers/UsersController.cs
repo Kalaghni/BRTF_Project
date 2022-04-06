@@ -55,6 +55,8 @@ namespace BRTF_Booking.Controllers
         // GET: Users
         public async Task<IActionResult> Index(string[] chkDelete, string SearchName, string SearchNumber, string SearchEmail, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
         {
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
+
             ViewData["Filtering"] = "btn-outline-secondary";
 
             PopulateDropDownLists();
@@ -190,6 +192,8 @@ namespace BRTF_Booking.Controllers
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -210,6 +214,8 @@ namespace BRTF_Booking.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
+            ViewDataReturnURL();
+
             return View();
         }
 
@@ -220,6 +226,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,StudentID,FName,MName,LName,Email,DateOfBirth")] User user, string? Password)
         {
+            ViewDataReturnURL();
+
             try
             {
                 if (ModelState.IsValid)
@@ -280,6 +288,8 @@ namespace BRTF_Booking.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -300,6 +310,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
         {
+            ViewDataReturnURL();
+
             var userToUpdate = await _context.Users.FirstOrDefaultAsync(u => u.ID == id);
 
             if (userToUpdate == null)
@@ -346,6 +358,8 @@ namespace BRTF_Booking.Controllers
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -366,6 +380,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewDataReturnURL();
+
             var user = await _context.Users.FindAsync(id);
 
             try
@@ -468,6 +484,11 @@ namespace BRTF_Booking.Controllers
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
         private SelectList AcadPlanList(int? selectedId)

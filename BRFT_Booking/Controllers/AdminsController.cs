@@ -10,6 +10,7 @@ using BRTF_Booking.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
+using BRTF_Booking.Utilities;
 
 namespace BRTF_Booking.Controllers
 {
@@ -28,12 +29,15 @@ namespace BRTF_Booking.Controllers
         // GET: Admins
         public async Task<IActionResult> Index()
         {
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
             return View(await _context.Admins.ToListAsync());
         }
 
         // GET: Admins/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -51,6 +55,7 @@ namespace BRTF_Booking.Controllers
         // GET: Admins/Create
         public IActionResult Create()
         {
+            ViewDataReturnURL();
             //List<string> roles = new List<string>();
             //roles.Add("Admin");
             //roles.Add("Top-Level Admin");
@@ -66,6 +71,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,FName,LName,Email,Role")] Admin admin, string? password)
         {
+            ViewDataReturnURL();
+
             try
             {
                 if (ModelState.IsValid)
@@ -118,6 +125,8 @@ namespace BRTF_Booking.Controllers
         // GET: Admins/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -138,6 +147,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
         {
+            ViewDataReturnURL();
+
             var adminToUpdate = await _context.Admins.FindAsync(id);
             if (adminToUpdate == null)
             {
@@ -186,6 +197,8 @@ namespace BRTF_Booking.Controllers
         // GET: Admins/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -206,6 +219,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewDataReturnURL();
+
             var admin = await _context.Admins.FindAsync(id);
             try
             {
@@ -219,6 +234,15 @@ namespace BRTF_Booking.Controllers
                 ModelState.AddModelError("", "Unable to delete record. Try again, and if the problem persists see your system administrator.");
             }
             return View(admin);
+        }
+
+        private string ControllerName()
+        {
+            return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
         private bool AdminExists(int id)

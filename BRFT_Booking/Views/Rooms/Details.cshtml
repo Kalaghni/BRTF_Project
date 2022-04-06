@@ -30,7 +30,7 @@
     {
         <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a>
     }
-    <a asp-action="Index">Back to List</a>
+    <a href='@ViewData["returnURL"]'>Back to List</a>
 </div>
 <hr />
 <h1>Bookings</h1>

@@ -25,6 +25,8 @@ namespace BRTF_Booking.Controllers
         // GET: Areas
         public async Task<IActionResult> Index(string SearchArea, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "Area")
         {
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
+
             ViewData["Filtering"] = "btn-outline-secondary";
 
             string[] sortOptions = new[] { "Name" };
@@ -77,6 +79,8 @@ namespace BRTF_Booking.Controllers
         // GET: Areas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -94,6 +98,8 @@ namespace BRTF_Booking.Controllers
         // GET: Areas/Create
         public IActionResult Create()
         {
+            ViewDataReturnURL();
+
             return View();
         }
 
@@ -104,6 +110,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Name")] Area area)
         {
+            ViewDataReturnURL();
+
             try
             {
                 if (ModelState.IsValid)
@@ -123,6 +131,8 @@ namespace BRTF_Booking.Controllers
         // GET: Areas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -143,6 +153,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
         {
+            ViewDataReturnURL();
+
             var areaToUpdate = await _context.Areas.FindAsync(id);
             if (areaToUpdate == null)
             {
@@ -178,6 +190,8 @@ namespace BRTF_Booking.Controllers
         // GET: Areas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -198,6 +212,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewDataReturnURL();
+
             var area = await _context.Areas.FindAsync(id);
 
             try
@@ -223,6 +239,11 @@ namespace BRTF_Booking.Controllers
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
         private bool AreaExists(int id)

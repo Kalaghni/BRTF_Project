@@ -28,6 +28,8 @@ namespace BRTF_Booking.Controllers
         // GET: ProgramTerms
         public async Task<IActionResult> Index(string SearchProgram, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "ProgramTerms")
         {
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
+
             ViewData["Filtering"] = "btn-outline-secondary";
 
             var terms = _context.ProgramTerms
@@ -93,6 +95,8 @@ namespace BRTF_Booking.Controllers
         // GET: ProgramTerms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -113,6 +117,8 @@ namespace BRTF_Booking.Controllers
         // GET: ProgramTerms/Create
         public IActionResult Create()
         {
+            ViewDataReturnURL();
+
             PopulateDropDownLists();
             return View();
         }
@@ -124,6 +130,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,AcadPlan,ProgramDetailID,UserID,StrtLevel,LastLevel,Term")] ProgramTerm programTerm)
         {
+            ViewDataReturnURL();
+
             try
             {
                 if (ModelState.IsValid)
@@ -151,6 +159,8 @@ namespace BRTF_Booking.Controllers
         // GET: ProgramTerms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -173,6 +183,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
         {
+            ViewDataReturnURL();
+
             var programTermToUpdate = await _context.ProgramTerms
                 .Include(p => p.ProgramDetail)
                 .Include(p => p.User)
@@ -218,6 +230,8 @@ namespace BRTF_Booking.Controllers
         // GET: ProgramTerms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -240,6 +254,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewDataReturnURL();
+
             var programTerm = await _context.ProgramTerms.FindAsync(id);
 
             try
@@ -341,6 +357,11 @@ namespace BRTF_Booking.Controllers
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
         private bool ProgramTermExists(int id)

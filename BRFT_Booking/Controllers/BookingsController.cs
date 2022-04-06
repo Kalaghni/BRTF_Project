@@ -37,6 +37,8 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index(string SearchName, string SearchRoom, string SearchArea, DateTime SearchDate, int? RoomID, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "Booking")
         {
+            CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
+
             ViewData["Filtering"] = "btn-outline-secondary";
 
             string[] sortOptions = new[] { "User", "Room", "Area", "Date", "Status" };
@@ -181,6 +183,8 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings/Create
         public IActionResult CreateRepeat(int? id)
         {
+            ViewDataReturnURL();
+
             if (id != null)
             {
                 Booking booking = _context.Bookings
@@ -215,6 +219,7 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRepeat(int? id, [Bind("UserID,RoomID,StartDate,StartTime,EndDate,EndTime,Status,AreaID")] Booking bookings)
         {
+            ViewDataReturnURL();
 
             Booking booking = _context.Bookings.FindAsync(id).Result;
             booking.StartDate = booking.StartDate.AddDays(7);
@@ -242,6 +247,8 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings/Create
         public IActionResult Create(int? id)
         {
+            ViewDataReturnURL();
+
             if (id != null)
             {
                 Booking booking = _context.Bookings.FindAsync(id).Result;
@@ -270,6 +277,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,UserID,RoomID,StartDate,StartTime,EndDate,EndTime,Status")] Booking booking, DateTime[] selectedTimes)
         {
+            ViewDataReturnURL();
+
             try
             {
                 if (ModelState.IsValid)
@@ -294,6 +303,8 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -320,6 +331,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, string[] selectedOptions, Byte[] RowVersion)
         {
+            ViewDataReturnURL();
+
             var bookingToUpdate = await _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Room)
@@ -362,6 +375,8 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            ViewDataReturnURL();
+
             if (id == null)
             {
                 return NotFound();
@@ -385,6 +400,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ViewDataReturnURL();
+
             var booking = await _context.Bookings.FindAsync(id);
             try
             {
@@ -544,6 +561,8 @@ namespace BRTF_Booking.Controllers
         // GET: Bookings/Request
         public new IActionResult Request()
         {
+            ViewDataReturnURL();
+
             ViewData["AreaID"] = AreaSelectList();
             return View();
         }
@@ -555,6 +574,8 @@ namespace BRTF_Booking.Controllers
         [ValidateAntiForgeryToken]
         public new async Task<IActionResult> Request([Bind("ID,RoomID,StartDate,StartTime,EndDate,EndTime")] Booking booking)
         {
+            ViewDataReturnURL();
+
             var settings = _context.SettingsViewModels.First();
             if (ModelState.IsValid)
             {
@@ -834,6 +855,11 @@ namespace BRTF_Booking.Controllers
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
+        }
+
+        private void ViewDataReturnURL()
+        {
+            ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
         }
 
         private void PopulateDropDownLists()
