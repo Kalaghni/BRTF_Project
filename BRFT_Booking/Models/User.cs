@@ -27,7 +27,7 @@ namespace BRTF_Booking.Models
         public string FName { get; set; }
 
         [Display(Name = "Middle Name")]
-        public string? MName { get; set; }
+        public string MName { get; set; }
 
         [Display(Name = "Last Name")]
         [Required(ErrorMessage = "User must have a last name.")]
@@ -52,8 +52,8 @@ namespace BRTF_Booking.Models
         public DateTime? DateOfBirth { get; set; }
 
         [Display(Name = "Program Term")]
-        public ProgramTerm? ProgramTerm { get; set; }
         public int? ProgramTermID { get; set; }
+        public ProgramTerm ProgramTerm { get; set; }
 
         public bool Active { get; set; }
         public ICollection<Booking> Bookings { get; set; }

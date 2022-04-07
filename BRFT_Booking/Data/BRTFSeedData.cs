@@ -1250,6 +1250,7 @@ namespace BRTF_Booking.Data
                      }
                      context.SaveChanges();*/
                 }
+
                 if (!context.SettingsViewModels.Any())
                 {
                     context.SettingsViewModels.Add(new ViewModels.SettingsViewModel 
@@ -1262,14 +1263,7 @@ namespace BRTF_Booking.Data
                     } );
                     context.SaveChanges();
                 }
-            }
-        }
-        public static void InitializeAdmins(IServiceProvider serviceProvider)
-        {
 
-            using (var context = new BRTFContext(
-                serviceProvider.GetRequiredService<DbContextOptions<BRTFContext>>()))
-            {
                 if (!context.Admins.Any())
                 {
                     context.Admins.AddRange(

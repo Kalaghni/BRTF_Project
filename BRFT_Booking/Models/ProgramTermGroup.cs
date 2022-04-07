@@ -14,14 +14,14 @@ namespace BRTF_Booking.Models
         public string Name { get; set; }
 
         [Display(Name = "Program")]
-        public ProgramDetail? ProgramDetail { get; set; }
         public int? ProgramDetailID { get; set; }
+        public ProgramDetail ProgramDetail { get; set; }
 
         [Display(Name = "Level")]
         public int Level { get; set; }
 
-      /*  public ProgramTermGroupArea ProgramTermGroupArea { get; set; }
-        public int? ProgramTermGroupAreaID { get; set; }*/
+        //public ProgramTermGroupArea ProgramTermGroupArea { get; set; }
+        //public int? ProgramTermGroupAreaID { get; set; }
 
     }
 }

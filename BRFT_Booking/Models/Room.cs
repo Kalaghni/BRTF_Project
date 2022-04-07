@@ -9,7 +9,6 @@ namespace BRTF_Booking.Models
 {
     public class Room
     {
-
         public int ID { get; set; }
 
         [Display(Name = "Area")]
@@ -23,17 +22,17 @@ namespace BRTF_Booking.Models
         [Display(Name = "Description")]
         [StringLength(2000, ErrorMessage = "Description cannot be more than 2000 characters long!")]
         [DataType(DataType.MultilineText)]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [Display(Name = "Room Rules")]
         [DisplayFormat(NullDisplayText = "This room has no booking rules.")]
-        public string? Rule { get; set; }
+        public string Rule { get; set; }
 
         [Range(1, 99, ErrorMessage = "Room limit between 1 and 99 only!")]
         public int? Limit { get; set; }
 
-        public string? ApprovalName { get; set; }
-        public string? ApprovalEmail { get; set; }
+        public string ApprovalName { get; set; }
+        public string ApprovalEmail { get; set; }
 
         public int? MaxNumofBookings { get; set; }
 

@@ -23,7 +23,7 @@ namespace BRTF_Booking.Controllers
         }
 
         // GET: Rooms
-        public async Task<IActionResult> Index(string SearchRoom, int? AreaID, int? page, int? pageSizeID, string? enabled, string actionButton, string sortDirection = "asc", string sortField = "Room")
+        public async Task<IActionResult> Index(string SearchRoom, int? AreaID, int? page, int? pageSizeID, string enabled, string actionButton, string sortDirection = "asc", string sortField = "Room")
         {
             CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
 

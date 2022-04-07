@@ -69,7 +69,7 @@ namespace BRTF_Booking.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FName,LName,Email,Role")] Admin admin, string? password)
+        public async Task<IActionResult> Create([Bind("ID,FName,LName,Email,Role")] Admin admin, string password)
         {
             ViewDataReturnURL();
 
@@ -89,6 +89,12 @@ namespace BRTF_Booking.Controllers
                             UserName = admin.Email,
                             Email = admin.Email
                         };
+
+                        if (password == null)
+                        {
+                            TempData["Message"] = "You must enter a password!";
+                            return RedirectToAction(nameof(Create));
+                        }
 
                         IdentityResult result = _userManager.CreateAsync(user, password).Result;
 

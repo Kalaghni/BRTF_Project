@@ -50,10 +50,7 @@ namespace BRTF_Booking.Data
                     }
                 }
             }
-        }
-        public static async Task SeedAdminsAsync(BRTFContext context, ApplicationDbContext identityContext, IServiceProvider serviceProvider)
-        {
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
             var admins = context.Admins.ToList();
 
             foreach (Admin admin in admins)
@@ -75,6 +72,5 @@ namespace BRTF_Booking.Data
                 }
             }
         }
-
     }
 }

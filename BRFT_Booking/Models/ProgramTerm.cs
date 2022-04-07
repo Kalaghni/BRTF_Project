@@ -50,12 +50,12 @@ namespace BRTF_Booking.Models
         public string AcadPlan { get; set; }
 
         [Display(Name = "Program")]
-        public ProgramDetail? ProgramDetail { get; set; }
         public int? ProgramDetailID { get; set; }
+        public ProgramDetail ProgramDetail { get; set; }
 
         [Display(Name = "Student")]
-        public User? User { get; set; }
         public int? UserID { get; set; }
+        public User User { get; set; }
 
         [Display(Name = "Start Level")]
         [Required(ErrorMessage = "Start Level is required!")]

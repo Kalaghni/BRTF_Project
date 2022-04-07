@@ -36,6 +36,7 @@
             <div class="form-group">
                 <label for="password" class="control-label">Password:</label>
                 @Html.Password("password", null, new { @class = "form-control" })
+                <p class="text-danger">@TempData["Message"]</p>
             </div>
             <div class="form-group">
                 <label asp-for="Role" class="control-label"></label>
