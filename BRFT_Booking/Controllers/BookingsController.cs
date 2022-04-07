@@ -431,7 +431,7 @@ namespace BRTF_Booking.Controllers
                          .Include(b => b.User)
                          .Include(b => b.Room)
                          .ThenInclude(p => p.Area)
-                         .Where(a => a.StartDate >= reportStart.Date && a.StartDate < reportEnd.Date)
+                         .Where(a => a.StartDate.Date >= reportStart.Date && a.EndDate.Date <= reportEnd.Date)
                             orderby b.BookingRequested ascending
                             select new
                             {
@@ -500,12 +500,29 @@ namespace BRTF_Booking.Controllers
                         fill.PatternType = ExcelFillStyle.Solid;
                         fill.BackgroundColor.SetColor(Color.FromArgb(8, 124, 232));
                     }
+                    if (reportStart != DateTime.MinValue)
+                    {
+                        workSheet.Cells[2, 1].Value = "Filter Start - " + reportStart.ToShortDateString();
+
+                    }
+                    
+                    if (reportEnd != DateTime.MaxValue)
+                    {
+                        workSheet.Cells[2, 2].Value = "Filter End - " + reportEnd.ToShortDateString();
+
+                    }
+                    
+                    
 
                     workSheet.Cells.AutoFitColumns();
                     workSheetBookings.Cells.AutoFitColumns();
 
                     workSheet.Cells[1, 1].Value = "Booking Report";
                     workSheetBookings.Cells[1, 1].Value = "Booking Report";
+
+                    
+                    
+
 
                     using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 8])
                     {
