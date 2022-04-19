@@ -170,12 +170,12 @@ namespace BRTF_Booking.Controllers
                 await _context.SaveChangesAsync();*/
             }
 
-            if (failedDelete > 1)
+            if (failedDelete > 0)
             {
                 ModelState.AddModelError("", "Unable to delete " + failedDelete + " users");
                 //ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert(\"" + message + "\");", true);
             }
-            else if (countDelete > 1)
+            else if (countDelete > 0)
             {
                 ModelState.AddModelError("", "Successfully deleted " + countDelete + " users");
             }
@@ -377,11 +377,23 @@ namespace BRTF_Booking.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             ViewDataReturnURL();
-
+            int strTemp = Convert.ToInt32(id);
             var user = await _context.Users.FindAsync(id);
+            var deleteTerm = _context.ProgramTerms.FirstOrDefault(p => p.UserID == strTemp);
+            var deleteBooking = _context.Bookings.Where(p => p.UserID == strTemp);
 
             try
             {
+
+                if (deleteTerm != null)
+                {
+                    _context.ProgramTerms.Remove(deleteTerm);
+                }
+
+                foreach (var delete in deleteBooking)
+                {
+                    _context.Bookings.Remove(delete);
+                }
                 //await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();

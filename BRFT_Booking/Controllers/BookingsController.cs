@@ -35,7 +35,7 @@ namespace BRTF_Booking.Controllers
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings
-        public async Task<IActionResult> Index(string SearchName, string SearchRoom, string SearchArea, DateTime SearchDate, int? RoomID, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "Booking")
+        public async Task<IActionResult> Index(string[] chkDelete, string SearchName, string SearchRoom, string SearchArea, DateTime SearchDate, int? RoomID, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "Booking")
         {
             CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
 
@@ -144,6 +144,40 @@ namespace BRTF_Booking.Controllers
                     bookings = bookings.OrderByDescending(b => b.User.LName).ThenByDescending(b => b.User.FName);
                 }
             }
+
+
+            int countDelete = 0;
+            int failedDelete = 0;
+            foreach (var temp in chkDelete)
+            {
+                int strTemp = Convert.ToInt32(temp);
+                var deleteBooking = _context.Bookings.FirstOrDefault(p => p.ID == strTemp);
+                var deleteTerm = _context.ProgramTerms.FirstOrDefault(p => p.UserID == strTemp);
+                try
+                {
+                    _context.Bookings.Remove(deleteBooking);
+
+                    _context.SaveChanges();
+                    countDelete = countDelete + 1;
+                }
+                catch
+                {
+                    failedDelete = failedDelete + 1;
+                }
+
+            }
+
+            if (failedDelete > 0)
+            {
+                ModelState.AddModelError("", "Unable to delete " + failedDelete + " users");
+                //ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert(\"" + message + "\");", true);
+            }
+            else if (countDelete > 0)
+            {
+                ModelState.AddModelError("", "Successfully deleted " + countDelete + " users");
+            }
+
+
 
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
@@ -897,5 +931,7 @@ namespace BRTF_Booking.Controllers
             ViewData["AreaID"] = new SelectList(_context.Areas.OrderBy(u => u.Name), "ID", "Name");
             ViewData["RoomID"] = new SelectList(_context.Rooms.OrderBy(u => u.Name), "ID", "Name");
         }
+
+
     }
 }

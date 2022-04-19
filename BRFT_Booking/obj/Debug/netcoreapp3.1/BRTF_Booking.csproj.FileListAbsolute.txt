@@ -1411,3 +1411,8 @@ C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\bin\Debug\netcoreapp3.
 C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPassword.cshtml.g.cs
 C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\Index.cshtml.g.cs
 C:\Users\vogia\Documents\GitHub\BRTF_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.csproj.AssemblyReference.cache
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\MailKit.dll
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\MimeKit.dll
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPassword.cshtml.g.cs
+C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\Index.cshtml.g.cs
