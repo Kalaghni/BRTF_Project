@@ -801,7 +801,6 @@ C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\net
 C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.RazorAssemblyInfo.cs
 C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\staticwebassets\BRTF_Booking.StaticWebAssets.Manifest.cache
 C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\staticwebassets\BRTF_Booking.StaticWebAssets.xml
-C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\scopedcss\bundle\BRTF_Booking.styles.css
 C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.TagHelpers.input.cache
 C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.TagHelpers.output.cache
 C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\BRTF_Booking.RazorCoreGenerate.cache
@@ -1416,3 +1415,8 @@ C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\net
 C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
 C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPassword.cshtml.g.cs
 C:\Users\thesa\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\Index.cshtml.g.cs
+C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\MailKit.dll
+C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\MimeKit.dll
+C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPassword.cshtml.g.cs
+C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\Index.cshtml.g.cs

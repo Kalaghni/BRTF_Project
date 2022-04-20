@@ -14,7 +14,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.21");
+                .HasAnnotation("ProductVersion", "3.1.23");
 
             modelBuilder.Entity("BRTF_Booking.Models.Admin", b =>
                 {
@@ -266,6 +266,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
+                    b.Property<bool?>("Invisible")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LName")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -279,9 +282,6 @@ namespace BRTF_Booking.Data.BRTFMigrations
 
                     b.Property<int?>("ProgramTermID")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("StudentID")
                         .IsRequired()

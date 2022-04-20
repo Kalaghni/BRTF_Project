@@ -34,8 +34,8 @@ namespace BRTF_Booking.Models
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Last name need to be between 2 and 100 characters!")]
         public string LName { get; set; }
 
-        [Display(Name = "Role")]
-        public string Role { get; set; }
+        [Display(Name = "Invisible")]
+        public bool? Invisible { get; set; }
 
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Email is required!")]

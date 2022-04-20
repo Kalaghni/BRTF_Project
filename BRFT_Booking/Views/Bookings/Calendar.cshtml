@@ -57,6 +57,8 @@
 
 
     <script type="text/javascript">
+        var termStart = "";
+        var termEnd = "";
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -72,7 +74,7 @@
                 selectable: true,
                 editable: false,
                 dateClick: function (info) {
-                    location.href = '@Url.RouteUrl(new { action = "Request", controller = "Bookings"})';
+                    location.href = '@Url.RouteUrl(new { action = "Request", controller = "Bookings"})' + "?date=" + info.dateStr;
                 },
                 eventDragStop: false@*function (info) {
                     const myJSON = JSON.stringify(info.event);
@@ -85,7 +87,23 @@
                     });
                 }*@
             });
-            calendar.render();
+            $.getJSON("/Bookings/GetSettings", function (data) {
+                termStart = data.termStart;
+                termEnd = data.termEnd;
+            }).success(function (data) {
+                calendar.addEventSource(
+                    [
+                        {
+                            start: termStart,
+                            end: termEnd,
+                            display: 'inverse-background',
+                            backgroundColor: 'red'
+                        }
+                    ]
+                );
+                calendar.render();
+            });
+            
         });
     </script>
 }

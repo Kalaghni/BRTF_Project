@@ -298,7 +298,6 @@ namespace BRTF_Booking.Controllers
             else
             {
                 PopulateDropDownLists();
-
                 return View();
             }
         }
@@ -317,6 +316,7 @@ namespace BRTF_Booking.Controllers
             {
                 if (ModelState.IsValid)
                 {
+
                     //booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
                     booking.BookingRequested = DateTime.Today;
                     _context.Add(booking);
@@ -612,12 +612,29 @@ namespace BRTF_Booking.Controllers
         }
 
         // GET: Bookings/Request
-        public new IActionResult Request()
+        public new IActionResult Request(int? areaID, string? date)
         {
             ViewDataReturnURL();
 
-            ViewData["AreaID"] = AreaSelectList();
-            return View();
+            if (areaID != null)
+            {
+                ViewData["DateClicked"] = DateTime.Today.ToString("yyyy-MM-dd");
+                ViewData["AreaID"] = AreaSelectList(areaID);
+                ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.AreaID == areaID), "ID", "Name");
+                return View();
+            }
+            else if (date != null)
+            {
+                ViewData["DateClicked"] = date;
+                ViewData["AreaID"] = AreaSelectList();
+                return View();
+            }
+            else
+            {
+                ViewData["DateClicked"] = DateTime.Today.ToString("yyyy-MM-dd");
+                ViewData["AreaID"] = AreaSelectList();
+                return View();
+            }
         }
 
         // POST: Bookings/Request
@@ -700,7 +717,38 @@ namespace BRTF_Booking.Controllers
             return new SelectList(areas.OrderBy(d => d.Name), "ID", "Name");
         }
 
+        private SelectList AreaSelectList(int? id)
+        {
+            int groupID = _context.Users
+                        .Include(u => u.ProgramTerm)
+                        .ThenInclude(u => u.ProgramDetail)
+                        .ThenInclude(u => u.ProgramTermGroups)
+                        .AsNoTracking()
+                        .Where(u => u.Email == User.Identity.Name)
+                        .FirstOrDefault().ProgramTerm.ID;
 
+
+
+            List<Area> areas = new List<Area>();
+
+            foreach (ProgramTermGroupArea pGroupArea in _context.ProgramTermGroupAreas.Include(p => p.Area).Include(p => p.ProgramTermGroup))
+            {
+                if (pGroupArea.ID == groupID)
+                {
+                    areas.Add(_context.Areas.FindAsync(pGroupArea.AreaID).Result);
+                }
+            }
+            foreach (Area area in _context.Areas)
+            {
+                if (!areas.Contains(area) && !_context.ProgramTermGroupAreas.Where(p => p.AreaID == area.ID).Any())
+                {
+                    areas.Add(area);
+                }
+            }
+
+            return new SelectList(areas.OrderBy(d => d.Name), "ID", "Name", id);
+
+        }
         private SelectList RoomCreateSelectList(int? AreaID, int? selectedId)
         {
             var rooms = _context.Rooms.Where(r => r.AreaID == AreaID);
@@ -857,6 +905,8 @@ namespace BRTF_Booking.Controllers
             var settings = _context.SettingsViewModels.First();
             settings.OfficeStartHours = DateTime.Parse(settings.OfficeStartHours).ToString("HH:mm");
             settings.OfficeEndHours = DateTime.Parse(settings.OfficeEndHours).ToString("HH:mm");
+            settings.TermStart = DateTime.Parse(settings.TermStart).ToString("yyyy-MM-dd");
+            settings.TermEnd = DateTime.Parse(settings.TermEnd).ToString("yyyy-MM-dd");
 
             return Json(settings);
         }

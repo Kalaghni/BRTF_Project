@@ -66,6 +66,7 @@ namespace BRTF_Booking.Controllers
                         .ThenInclude(u => u.ProgramTermGroups)
                         select u;
 
+            users = users.Where(u => u.Invisible != true);
 
             if (!String.IsNullOrEmpty(SearchName))
             {
@@ -379,8 +380,10 @@ namespace BRTF_Booking.Controllers
             ViewDataReturnURL();
             int strTemp = Convert.ToInt32(id);
             var user = await _context.Users.FindAsync(id);
+            var userToDelete = _identityContext.Users.Where(u => u.Email == user.Email).First();
             var deleteTerm = _context.ProgramTerms.FirstOrDefault(p => p.UserID == strTemp);
             var deleteBooking = _context.Bookings.Where(p => p.UserID == strTemp);
+            
 
             try
             {
@@ -395,6 +398,7 @@ namespace BRTF_Booking.Controllers
                     _context.Bookings.Remove(delete);
                 }
                 //await _userManager.DeleteAsync(_userManager.FindByEmailAsync(user.Email).Result);
+                await _userManager.DeleteAsync(userToDelete);
                 _context.Users.Remove(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

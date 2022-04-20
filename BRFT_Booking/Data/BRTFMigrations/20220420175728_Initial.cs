@@ -76,7 +76,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     FName = table.Column<string>(maxLength: 50, nullable: false),
                     MName = table.Column<string>(nullable: true),
                     LName = table.Column<string>(maxLength: 100, nullable: false),
-                    Role = table.Column<string>(nullable: true),
+                    Invisible = table.Column<bool>(nullable: true),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: true),

@@ -34,19 +34,22 @@ namespace BRTF_Booking.Data
 
             foreach (User student in students)
             {
-                if (userManager.FindByEmailAsync(student.Email).Result == null)
+                if (student.Invisible != true)
                 {
-                    IdentityUser user = new IdentityUser
+                    if (userManager.FindByEmailAsync(student.Email).Result == null)
                     {
-                        UserName = student.Email,
-                        Email = student.Email
-                    };
+                        IdentityUser user = new IdentityUser
+                        {
+                            UserName = student.Email,
+                            Email = student.Email
+                        };
 
-                    IdentityResult result = userManager.CreateAsync(user, "password").Result;
+                        IdentityResult result = userManager.CreateAsync(user, "password").Result;
 
-                    if (result.Succeeded)
-                    {
-                        userManager.AddToRoleAsync(user, "Student").Wait();
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRoleAsync(user, "Student").Wait();
+                        }
                     }
                 }
             }

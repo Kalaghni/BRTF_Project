@@ -72,7 +72,6 @@ namespace BRTF_Booking.Data
                          LName = "Al-Bahrini",
                          Email = "cstevens@ncstudents.niagaracollege.ca"
                      },
-
                      new User
                      {
                          StudentID = "9311011",
@@ -1289,6 +1288,22 @@ namespace BRTF_Booking.Data
                             Role = "Admin"
                         });
                     context.SaveChanges();
+                }
+                foreach (Admin admin in context.Admins)
+                {
+                    if (!context.Users.Where(u => u.Email == admin.Email).Any())
+                    {
+                        context.Users.Add(
+                            new User
+                            {
+                                StudentID = string.Concat(Enumerable.Repeat("0", 7 - admin.ID.ToString().Length)) + admin.ID,
+                                FName = admin.FName,
+                                LName = admin.LName,
+                                Invisible = true,
+                                Email = admin.Email
+                            });
+                        context.SaveChanges();
+                    }
                 }
             }
         }

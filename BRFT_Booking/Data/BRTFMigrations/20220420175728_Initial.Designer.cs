@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Booking.Data.BRTFMigrations
 {
     [DbContext(typeof(BRTFContext))]
-    [Migration("20220405192407_Initial")]
+    [Migration("20220420175728_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.21");
+                .HasAnnotation("ProductVersion", "3.1.23");
 
             modelBuilder.Entity("BRTF_Booking.Models.Admin", b =>
                 {
@@ -268,6 +268,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
+                    b.Property<bool?>("Invisible")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LName")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -281,9 +284,6 @@ namespace BRTF_Booking.Data.BRTFMigrations
 
                     b.Property<int?>("ProgramTermID")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("StudentID")
                         .IsRequired()

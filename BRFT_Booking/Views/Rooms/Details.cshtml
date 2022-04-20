@@ -35,7 +35,7 @@
 <hr />
 <h1>Bookings</h1>
 <p>
-    <a asp-action="Request">Request Booking</a>
+    <a asp-controller="Bookings" asp-route-areaID="@Model.AreaID" asp-route-roomID="@Model.ID" asp-action="Request">Request Booking</a>
 </p>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
 <div class="container">
