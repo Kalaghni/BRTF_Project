@@ -132,8 +132,8 @@
                                 <p class="card-text">
                                     <strong>Area:</strong> @Html.DisplayFor(modelItem => item.Room.Area.Name)<br />
                                     <strong>Room:</strong> @Html.DisplayFor(modelItem => item.Room.Name)<br />
-                                    <strong>Date:</strong> @Convert.ToString(string.Format("{0:MMMM dd, yyyy HH:mm tt}", item.StartDate))<br />
-                                    <strong>Duration:</strong> @Html.DisplayFor(modelItem => item.Duration)<br />
+                                    <strong>Date:</strong> @Convert.ToString(string.Format("{0:MMMM dd, yyyy hh:mm tt}", item.StartDate))<br />
+                                    <strong>Duration:</strong> @Html.DisplayFor(modelItem => item.Duration.TotalHours)<br />
                                     <strong>Status:</strong> @Html.DisplayFor(modelItem => item.Status)<br />
                                 </p>
                                 <div class="card-footer">
@@ -162,9 +162,8 @@
         <thead>
             <tr>
                 <th>
-                    <label>Select All</label>
-                    <br />
-                    <input style="margin:auto" type="checkbox" name="checkBoxAll" id="checkBoxAll" />
+                    <label for="checkBoxAll">Select All<input style="float: right;" type="checkbox" name="checkBoxAll" id="checkBoxAll" title="Select All" />&nbsp;</label>
+                    
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="User" class="btn btn-link" />
@@ -179,7 +178,7 @@
                     <input type="submit" name="actionButton" value="Date" class="btn btn-link" />
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Duration)
+                    @Html.DisplayNameFor(item => item.Duration)
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Status" class="btn btn-link" />
@@ -192,7 +191,7 @@
             {
                 <tr>
                     <td>
-                        <input type="checkbox" name="chkDelete" value="@item.ID" class="custom-checkbox chkCheckBoxId" />
+                        <input type="checkbox" style="float: right;" name="chkDelete" value="@item.ID" class="custom-checkbox chkCheckBoxId" />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.User.FullName)
@@ -204,10 +203,10 @@
                         @Html.DisplayFor(modelItem => item.Room.Name)
                     </td>
                     <td>
-                        @Convert.ToString(string.Format("{0:MMMM dd, yyyy HH:mm tt}", item.StartDate))
+                        @Convert.ToString(string.Format("{0:MMMM dd, yyyy hh:mm tt}", item.StartDate))
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Duration)
+                        @Html.DisplayFor(modelItem => item.Duration.TotalHours)
                     </td>
                     <th>
                         @Html.DisplayFor(modelItem => item.Status)

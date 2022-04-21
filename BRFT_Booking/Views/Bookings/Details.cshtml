@@ -62,7 +62,7 @@
         <a asp-route-id="@Model.ID" asp-action="CreateRepeat">Repeat Booking</a>
         <br />
         <br />
-        <a href='@ViewData["returnURL"]'>Back to List</a>
+        <a href="@ViewData["returnURL"]">Back to List</a>
     }
     @if (User.IsInRole("Student"))
     {

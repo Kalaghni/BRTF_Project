@@ -345,6 +345,7 @@ namespace BRTF_Booking.Controllers
             }
 
             var booking = await _context.Bookings
+                .Include(b => b.User)
                 .Include(b => b.Room)
                 .ThenInclude(b => b.Area)
                 .Where(b => b.ID == id)
@@ -353,7 +354,12 @@ namespace BRTF_Booking.Controllers
             {
                 return NotFound();
             }
-            PopulateDropDownLists();
+            ViewData["UserID"] = new SelectList(_context.Users.OrderBy(u => u.FName), "ID", "FullName", booking.UserID);
+            ViewData["AreaID"] = IndexedAreaSelectList(booking.Room.AreaID);
+            ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.AreaID == booking.Room.AreaID), "ID", "Name", booking.RoomID);
+            ViewData["BookingRequested"] = booking.BookingRequested.ToString("yyyy-MM-dd");
+            ViewData["StartDate"] = booking.StartDate.ToString("yyyy-MM-ddTHH:mm");
+            ViewData["EndDate"] = booking.EndDate.ToString("yyyy-MM-ddTHH:mm");
             return View(booking);
         }
 
@@ -879,6 +885,13 @@ namespace BRTF_Booking.Controllers
         }
 
 
+        private SelectList IndexedAreaSelectList(int areaID)
+        {
+            var areas = _context.Areas;
+
+            return new SelectList(areas.OrderBy(d => d.Name), "ID", "Name", areaID);
+        }
+
         private SelectList AreaSelectList()
         {
             int groupID = _context.Users
@@ -1114,6 +1127,51 @@ namespace BRTF_Booking.Controllers
                 .Include(b => b.User)
                 .Include(b => b.Room)
                 .Where(b => b.Room.ID == roomID);
+
+            foreach (Booking booking in bookings)
+            {
+                string color = "";
+
+                if (booking.Status == "Accepted")
+                {
+                    color = "#44CF6C";
+                }
+                else if (booking.Status == "Declined")
+                {
+                    color = "#D52941";
+                }
+                else
+                {
+                    color = "#E2C044";
+                }
+
+                events.Add(new EventViewModel()
+                {
+                    id = booking.ID,
+                    title = booking.User.FullName,
+                    start = booking.StartDate.ToString(),
+                    end = booking.EndDate.ToString(),
+                    url = Url.RouteUrl(new { Action = "Details", Controller = "Bookings" }) + $"/{booking.ID}",
+                    borderColor = color,
+                    backgroundColor = color,
+                    allDay = false
+                });
+
+            }
+            return Json(events.ToArray());
+        }
+
+        [HttpGet]
+        public JsonResult GetEditRoomEvents(int? roomID, int? bookingID)
+        {
+            var viewModel = new EventViewModel();
+            var events = new List<EventViewModel>();
+
+            var bookings = _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .Where(b => b.Room.ID == roomID && b.ID != bookingID);
+
 
             foreach (Booking booking in bookings)
             {

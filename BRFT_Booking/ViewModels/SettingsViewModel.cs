@@ -14,5 +14,6 @@ namespace BRTF_Booking.ViewModels
         public string EmailExtension { get; set; }
         public string TermStart { get; set; }
         public string TermEnd { get; set; }
+        public bool Weekends { get; set; }
     }
 }

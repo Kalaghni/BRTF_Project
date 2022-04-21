@@ -84,7 +84,85 @@
     
     <script type="text/javascript">
 
-        var limit,start,end,calendarLoaded=!1,termEnd="",termStart="",firstDay="@ViewBag.DateClicked";console.log(firstDay),$("#AreaID").change(function(){calendarLoaded||($.getJSON("/Bookings/GetSettings",function(e){start=e.officeStartHours,end=e.officeEndHours,termStart=e.termStart,termEnd=e.termEnd,$("#officeHours").text("Booking is only available Mon-Friday between "+e.officeStartHours+" to "+e.officeEndHours),$("#termDates").text("Current term is "+e.termStart+" to "+e.termEnd)}).success($("#calendar").fullCalendar({header:{left:"prev,next today",center:"title"},defaultView:"agendaWeek",allDayText:"Term",firstDay:0,defaultDate:firstDay,slotMinutes:60,selectable:!0,selectOverlap:function(e,t){return"inverse-background"==e.rendering},businessHours:{dow:[1,2,3,4,5],start:start,end:end},selectConstraint:{dow:[1,2,3,4,5],start:start,end:end},selectAllow:function(e){var t=moment.duration(e.end.diff(e.start)),r=60*parseInt(start.slice(0,2))+parseInt(start.slice(3,5)),a=60*parseInt(end.slice(0,2))+parseInt(end.slice(3,5)),n=60*(new Date(e.start).getHours()+4)+new Date(e.start).getMinutes()-30,o=60*(new Date(e.end).getHours()+4)+new Date(e.end).getMinutes()-30;return $("#hours-counter").text("Hours Selected: "+t.asHours()),e.start<Date.now()?($("#hours-counter").text(""),$("#error-msg").text("Selection cannot be in the past"),!1):t.asMinutes()>60*limit?($("#hours-counter").text(""),$("#error-msg").text("Selection must be less than "+limit+" hours"),!1):e.start<Date.parse(termStart)|e.end<Date.parse(termStart)|e.end>Date.parse(termEnd)|e.start>Date.parse(termEnd)?($("#hours-counter").text(""),$("#error-msg").text("Selection must be within the current term"),!1):n<r|o<r|n>a|o>a?($("#hours-counter").text(""),$("#error-msg").text("Selection must be within office hours"),!1):0==new Date(e.start).getDay()|6==new Date(e.start).getDay()|0==new Date(e.end).getDay()|6==new Date(e.end).getDay()?(console.log(new Date(e.start).getDay()),$("#hours-counter").text(""),$("#error-msg").text("Selection cannot be on weekends"),!1):void $("#error-msg").text("")},select:function(e,t){$("#StartDate").val(e.format()),$("#EndDate").val(t.format())},selectHelper:!0,unselectAuto:!1})),calendarLoaded=!0),$("#calendar").fullCalendar("unselect"),$("#hours-counter").text(""),$("#error-msg").text("");var e="/Bookings/GetCreateRooms/"+$("#AreaID").val();refreshDDL("RoomID",e,!0),$.getJSON(e,function(e){var t=e[0].value;$.getJSON("/Rooms/GetRoomRules?roomID="+t,function(e){null!=e.limit?($("#roomTitle").text("Click and Drag to select an available time block up to "+e.limit+" hours"),$("#limit").val(e.limit),limit=e.limit):$("#roomTitle").text("Click and Drag to select an available time block")});var r="/Bookings/GetRoomEvents?roomID="+t;$.getJSON(r,function(e){$("#calendar").fullCalendar("removeEvents"),$("#calendar").fullCalendar("addEventSource",e),$("#calendar").fullCalendar("addEventSource",[{start:termStart,end:termEnd,rendering:"inverse-background",backgroundColor:"red"}])})})}),$("#RoomID").change(function(){var e="/Bookings/GetRoomEvents?roomID="+$("#RoomID").val();$.getJSON(e,function(e){$("#calendar").fullCalendar("removeEvents"),$("#calendar").fullCalendar("addEventSource",e)}),$("#calendar").fullCalendar("unselect"),$("#hours-counter").text(""),$("#error-msg").text("")}),document.addEventListener("DOMContentLoaded",()=>{""!=document.getElementById("RoomID").value&&($("#AreaID").trigger("change"),$("#RoomID").trigger("change"))});
+        var limit, start = "",
+            end = "",
+            calendarLoaded = !1,
+            termEnd = "",
+            termStart = "",
+            firstDay = "@ViewBag.DateClicked", weekends = false;
+    $("#AreaID").change(function() {
+        calendarLoaded || ($.getJSON("/Bookings/GetSettings", function(e) {
+            start = e.officeStartHours, end = e.officeEndHours, termStart = e.termStart, termEnd = e.termEnd, weekends = e.weekends, $("#officeHours").text("Booking is only available " + Date.parse(start).getTime() + " to " + Date.parse(end).getTime()), $("#termDates").text("Current term is " + e.termStart + " to " + e.termEnd)
+        }).success($("#calendar").fullCalendar({
+            header: {
+                left: "prev,next today",
+                center: "title"
+            },
+            defaultView: "agendaWeek",
+            weekends: weekends,
+            minTime: start,
+            maxTime: end,
+            height: "auto",
+            allDayText: "Term",
+            firstDay: 0,
+            defaultDate: firstDay,
+            slotMinutes: 60,
+            selectable: !0,
+            selectOverlap: function(e, t) {
+                return "inverse-background" == e.rendering || "background" == e.rendering;
+            },
+            selectConstraint: {
+                dow: [1, 2, 3, 4, 5],
+                start: start,
+                end: end
+            },
+            selectAllow: function(e) {
+                var t = moment.duration(e.end.diff(e.start)),
+                    r = 60 * parseInt(start.slice(0, 2)) + parseInt(start.slice(3, 5)),
+                    a = 60 * parseInt(end.slice(0, 2)) + parseInt(end.slice(3, 5)),
+                    n = 60 * (new Date(e.start).getHours() + 4) + new Date(e.start).getMinutes(),
+                    o = 60 * (new Date(e.end).getHours() + 4) + new Date(e.end).getMinutes();
+                return $("#hours-counter").text("Hours Selected: " + t.asHours()), e.start < Date.now() ? ($("#hours-counter").text(""), $("#error-msg").text("Selection cannot be in the past"), !1) : t.asMinutes() > 60 * limit ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be less than " + limit + " hours"), !1) : e.start < Date.parse(termStart) | e.end < Date.parse(termStart) | e.end > Date.parse(termEnd) | e.start > Date.parse(termEnd) ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be within the current term"), !1) : n < r | o < r | n > a | o > a ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be within office hours"), !1) : 0 == new Date(e.start).getDay() | 6 == new Date(e.start).getDay() | 0 == new Date(e.end).getDay() | 6 == new Date(e.end).getDay() ? (console.log(new Date(e.start).getDay()), $("#hours-counter").text(""), $("#error-msg").text("Selection cannot be on weekends"), !1) : void $("#error-msg").text("")
+            },
+            select: function(e, t) {
+                $("#StartDate").val(e.format()), $("#EndDate").val(t.format())
+            },
+            selectHelper: !0,
+            unselectAuto: !1
+        })), calendarLoaded = !0), $("#calendar").fullCalendar("unselect"), $("#hours-counter").text(""), $("#error-msg").text("");
+        var e = "/Bookings/GetCreateRooms/" + $("#AreaID").val();
+        refreshDDL("RoomID", e, !0), $.getJSON(e, function(ee) {
+            var t = ee[0].value;
+            $.getJSON("/Rooms/GetRoomRules?roomID=" + t, function(e) {
+                null != e.limit ? ($("#roomTitle").text("Click and Drag to select an available time block up to " + e.limit + " hours"), $("#limit").val(e.limit), limit = e.limit) : $("#roomTitle").text("Click and Drag to select an available time block")
+            });
+            var r = "/Bookings/GetRoomEvents?roomID=" + t;
+            $.getJSON(r, function(e) {
+                $("#calendar").fullCalendar("removeEvents"), $("#calendar").fullCalendar("addEventSource", e), $("#calendar").fullCalendar("addEventSource", [{
+                    start: termStart,
+                    end: termEnd,
+                    rendering: "inverse-background",
+                    backgroundColor: "red"
+                }]),
+                    $("#calendar").fullCalendar("addEventSource", [{
+                    start: start,
+                    end: end,
+                    rendering: "inverse-background",
+                    backgroundColor: "grey"
+                }])
+            })
+        })
+    }), $("#RoomID").change(function() {
+        var e = "/Bookings/GetRoomEvents?roomID=" + $("#RoomID").val();
+        $.getJSON(e, function(e) {
+            $("#calendar").fullCalendar("removeEvents"), $("#calendar").fullCalendar("addEventSource", e)
+        }), $("#calendar").fullCalendar("unselect"), $("#hours-counter").text(""), $("#error-msg").text("")
+    }), document.addEventListener("DOMContentLoaded", () => {
+        $.getJSON("/Bookings/GetSettings", function (e) {
+            start = e.officeStartHours, end = e.officeEndHours, termStart = e.termStart, termEnd = e.termEnd, $("#officeHours").text("Booking is only available " + start + " to " + end), $("#termDates").text("Current term is " + e.termStart + " to " + e.termEnd)
+        }),
+        "" != document.getElementById("RoomID").value && ($("#AreaID").trigger("change"), $("#RoomID").trigger("change"))
+    });
     </script>
 
 }

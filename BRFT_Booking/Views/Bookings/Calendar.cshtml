@@ -40,8 +40,9 @@
             <a asp-action="DownloadUserBookings" asp-route-userID="@Model.Where(u => u.Email == User.Identity.Name).First().ID" class="btn btn-primary-special">Download Bookings</a>
         </div>
     </div>
-<p class="text-danger">@TempData["Message"]</p>
 </p>
+<p class="text-danger">@TempData["Message"]</p>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
 <div class="card md-sm-3">
     <div class="card-header"></div>

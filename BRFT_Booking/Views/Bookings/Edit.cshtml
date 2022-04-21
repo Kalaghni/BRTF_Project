@@ -3,16 +3,17 @@
 @{
     ViewData["Title"] = "Edit";
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });</script>
+
 <style>
     .btn-primary:hover {
         background-color: #21db21;
         border-color: #1dc41d;
+    }
+</style>
+<style>
+    .card-body {
+        flex: 1 1 auto;
+        padding: .5rem;
     }
 </style>
 
@@ -43,17 +44,17 @@
 
             <div class="form-group">
                 <label asp-for="BookingRequested" class="control-label"></label>
-                <input asp-for="BookingRequested" data-toggle="tooltip" title="Time the booking was created" class="form-control" />
+                <input asp-for="BookingRequested" data-toggle="tooltip" title="Time the booking was created" value="@ViewBag.BookingRequested" class="form-control" />
                 <span asp-validation-for="BookingRequested" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" id="StartDate" name="StartDate" data-toggle="tooltip" title="Select a specific start time and date in 30 minute increments" class="form-control" />
+                <input asp-for="StartDate" id="StartDate" name="StartDate" data-toggle="tooltip" title="Select a specific start time and date in 30 minute increments" value="@ViewBag.StartDate" class="form-control" readonly />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" id="EndDate" name="EndDate" data-toggle="tooltip" title="Select a specific start time and date in 30 minute increments" class="form-control" />
+                <input asp-for="EndDate" id="EndDate" name="EndDate" data-toggle="tooltip" title="Select a specific start time and date in 30 minute increments" value="@ViewBag.EndDate" class="form-control" readonly />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -65,11 +66,23 @@
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
-
+    </div>
+    <div class="col-md-8">
+        <div class="card md-sm-3">
+            <div class="card-body">
+                <label class="control-label" id="officeHours"></label>
+                <label class="control-label" id="termDates"></label>
+                <label class="control-label" id="roomTitle"></label>
+                <div id='calendar'></div>
+                <h3 id="hours-counter"></h3>
+                <h3 style="color: #FCA17D;" id="error-msg"></h3>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -77,21 +90,86 @@
     <a href='@ViewData["returnURL"]'>Back to List</a>
 </div>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
+
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/mvc/4.0/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js"></script>
 
     <script src="~/js/refreshDDL.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var selectedBooking = $("#BookingID").val();
-            var URL = "/Bookings/GetEditRooms/" + selectedBooking;
-            refreshDDL('RoomID', URL, true);
-        });
 
-        $('#AreaID').change(function () {
-            var selectedArea = $("#AreaID").val();
-            var URL = "/Bookings/GetCreateRooms/" + selectedArea;
-            refreshDDL('RoomID', URL, true);
+    <script type="text/javascript">
+var limit, start, end, calendarLoaded = !1,
+    termEnd = "",
+    termStart = "",
+    weekends = false;
+$("#AreaID").change(function() {
+    calendarLoaded || ($.getJSON("/Bookings/GetSettings", function(e) {
+        start = e.officeStartHours, end = e.officeEndHours, termStart = e.termStart, termEnd = e.termEnd, weekends = e.weekends, $("#officeHours").text("Booking is only available Mon-Friday between " + start + " to " + end), $("#termDates").text("Current term is " + e.termStart + " to " + e.termEnd)
+    }).success($("#calendar").fullCalendar({
+        header: {
+            left: "prev,next today",
+            center: "title"
+        },
+        defaultView: "agendaWeek",
+        allDayText: "Term",
+        weekends: weekends,
+        minTime: start,
+        maxTime: end,
+        firstDay: 0,
+        slotMinutes: 60,
+        selectable: !0,
+        selectOverlap: function(e, t) {
+            return "inverse-background" == e.rendering
+        },
+        selectAllow: function(e) {
+            var t = moment.duration(e.end.diff(e.start)),
+                r = 60 * parseInt(start.slice(0, 2)) + parseInt(start.slice(3, 5)),
+                a = 60 * parseInt(end.slice(0, 2)) + parseInt(end.slice(3, 5)),
+                n = 60 * (new Date(e.start).getHours() + 4) + new Date(e.start).getMinutes(),
+                o = 60 * (new Date(e.end).getHours() + 4) + new Date(e.end).getMinutes();
+            return $("#hours-counter").text("Hours Selected: " + t.asHours()), e.start < Date.now() ? ($("#hours-counter").text(""), $("#error-msg").text("Selection cannot be in the past"), !1) : t.asMinutes() > 60 * limit ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be less than " + limit + " hours"), !1) : e.start < Date.parse(termStart) | e.end < Date.parse(termStart) | e.end > Date.parse(termEnd) | e.start > Date.parse(termEnd) ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be within the current term"), !1) : n < r | o < r | n > a | o > a ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be within office hours"), !1) : 0 == new Date(e.start).getDay() | 6 == new Date(e.start).getDay() | 0 == new Date(e.end).getDay() | 6 == new Date(e.end).getDay() ? (console.log(new Date(e.start).getDay()), $("#hours-counter").text(""), $("#error-msg").text("Selection cannot be on weekends"), !1) : void $("#error-msg").text("")
+        },
+        select: function(e, t) {
+            $("#StartDate").val(e.format()), $("#EndDate").val(t.format())
+        },
+        selectHelper: !0,
+        unselectAuto: !1
+    })), calendarLoaded = !0), $("#calendar").fullCalendar("unselect"), $("#hours-counter").text(""), $("#error-msg").text("");
+    var e = "/Bookings/GetCreateRooms/" + $("#AreaID").val();
+    refreshDDL("RoomID", e, !0), $.getJSON(e, function(e) {
+        var t = e[0].value;
+        $.getJSON("/Rooms/GetRoomRules?roomID=" + t, function(e) {
+            null != e.limit ? ($("#roomTitle").text("Click and Drag to select an available time block up to " + e.limit + " hours"), $("#limit").val(e.limit), limit = e.limit) : $("#roomTitle").text("Click and Drag to select an available time block")
         });
+        var r = "/Bookings/GetEditRoomEvents?roomID=" + t + "?bookingID=" + document.getElementById("BookingID").value;
+        $.getJSON(r, function(e) {
+            $("#calendar").fullCalendar("removeEvents"), $("#calendar").fullCalendar("addEventSource", e), $("#calendar").fullCalendar("addEventSource", [{
+                start: termStart,
+                end: termEnd,
+                rendering: "inverse-background",
+                backgroundColor: "red"
+            }])
+        })
+    })
+}), $("#RoomID").change(function() {
+    var e = "/Bookings/GetRoomEvents?roomID=" + $("#RoomID").val();
+    $.getJSON(e, function(e) {
+        $("#calendar").fullCalendar("removeEvents"), $("#calendar").fullCalendar("addEventSource", e)
+    }), $("#calendar").fullCalendar("unselect"), $("#hours-counter").text(""), $("#error-msg").text("")
+}), document.addEventListener("DOMContentLoaded", () => {
+    $.getJSON("/Bookings/GetSettings", function (e) {
+        start = e.officeStartHours, end = e.officeEndHours, termStart = e.termStart, termEnd = e.termEnd, weekends = e.weekends, $("#officeHours").text("Booking is only available Mon-Friday between " + start + " to " + end), $("#termDates").text("Current term is " + e.termStart + " to " + e.termEnd)
+    }),
+    "" != document.getElementById("RoomID").value && ($("#AreaID").trigger("change"), $("#RoomID").trigger("change"), $("#calendar").fullCalendar("select", "@ViewBag.StartDate", "@ViewBag.EndDate"))
+});
     </script>
+
 }
