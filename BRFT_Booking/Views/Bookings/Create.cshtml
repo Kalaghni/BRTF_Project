@@ -3,13 +3,19 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });</script>
 <style>
     .btn-primary:hover {
         background-color: #21db21;
         border-color: #1dc41d;
     }
 </style>
+
 
 <h1>Create New Booking</h1>
 <hr />
@@ -19,81 +25,81 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="User" class="control-label"></label>
-                <select asp-for="UserID" class="form-control" asp-items="ViewBag.UserID"></select>
+                <select asp-for="UserID" class="form-control" data-toggle="tooltip" title="User that is creating the booking" asp-items="ViewBag.UserID"></select>
             </div>
             <div class="form-group">
                 <label class="control-label">Area</label>
-                <select asp-for="Room.AreaID" id="AreaID" name="AreaID" class="form-control" asp-items="ViewBag.AreaID">
+                <select asp-for="Room.AreaID" id="AreaID" data-toggle="tooltip" title="Select an area" name="AreaID" class="form-control" asp-items="ViewBag.AreaID">
                     <option>Select An Area:</option>
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="Room" class="control-label"></label>
-                <select asp-for="RoomID" id="RoomID" name="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+                <select asp-for="RoomID" id="RoomID" name="RoomID" data-toggle="tooltip" title="Select a room in the corresponding area" class="form-control" asp-items="ViewBag.RoomID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" id="StartDate" name="StartDate" class="form-control" readonly/>
+                <input asp-for="StartDate" id="StartDate" data-toggle="tooltip" title="Select a Time through the Calander and specifc dates and time will appear here" name="StartDate" class="form-control" readonly />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             @*<div class="form-group">
-                <label asp-for="StartTime" class="control-label"></label>
-                <select id="StartTime" name="StartTime" class="form-control">
-                    <option value="0:00">Select...</option>
-                    <option value="8:30">8:30 AM</option>
-                    <option value="9:00">9:00 AM</option>
-                    <option value="9:30">9:30 AM</option>
-                    <option value="10:00">10:00 AM</option>
-                    <option value="10:30">10:30 AM</option>
-                    <option value="11:00">11:00 AM</option>
-                    <option value="11:30">11:30 AM</option>
-                    <option value="12:00">12:00 PM</option>
-                    <option value="12:30">12:30 PM</option>
-                    <option value="13:00">1:00 PM</option>
-                    <option value="13:30">1:30 PM</option>
-                    <option value="14:00">2:00 PM</option>
-                    <option value="14:30">2:30 PM</option>
-                    <option value="15:00">3:00 PM</option>
-                    <option value="15:30">3:30 PM</option>
-                    <option value="16:00">4:00 PM</option>
-                    <option value="16:30">4:30 PM</option>
-                    <option value="17:00">5:00 PM</option>
-                </select>
-                <span asp-validation-for="StartTime" class="text-danger"></span>
-            </div>*@
+                    <label asp-for="StartTime" class="control-label"></label>
+                    <select id="StartTime" name="StartTime" class="form-control">
+                        <option value="0:00">Select...</option>
+                        <option value="8:30">8:30 AM</option>
+                        <option value="9:00">9:00 AM</option>
+                        <option value="9:30">9:30 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="10:30">10:30 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="11:30">11:30 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                        <option value="12:30">12:30 PM</option>
+                        <option value="13:00">1:00 PM</option>
+                        <option value="13:30">1:30 PM</option>
+                        <option value="14:00">2:00 PM</option>
+                        <option value="14:30">2:30 PM</option>
+                        <option value="15:00">3:00 PM</option>
+                        <option value="15:30">3:30 PM</option>
+                        <option value="16:00">4:00 PM</option>
+                        <option value="16:30">4:30 PM</option>
+                        <option value="17:00">5:00 PM</option>
+                    </select>
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                </div>*@
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" id="EndDate" name="EndDate" class="form-control" readonly/>
+                <input asp-for="EndDate" id="EndDate" name="EndDate" data-toggle="tooltip" title="Select a Time through the Calander and specifc dates and time will appear here" class="form-control" readonly />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             @*<div class="form-group">
-                <label asp-for="EndTime" class="control-label"></label>
-                <select id="EndTime" name="EndTime" class="form-control">
-                    <option value="0:00">Select...</option>
-                    <option value="9:00">9:00 AM</option>
-                    <option value="9:30">9:30 AM</option>
-                    <option value="10:00">10:00 AM</option>
-                    <option value="10:30">10:30 AM</option>
-                    <option value="11:00">11:00 AM</option>
-                    <option value="11:30">11:30 AM</option>
-                    <option value="12:00">12:00 PM</option>
-                    <option value="12:30">12:30 PM</option>
-                    <option value="13:00">1:00 PM</option>
-                    <option value="13:30">1:30 PM</option>
-                    <option value="14:00">2:00 PM</option>
-                    <option value="14:30">2:30 PM</option>
-                    <option value="15:00">3:00 PM</option>
-                    <option value="15:30">3:30 PM</option>
-                    <option value="16:00">4:00 PM</option>
-                    <option value="16:30">4:30 PM</option>
-                    <option value="17:00">5:00 PM</option>
-                    <option value="17:30">5:30 PM</option>
-                </select>
-                <span asp-validation-for="EndTime" class="text-danger"></span>
-            </div>*@
+                    <label asp-for="EndTime" class="control-label"></label>
+                    <select id="EndTime" name="EndTime" class="form-control">
+                        <option value="0:00">Select...</option>
+                        <option value="9:00">9:00 AM</option>
+                        <option value="9:30">9:30 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="10:30">10:30 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="11:30">11:30 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                        <option value="12:30">12:30 PM</option>
+                        <option value="13:00">1:00 PM</option>
+                        <option value="13:30">1:30 PM</option>
+                        <option value="14:00">2:00 PM</option>
+                        <option value="14:30">2:30 PM</option>
+                        <option value="15:00">3:00 PM</option>
+                        <option value="15:30">3:30 PM</option>
+                        <option value="16:00">4:00 PM</option>
+                        <option value="16:30">4:30 PM</option>
+                        <option value="17:00">5:00 PM</option>
+                        <option value="17:30">5:30 PM</option>
+                    </select>
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>*@
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select id="Status" name="Status" class="form-control">
+                <select id="Status" name="Status" data-toggle="tooltip" title="Select the status of the booking request" class="form-control">
                     <option style="color: #44CF6C;" value="Accepted">Accepted</option>
                     <option style="color: #E2C044;" value="Waiting">Awaiting Approval</option>
                     <option style="color: #D52941;" value="Declined">Declined</option>

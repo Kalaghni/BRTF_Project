@@ -20,27 +20,27 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FName" class="control-label"></label>
-                <input asp-for="FName" class="form-control" />
+                <input asp-for="FName" data-toggle="tooltip" title="Admins first name" class="form-control" />
                 <span asp-validation-for="FName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LName" class="control-label"></label>
-                <input asp-for="LName" class="form-control" />
+                <input asp-for="LName"  data-toggle="tooltip" title="Admins last name" class="form-control" />
                 <span asp-validation-for="LName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <label asp-for="Email"class="control-label"></label>
+                <input asp-for="Email" data-toggle="tooltip" title="Email (Must be a Niagara College Email)" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label for="password" class="control-label">Password:</label>
+            <div data-toggle="tooltip" title="Admin Password"  class="form-group">
+                <label for="password"  class="control-label">Password:</label>
                 @Html.Password("password", null, new { @class = "form-control" })
-                <p class="text-danger">@TempData["Message"]</p>
+                <p class="text-danger" >@TempData["Message"]</p>
             </div>
             <div class="form-group">
                 <label asp-for="Role" class="control-label"></label>
-                <select id="Role" name="Role" class="form-control">
+                <select id="Role" data-toggle="tooltip" title="Select Admin Role controlling what they can and cannot access" name="Role" class="form-control">
                     <option value="Admin">Admin</option>
                     <option value="Top-Level Admin">Top-Level Admin</option>
                 </select>
@@ -63,3 +63,9 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });</script>

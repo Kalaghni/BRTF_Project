@@ -1,7 +1,7 @@
 ﻿@model BRTF_Booking.Models.Room
 
-@{ 
-    ViewData["Title"] = "Create"; 
+@{
+    ViewData["Title"] = "Create";
 }
 
 <style>
@@ -54,11 +54,11 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script>
-    $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });</script>
-}
 
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });</script>

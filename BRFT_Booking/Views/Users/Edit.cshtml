@@ -20,27 +20,27 @@
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="StudentID" class="control-label"></label>
-                <input asp-for="StudentID" data-toggle="tooltip" title="The Students ID" placeholder="Student ID" class="form-control" />
+                <input asp-for="StudentID" data-toggle="tooltip" title="The Students ID" placeholder="e.g 4265448" class="form-control" />
                 <span asp-validation-for="StudentID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FName" class="control-label"></label>
-                <input asp-for="FName" data-toggle="tooltip" title="First name of the student you are adding" placeholder="First Name" class="form-control" />
+                <input asp-for="FName" data-toggle="tooltip" title="First name of the student you are adding" placeholder="e.g John" class="form-control" />
                 <span asp-validation-for="FName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MName" class="control-label"></label>
-                <input asp-for="MName" data-toggle="tooltip" title="Middle name of the student you are adding" placeholder="Middle Name" class="form-control" />
+                <input asp-for="MName" data-toggle="tooltip" title="Middle name of the student you are adding" placeholder="e.g Frank" class="form-control" />
                 <span asp-validation-for="MName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LName" class="control-label"></label>
-                <input asp-for="LName" data-toggle="tooltip" title="Last name of the student you are adding" placeholder="Last Name" class="form-control" />
+                <input asp-for="LName" data-toggle="tooltip" title="Last name of the student you are adding" placeholder="e.g Doe" class="form-control" />
                 <span asp-validation-for="LName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="DateOfBirth" class="control-label">Date of Birth</label>
-                <input asp-for="DateOfBirth" type="date" data-toggle="tooltip" title="DateOfBirth" class="form-control" />
+                <input asp-for="DateOfBirth" type="date" data-toggle="tooltip" title="Date Of Birth" class="form-control" />
                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -57,3 +57,9 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });</script>

@@ -28,21 +28,21 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProgramDetail" class="control-label"></label>
-                <select asp-for="ProgramDetailID" class="form-control" data-toggle="tooltip" title="Choose Program" asp-items="ViewBag.ProgramDetailID"></select>
+                <select asp-for="ProgramDetailID" class="form-control" data-toggle="tooltip" title="Select Program" asp-items="ViewBag.ProgramDetailID"></select>
             </div>
             <div class="form-group">
                 <label asp-for="StrtLevel" class="control-label"></label>
-                <input asp-for="StrtLevel" class="form-control" />
+                <input asp-for="StrtLevel" data-toggle="tooltip" title="Select Starting Level" class="form-control" />
                 <span asp-validation-for="StrtLevel" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastLevel" class="control-label"></label>
-                <input asp-for="LastLevel" class="form-control" />
+                <input asp-for="LastLevel" data-toggle="tooltip" title="Is this the Last Level (Y = Yes, N = No)" class="form-control" />
                 <span asp-validation-for="LastLevel" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Term" class="control-label"></label>
-                <input asp-for="Term" class="form-control" />
+                <input asp-for="Term" data-toggle="tooltip" title="Select Term" class="form-control" />
                 <span asp-validation-for="Term" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -59,3 +59,9 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });</script>
