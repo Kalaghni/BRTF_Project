@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BRTF_Booking.Models.Booking>
+﻿@model IEnumerable<BRTF_Booking.Models.User>
 
 @{
     ViewData["Title"] = "Calendar";
@@ -32,7 +32,15 @@
 
 <h1>Bookings</h1>
 <p>
-    <a asp-action="Request" class="btn btn-primary-special">Request Booking</a>
+    <div class="row">
+        <div class="form-group col-md-2">
+            <a asp-action="Request" class="btn btn-primary-special">Request Booking</a>
+        </div>
+        <div class="form-group align-self-end">
+            <a asp-action="DownloadUserBookings" asp-route-userID="@Model.Where(u => u.Email == User.Identity.Name).First().ID" class="btn btn-primary-special">Download Bookings</a>
+        </div>
+    </div>
+<p class="text-danger">@TempData["Message"]</p>
 </p>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css">
 <div class="card md-sm-3">
@@ -103,7 +111,7 @@
                 );
                 calendar.render();
             });
-            
+
         });
     </script>
 }

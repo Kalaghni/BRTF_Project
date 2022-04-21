@@ -3,10 +3,16 @@
 @{
     ViewData["Title"] = "Delete";
 }
-
-<h1>Delete</h1>
-
-<h3>Are you sure you want to cancel this booking?</h3>
+@if (User.IsInRole("Student"))
+{
+    <h1>Cancel</h1>
+    <h3>Are you sure you want to cancel this booking?</h3>
+}
+else
+{
+    <h1>Delete</h1>
+    <h3>Are you sure you want to delete this booking?</h3>
+}
 <div>
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>

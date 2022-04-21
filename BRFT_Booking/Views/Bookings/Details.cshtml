@@ -68,6 +68,10 @@
     {
         <a asp-route-id="@Model.ID" asp-action="CreateRepeat">Request Repeat Booking</a>
         <br />
+        @if (Model.User.Email == User.Identity.Name)
+                {
+<a asp-route-id="@Model.ID" asp-action="Delete">Cancel Booking</a>
+                }
         <br />
         <a asp-action="Calendar">Back to Calendar</a>
     }

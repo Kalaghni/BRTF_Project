@@ -1258,7 +1258,7 @@ namespace BRTF_Booking.Data
                         OfficeEndHours = "17:30:00",
                         EmailExtension = "niagaracollege.ca",
                         TermStart = "2022-01-04",
-                        TermEnd = "2022-04-20"
+                        TermEnd = "2022-05-20"
                     } );
                     context.SaveChanges();
                 }

@@ -405,7 +405,7 @@ namespace BRTF_Booking.Controllers
             return View(bookingToUpdate);
         }
 
-        [Authorize(Roles = "Admin, Top-Level Admin")]
+        [Authorize]
         // GET: Bookings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -415,20 +415,43 @@ namespace BRTF_Booking.Controllers
             {
                 return NotFound();
             }
-
-            var booking = await _context.Bookings
+            if (User.IsInRole("Student"))
+            {
+                var booking = await _context.Bookings
                 .Include(b => b.Room)
                 .Include(b => b.User)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (booking == null)
-            {
-                return NotFound();
-            }
 
-            return View(booking);
+                if (booking == null)
+                {
+                    return NotFound();
+                }
+                else if (booking.UserID == _context.Users.Where(u => u.Email == User.Identity.Name).First().ID)
+                {
+                    return View(booking);
+                }
+                else
+                {
+                    return NotFound("You do not own this booking");
+                }
+            }
+            else
+            {
+                var booking = await _context.Bookings
+                .Include(b => b.Room)
+                .Include(b => b.User)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+                if (booking == null)
+                {
+                    return NotFound();
+                }
+
+                return View(booking);
+            }            
         }
 
-        [Authorize(Roles = "Admin, Top-Level Admin")]
+        [Authorize]
         // POST: Bookings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -437,15 +460,35 @@ namespace BRTF_Booking.Controllers
             ViewDataReturnURL();
 
             var booking = await _context.Bookings.FindAsync(id);
-            try
+            if (User.IsInRole("Student") && booking.UserID == _context.Users.Where(u => u.Email == User.Identity.Name).First().ID)
             {
-                _context.Bookings.Remove(booking);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Bookings.Remove(booking);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Calendar));
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to delete record. Try again, and if the problem persists see your system administrator.");
+                }
             }
-            catch (DbUpdateException)
+            else if (User.IsInRole("Admin") || User.IsInRole("Top-Level Admin"))
             {
-                ModelState.AddModelError("", "Unable to delete record. Try again, and if the problem persists see your system administrator.");
+                try
+                {
+                    _context.Bookings.Remove(booking);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to delete record. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "You do not own this booking");
             }
             return View(booking);
         }
@@ -608,6 +651,156 @@ namespace BRTF_Booking.Controllers
             }
             TempData["Message"] = "No bookings found during that time frame!";
             return RedirectToAction(nameof(Index));
+            //return NotFound("No Bookings found during Time frame");
+        }
+
+        [Authorize]
+        // GET: Bookings/DownloadBookings
+        public IActionResult DownloadUserBookings(int userID)
+        {
+            if (_context.Users.Where(u => u.Email == User.Identity.Name).First().ID != userID)
+            {
+                TempData["Message"] = "No bookings found during that time frame!";
+                return RedirectToAction(nameof(Calendar));
+            }
+            //main page
+            var bookings = (from b in _context.Bookings
+                         .Include(b => b.User)
+                         .Include(b => b.Room)
+                         .ThenInclude(p => p.Area)
+                         .Where(a => a.UserID == userID)
+                            orderby b.BookingRequested ascending
+                            select new
+                            {
+                                User = b.User.FullName,
+                                Area = b.Room.Area.Name,
+                                Room = b.Room.Name,
+                                Date = b.BookingRequested,
+                                Start = b.StartDate,
+                                End = b.EndDate,
+                                Hours = (b.EndDate - b.StartDate).TotalHours,
+                                b.Status
+                            }).AsNoTracking().ToList();
+
+            //for chart
+            var roomBookings = bookings
+               .GroupBy(a => new { a.Area, a.Room })
+               .Select(grp => new
+               {
+                   grp.Key.Area,
+                   grp.Key.Room,
+                   Number_Of_Bookings = grp.Count(),
+                   Total_Hours = (int)grp.Sum(a => a.Hours)
+               });
+
+
+            int numRows = bookings.Count();
+
+            if (numRows > 0)
+            {
+                using (ExcelPackage excel = new ExcelPackage())
+                {
+
+                    var workSheet = excel.Workbook.Worksheets.Add("Bookings");
+                    var workSheetBookings = excel.Workbook.Worksheets.Add("Room Bookings");
+
+                    workSheet.Cells[3, 1].LoadFromCollection(bookings, true);
+                    workSheetBookings.Cells[3, 1].LoadFromCollection(roomBookings, true);
+
+                    workSheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
+
+                    workSheet.Column(5).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
+
+                    workSheet.Column(6).Style.Numberformat.Format = "yyyy-mm-dd hh:mm";
+
+
+
+                    //Start Chart
+
+                    var barChart = (ExcelBarChart)workSheetBookings.Drawings.AddChart("Bookings", eChartType.BarClustered);
+                    barChart.SetPosition(5, 25, 6, 25);
+                    barChart.SetSize(500, 500);
+                    int rowcount = workSheetBookings.Dimension.End.Row;
+
+                    barChart.Series.Add("D4:D" + rowcount, "B4:B" + rowcount);
+                    barChart.YAxis.Title.Text = "Hours Booked";
+                    barChart.XAxis.Title.Text = "Rooms";
+                    //barChart.DataLabel.ShowCategory = false;
+                    //barChart.DataLabel.ShowPercent = false;
+                    barChart.Legend.Remove();
+
+
+                    using (ExcelRange headings = workSheet.Cells[3, 1, 3, 8])
+                    {
+                        headings.Style.Font.Bold = true;
+                        var fill = headings.Style.Fill;
+                        fill.PatternType = ExcelFillStyle.Solid;
+                        fill.BackgroundColor.SetColor(Color.FromArgb(8, 124, 232));
+                    }
+
+
+
+
+                    workSheet.Cells.AutoFitColumns();
+                    workSheetBookings.Cells.AutoFitColumns();
+
+                    workSheet.Cells[1, 1].Value = "Booking Report";
+                    workSheetBookings.Cells[1, 1].Value = "Booking Report";
+
+
+
+
+
+                    using (ExcelRange Rng = workSheet.Cells[1, 1, 1, 8])
+                    {
+                        Rng.Merge = true;
+                        Rng.Style.Font.Bold = true;
+                        Rng.Style.Font.Size = 18;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    }
+
+                    DateTime utcDate = DateTime.UtcNow;
+                    TimeZoneInfo esTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+                    DateTime localDate = TimeZoneInfo.ConvertTimeFromUtc(utcDate, esTimeZone);
+                    using (ExcelRange Rng = workSheet.Cells[2, 8])
+                    {
+                        Rng.Value = "Created: " + localDate.ToShortTimeString() + " on " +
+                            localDate.ToShortDateString();
+                        Rng.Style.Font.Bold = true;
+                        Rng.Style.Font.Size = 12;
+                        Rng.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    }
+
+                    var syncIOFeature = HttpContext.Features.Get<IHttpBodyControlFeature>();
+                    if (syncIOFeature != null)
+                    {
+                        syncIOFeature.AllowSynchronousIO = true;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            Response.Headers["content-disposition"] = "attachment;  filename=Bookings Report " + DateTime.Now.ToString("yyyy/MM/dd") + "-" + _context.Users.Find(userID).FName + ".xlsx";
+                            excel.SaveAs(memoryStream);
+                            memoryStream.WriteTo(Response.Body);
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Byte[] theData = excel.GetAsByteArray();
+                            string filename = "Bookings Report.xlsx";
+                            string mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                            return File(theData, mimeType, filename);
+                        }
+                        catch (Exception)
+                        {
+                            return NotFound();
+                        }
+                    }
+                }
+            }
+            TempData["Message"] = "No bookings found during that time frame!";
+            return RedirectToAction(nameof(Calendar));
             //return NotFound("No Bookings found during Time frame");
         }
 
@@ -805,8 +998,8 @@ namespace BRTF_Booking.Controllers
 
 
         public IActionResult Calendar()
-        {
-            return View();
+        { 
+            return View(_context.Users);
         }
 
         [HttpGet]
