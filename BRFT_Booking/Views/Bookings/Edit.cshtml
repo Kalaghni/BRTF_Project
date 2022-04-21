@@ -43,17 +43,17 @@
 
             <div class="form-group">
                 <label asp-for="BookingRequested" class="control-label"></label>
-                <input asp-for="BookingRequested"data-toggle="tooltip" title="Time the booking was created" class="form-control" />
+                <input asp-for="BookingRequested" data-toggle="tooltip" title="Time the booking was created" class="form-control" />
                 <span asp-validation-for="BookingRequested" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" id="StartDate" data-toggle="tooltip" title="Select a Time through the Calander and specifc dates and time will appear here" name="StartDate" class="form-control" readonly />
+                <input asp-for="StartDate" id="StartDate" name="StartDate" data-toggle="tooltip" title="Select a specific start time and date in 30 minute increments" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" id="EndDate" name="EndDate" data-toggle="tooltip" title="Select a Time through the Calander and specifc dates and time will appear here" class="form-control" readonly />
+                <input asp-for="EndDate" id="EndDate" name="EndDate" data-toggle="tooltip" title="Select a specific start time and date in 30 minute increments" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
