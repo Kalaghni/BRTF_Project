@@ -36,31 +36,6 @@
                 <input asp-for="StartDate" id="StartDate" name="StartDate" class="form-control" readonly"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-            <label asp-for="StartTime" class="control-label"></label>
-            <select id="StartTime" name="StartTime" class="form-control">
-                <option value="0:00">Select...</option>
-                <option value="8:30">8:30 AM</option>
-                <option value="9:00">9:00 AM</option>
-                <option value="9:30">9:30 AM</option>
-                <option value="10:00">10:00 AM</option>
-                <option value="10:30">10:30 AM</option>
-                <option value="11:00">11:00 AM</option>
-                <option value="11:30">11:30 AM</option>
-                <option value="12:00">12:00 PM</option>
-                <option value="12:30">12:30 PM</option>
-                <option value="13:00">1:00 PM</option>
-                <option value="13:30">1:30 PM</option>
-                <option value="14:00">2:00 PM</option>
-                <option value="14:30">2:30 PM</option>
-                <option value="15:00">3:00 PM</option>
-                <option value="15:30">3:30 PM</option>
-                <option value="16:00">4:00 PM</option>
-                <option value="16:30">4:30 PM</option>
-                <option value="17:00">5:00 PM</option>
-            </select>
-            <span asp-validation-for="StartTime" class="text-danger"></span>
-        </div>*@
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
                 <input asp-for="EndDate" id="EndDate" name="EndDate" class="form-control" readonly />
@@ -76,31 +51,6 @@
                     <a asp-action="Calendar">Back to calendar</a>
                 </div>
             </div>
-            @*<div class="form-group">
-            <label asp-for="EndTime" class="control-label"></label>
-            <select id="EndTime" name="EndTime" class="form-control">
-                <option value="0:00">Select...</option>
-                <option value="9:00">9:00 AM</option>
-                <option value="9:30">9:30 AM</option>
-                <option value="10:00">10:00 AM</option>
-                <option value="10:30">10:30 AM</option>
-                <option value="11:00">11:00 AM</option>
-                <option value="11:30">11:30 AM</option>
-                <option value="12:00">12:00 PM</option>
-                <option value="12:30">12:30 PM</option>
-                <option value="13:00">1:00 PM</option>
-                <option value="13:30">1:30 PM</option>
-                <option value="14:00">2:00 PM</option>
-                <option value="14:30">2:30 PM</option>
-                <option value="15:00">3:00 PM</option>
-                <option value="15:30">3:30 PM</option>
-                <option value="16:00">4:00 PM</option>
-                <option value="16:30">4:30 PM</option>
-                <option value="17:00">5:00 PM</option>
-                <option value="17:30">5:30 PM</option>
-            </select>
-            <span asp-validation-for="EndTime" class="text-danger"></span>
-        </div>*@
         </div>
         <div class="col-md-8">
             <div class="card md-sm-3">
@@ -134,152 +84,7 @@
     
     <script type="text/javascript">
 
-        var limit;
-        var calendarLoaded = false;
-        var start;
-        var end;
-        var termEnd = "";
-        var termStart = "";
-        var firstDay = "@ViewBag.DateClicked";
-
-        console.log(firstDay);
-
-        $('#AreaID').change(function () {
-            if (!calendarLoaded) {
-                $.getJSON("/Bookings/GetSettings", function (data) {
-                    start = data.officeStartHours;
-                    end = data.officeEndHours;
-                    termStart = data.termStart;
-                    termEnd = data.termEnd;
-                    $('#officeHours').text("Booking is only available Mon-Friday between " + data.officeStartHours + " to " + data.officeEndHours);
-                    $('#termDates').text("Current term is " + data.termStart + " to " + data.termEnd);
-                }).success(
-                    $('#calendar').fullCalendar({
-                        header: {
-                            left: 'prev,next today',
-                            center: 'title'
-                        },
-                        defaultView: 'agendaWeek',
-                        allDayText: "Term",
-                        firstDay: 0,
-                        defaultDate: firstDay,
-                        slotMinutes: 60,
-                        selectable: true,
-                        selectOverlap: function (stillEvent, movingEvent) {
-                            return stillEvent.rendering == "inverse-background";
-                        },
-                        businessHours: {
-                            dow: [1, 2, 3, 4, 5],
-                            start: start,
-                            end: end
-                        },
-                        selectConstraint: {
-                            dow: [1, 2, 3, 4, 5],
-                            start: start,
-                            end: end
-                        },
-                        selectAllow: function (selectInfo) {
-                            var duration = moment.duration(selectInfo.end.diff(selectInfo.start));
-                            var offStartMins = parseInt(start.slice(0, 2)) * 60 + parseInt(start.slice(3, 5));
-                            var offEndMins = parseInt(end.slice(0, 2)) * 60 + parseInt(end.slice(3, 5));
-                            var selStartMins = (new Date(selectInfo.start).getHours() + 4) * 60 + new Date(selectInfo.start).getMinutes() - 30;
-                            var selEndMins = (new Date(selectInfo.end).getHours() + 4) * 60 + new Date(selectInfo.end).getMinutes() - 30;
-                            $("#hours-counter").text("Hours Selected: " + duration.asHours());
-                            if (selectInfo.start < Date.now()) {
-                                $("#hours-counter").text("");
-                                $("#error-msg").text("Selection cannot be in the past");
-                                return false;
-                            }
-                            else if (duration.asMinutes() > limit * 60) {
-                                $("#hours-counter").text("");
-                                $("#error-msg").text("Selection must be less than " + limit + " hours");
-                                return false;
-                            }
-                            else if (selectInfo.start < Date.parse(termStart) | selectInfo.end < Date.parse(termStart) | selectInfo.end > Date.parse(termEnd) | selectInfo.start > Date.parse(termEnd)) {
-                                $("#hours-counter").text("");
-                                $("#error-msg").text("Selection must be within the current term");
-                                return false;
-                            }
-                            else if (selStartMins < offStartMins | selEndMins < offStartMins | selStartMins > offEndMins | selEndMins > offEndMins) {
-                                $("#hours-counter").text("");
-                                $("#error-msg").text("Selection must be within office hours");
-                                return false;
-                            }
-                            else if (new Date(selectInfo.start).getDay() == 0 | new Date(selectInfo.start).getDay() == 6 | new Date(selectInfo.end).getDay() == 0 | new Date(selectInfo.end).getDay() == 6) {
-                                console.log(new Date(selectInfo.start).getDay());
-                                $("#hours-counter").text("");
-                                $("#error-msg").text("Selection cannot be on weekends");
-                                return false;
-                            }
-
-                            $("#error-msg").text("");
-                        },
-                        select: function (startDate, endDate) {
-                            $('#StartDate').val(startDate.format());
-                            $('#EndDate').val(endDate.format());
-                        },
-                        selectHelper: true,
-                        unselectAuto: false
-                    }));
-                    
-                    
-                calendarLoaded = true;
-            }
-            $('#calendar').fullCalendar('unselect');
-            $('#hours-counter').text("");
-            $('#error-msg').text("");
-            var selectedArea = $("#AreaID").val();
-            var URL = "/Bookings/GetCreateRooms/" + selectedArea;
-            refreshDDL('RoomID', URL, true);
-            $.getJSON(URL, function (data) {
-                var selectedRoom = data[0].value;
-                $.getJSON("/Rooms/GetRoomRules?roomID=" + selectedRoom, function (data) {
-                    if (data.limit != null) {
-                        $('#roomTitle').text("Click and Drag to select an available time block up to " + data.limit + " hours");
-                        $('#limit').val(data.limit);
-                        limit = data.limit
-                    }
-                    else {
-                        $('#roomTitle').text("Click and Drag to select an available time block");
-                    }
-                });
-
-                var URL2 = "/Bookings/GetRoomEvents?roomID=" + selectedRoom;
-                $.getJSON(URL2, function (data) {
-                    $('#calendar').fullCalendar('removeEvents');
-                    $('#calendar').fullCalendar('addEventSource', data);
-                    $('#calendar').fullCalendar('addEventSource', [
-                        {
-                            start: termStart,
-                            end: termEnd,
-                            rendering: 'inverse-background',
-                            backgroundColor: 'red'
-                        }
-                    ]);
-                })
-            });
-        });
-        $('#RoomID').change(function () {
-            var selectedRoom = $('#RoomID').val();
-            var URL2 = "/Bookings/GetRoomEvents?roomID=" + selectedRoom;
-            $.getJSON(URL2, function (data) {
-                $('#calendar').fullCalendar('removeEvents');
-                $('#calendar').fullCalendar('addEventSource', data);
-                
-            });
-            $('#calendar').fullCalendar('unselect');
-            $('#hours-counter').text("");
-            $('#error-msg').text("");
-        });
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-            let rooms = document.getElementById('RoomID');
-            if (rooms.value != "") {
-                    $("#AreaID").trigger("change");
-                    $("#RoomID").trigger("change");
-            }
-        });
+        var limit,start,end,calendarLoaded=!1,termEnd="",termStart="",firstDay="@ViewBag.DateClicked";console.log(firstDay),$("#AreaID").change(function(){calendarLoaded||($.getJSON("/Bookings/GetSettings",function(e){start=e.officeStartHours,end=e.officeEndHours,termStart=e.termStart,termEnd=e.termEnd,$("#officeHours").text("Booking is only available Mon-Friday between "+e.officeStartHours+" to "+e.officeEndHours),$("#termDates").text("Current term is "+e.termStart+" to "+e.termEnd)}).success($("#calendar").fullCalendar({header:{left:"prev,next today",center:"title"},defaultView:"agendaWeek",allDayText:"Term",firstDay:0,defaultDate:firstDay,slotMinutes:60,selectable:!0,selectOverlap:function(e,t){return"inverse-background"==e.rendering},businessHours:{dow:[1,2,3,4,5],start:start,end:end},selectConstraint:{dow:[1,2,3,4,5],start:start,end:end},selectAllow:function(e){var t=moment.duration(e.end.diff(e.start)),r=60*parseInt(start.slice(0,2))+parseInt(start.slice(3,5)),a=60*parseInt(end.slice(0,2))+parseInt(end.slice(3,5)),n=60*(new Date(e.start).getHours()+4)+new Date(e.start).getMinutes()-30,o=60*(new Date(e.end).getHours()+4)+new Date(e.end).getMinutes()-30;return $("#hours-counter").text("Hours Selected: "+t.asHours()),e.start<Date.now()?($("#hours-counter").text(""),$("#error-msg").text("Selection cannot be in the past"),!1):t.asMinutes()>60*limit?($("#hours-counter").text(""),$("#error-msg").text("Selection must be less than "+limit+" hours"),!1):e.start<Date.parse(termStart)|e.end<Date.parse(termStart)|e.end>Date.parse(termEnd)|e.start>Date.parse(termEnd)?($("#hours-counter").text(""),$("#error-msg").text("Selection must be within the current term"),!1):n<r|o<r|n>a|o>a?($("#hours-counter").text(""),$("#error-msg").text("Selection must be within office hours"),!1):0==new Date(e.start).getDay()|6==new Date(e.start).getDay()|0==new Date(e.end).getDay()|6==new Date(e.end).getDay()?(console.log(new Date(e.start).getDay()),$("#hours-counter").text(""),$("#error-msg").text("Selection cannot be on weekends"),!1):void $("#error-msg").text("")},select:function(e,t){$("#StartDate").val(e.format()),$("#EndDate").val(t.format())},selectHelper:!0,unselectAuto:!1})),calendarLoaded=!0),$("#calendar").fullCalendar("unselect"),$("#hours-counter").text(""),$("#error-msg").text("");var e="/Bookings/GetCreateRooms/"+$("#AreaID").val();refreshDDL("RoomID",e,!0),$.getJSON(e,function(e){var t=e[0].value;$.getJSON("/Rooms/GetRoomRules?roomID="+t,function(e){null!=e.limit?($("#roomTitle").text("Click and Drag to select an available time block up to "+e.limit+" hours"),$("#limit").val(e.limit),limit=e.limit):$("#roomTitle").text("Click and Drag to select an available time block")});var r="/Bookings/GetRoomEvents?roomID="+t;$.getJSON(r,function(e){$("#calendar").fullCalendar("removeEvents"),$("#calendar").fullCalendar("addEventSource",e),$("#calendar").fullCalendar("addEventSource",[{start:termStart,end:termEnd,rendering:"inverse-background",backgroundColor:"red"}])})})}),$("#RoomID").change(function(){var e="/Bookings/GetRoomEvents?roomID="+$("#RoomID").val();$.getJSON(e,function(e){$("#calendar").fullCalendar("removeEvents"),$("#calendar").fullCalendar("addEventSource",e)}),$("#calendar").fullCalendar("unselect"),$("#hours-counter").text(""),$("#error-msg").text("")}),document.addEventListener("DOMContentLoaded",()=>{""!=document.getElementById("RoomID").value&&($("#AreaID").trigger("change"),$("#RoomID").trigger("change"))});
     </script>
 
 }

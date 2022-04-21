@@ -612,15 +612,15 @@ namespace BRTF_Booking.Controllers
         }
 
         // GET: Bookings/Request
-        public new IActionResult Request(int? areaID, string? date)
+        public new IActionResult Request(int? areaID, int? roomID, string? date)
         {
             ViewDataReturnURL();
 
-            if (areaID != null)
+            if (areaID != null && roomID != null)
             {
                 ViewData["DateClicked"] = DateTime.Today.ToString("yyyy-MM-dd");
                 ViewData["AreaID"] = AreaSelectList(areaID);
-                ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.AreaID == areaID), "ID", "Name");
+                ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.AreaID == areaID), "ID", "Name", roomID);
                 return View();
             }
             else if (date != null)
