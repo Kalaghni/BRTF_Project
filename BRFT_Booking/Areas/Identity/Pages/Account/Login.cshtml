@@ -18,10 +18,10 @@
                     <input asp-for="Input.Email" class="form-control" />
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                <div class="form-row align-items-center">
-                    <div class="input-group">
-                        <label asp-for="Input.Password"></label>
-                        <input asp-for="Input.Password" class="form-control" type="password"/>
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label><br />
+                    <div class="form-row align-items-center">
+                        <input asp-for="Input.Password" class="form-control" type="password" />
                         <i class="bi bi-eye-slash" id="togglePassword" style="margin-left: -30px; cursor: pointer; "></i>
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
