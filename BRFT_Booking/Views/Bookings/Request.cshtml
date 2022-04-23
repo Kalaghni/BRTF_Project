@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "Request";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string Days = "available everyday from ";
+    if (ViewBag.Weekends != true)
+    {
+        Days = "only available Monday to Friday from ";
+    }
+    string newTime = "";
 }
 
 <style>
@@ -14,7 +20,7 @@
 
 <h1>Request Booking</h1>
 <hr />
-<form asp-action="Request">
+<form asp-action="Request" onsubmit="return validateMyForm();">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" id="limit" />
     <input type="hidden" id="officeStart" />
@@ -31,20 +37,76 @@
                 <label asp-for="Room" class="control-label"></label>
                 <select asp-for="RoomID" id="RoomID" name="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" id="StartDate" name="StartDate" class="form-control" readonly />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" id="EndDate" name="EndDate" class="form-control" readonly />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
-            </div>
+            @if (ViewBag.Accessibility == true)
+            {
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input asp-for="StartDate" id="StartDate" name="StartDate" class="form-control" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <input asp-for="EndDate" id="EndDate" name="EndDate" class="form-control" type="hidden" />
+                <div class="form-group">
+                    <label asp-for="StartTime" class="control-label"></label>
+                    <select id="StartTime" name="StartTime" class="form-control">
+                        @for (string time = ViewBag.OfficeStartHours; time != ViewBag.OfficeEndHours;)
+                        {
+                            <option value="@time">@DateTime.Parse(time).ToString("h:mm tt")</option>
+                            if (time.Substring(3) == "30:00")
+                            {
+                                int chunk = int.Parse(time.Substring(0, 2)) + 1;
+                                if (chunk < 10)
+                                {
+                                    time = "0" + (chunk) + ":00:00";
+                                }
+                                else if (chunk >= 10)
+                                {
+                                    time = (chunk) + ":00:00";
+                                }
+                            }
+                            else if (time.Substring(3) == "00:00")
+                            {
+                                int chunk = int.Parse(time.Substring(0, 2));
+                                if (chunk < 10)
+                                {
+                                    time = "0" + chunk + ":30:00";
+                                }
+                                else if (chunk >= 10)
+                                {
+                                    time = chunk + ":30:00";
+                                }
+                            }
+                        }
+                        <option value="@ViewBag.OfficeEndHours">@ViewBag.OfficeEndHours</option>
+                    </select>
+                    <span asp-validation-for="StartTime" type="date" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Duration" class="control-label"></label>
+                    <select asp-for="Duration" class="form-control"></select>
+                    <span asp-validation-for="Duration" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input asp-for="StartDate" id="StartDate" name="StartDate" class="form-control" readonly />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EndDate" class="control-label"></label>
+                    <input asp-for="EndDate" id="EndDate" name="EndDate" class="form-control" readonly />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+                <input id="StartTime" class="form-control" type="hidden" />
+                <div class="form-group">
+                    <input id="Duration" type="hidden" class="form-control">
+                </div>
+            }
             <br />
             <div class="form-group">
                 <div>
-                    <input type="submit" value="Next" class="btn btn-primary" />
+                    <input type="submit" id="submit" value="Next" class="btn btn-primary" />
                 </div>
                 <hr />
                 <div>
@@ -58,9 +120,19 @@
                     <label class="control-label" id="officeHours"></label>
                     <label class="control-label" id="termDates"></label>
                     <label class="control-label" id="roomTitle"></label>
-                    <div id='calendar'></div>
-                    <h3 id="hours-counter"></h3>
-                    <h3 style="color: #FCA17D;" id="error-msg"></h3>
+                    @if (ViewBag.Accessibility == true)
+                    {
+                        <div style="pointer-events: none" id='calendar'></div>
+                        <h3 id="hours-counter"></h3>
+                        <h3 style="color: #FCA17D;" id="error-msg"></h3>
+                    }
+                    else
+                    {
+                        <div id='calendar'></div>
+                        <h3 id="hours-counter"></h3>
+                        <h3 style="color: #FCA17D;" id="error-msg"></h3>
+                    }
+
                 </div>
             </div>
         </div>
@@ -88,33 +160,27 @@
             end = "",
             calendarLoaded = !1,
             termEnd = "",
-            termStart = "",
-            firstDay = "@ViewBag.DateClicked", weekends = false;
+            termStart = "";
     $("#AreaID").change(function() {
         calendarLoaded || ($.getJSON("/Bookings/GetSettings", function(e) {
-            start = e.officeStartHours, end = e.officeEndHours, termStart = e.termStart, termEnd = e.termEnd, weekends = e.weekends, $("#officeHours").text("Booking is only available " + Date.parse(start).getTime() + " to " + Date.parse(end).getTime()), $("#termDates").text("Current term is " + e.termStart + " to " + e.termEnd)
+            start = e.officeStartHours, end = e.officeEndHours, termStart = e.termStart, termEnd = e.termEnd, $("#officeHours").text("Booking is " + "@Days" + moment("@ViewBag.OfficeStartHours", "hh:mm").format("hh:mm A") + " to " + moment("@ViewBag.OfficeEndHours", "hh:mm").format("hh:mm A")), $("#termDates").text("Current term is " + "@ViewBag.TermStart" + " to " + "@ViewBag.TermEnd")
         }).success($("#calendar").fullCalendar({
             header: {
                 left: "prev,next today",
                 center: "title"
             },
             defaultView: "agendaWeek",
-            weekends: weekends,
-            minTime: start,
-            maxTime: end,
+            weekends: "@ViewBag.Weekends" == "True",
+            minTime: "@ViewBag.OfficeStartHours",
+            maxTime: "@ViewBag.OfficeEndHours",
             height: "auto",
-            allDayText: "Term",
+            allDaySlot: false,
             firstDay: 0,
-            defaultDate: firstDay,
+            defaultDate: "@ViewBag.DateClicked",
             slotMinutes: 60,
             selectable: !0,
             selectOverlap: function(e, t) {
                 return "inverse-background" == e.rendering || "background" == e.rendering;
-            },
-            selectConstraint: {
-                dow: [1, 2, 3, 4, 5],
-                start: start,
-                end: end
             },
             selectAllow: function(e) {
                 var t = moment.duration(e.end.diff(e.start)),
@@ -122,47 +188,80 @@
                     a = 60 * parseInt(end.slice(0, 2)) + parseInt(end.slice(3, 5)),
                     n = 60 * (new Date(e.start).getHours() + 4) + new Date(e.start).getMinutes(),
                     o = 60 * (new Date(e.end).getHours() + 4) + new Date(e.end).getMinutes();
-                return $("#hours-counter").text("Hours Selected: " + t.asHours()), e.start < Date.now() ? ($("#hours-counter").text(""), $("#error-msg").text("Selection cannot be in the past"), !1) : t.asMinutes() > 60 * limit ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be less than " + limit + " hours"), !1) : e.start < Date.parse(termStart) | e.end < Date.parse(termStart) | e.end > Date.parse(termEnd) | e.start > Date.parse(termEnd) ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be within the current term"), !1) : n < r | o < r | n > a | o > a ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be within office hours"), !1) : 0 == new Date(e.start).getDay() | 6 == new Date(e.start).getDay() | 0 == new Date(e.end).getDay() | 6 == new Date(e.end).getDay() ? (console.log(new Date(e.start).getDay()), $("#hours-counter").text(""), $("#error-msg").text("Selection cannot be on weekends"), !1) : void $("#error-msg").text("")
+                return $("#hours-counter").text("Hours Selected: " + t.asHours()), e.start < Date.now() ? ($("#hours-counter").text(""), $("#error-msg").text("Selection cannot be in the past"), !1) : t.asMinutes() > 60 * limit ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be less than " + limit + " hours"), !1) : e.start < Date.parse(termStart) | e.end < Date.parse(termStart) | e.end > Date.parse(termEnd) | e.start > Date.parse(termEnd) ? ($("#hours-counter").text(""), $("#error-msg").text("Selection must be within the current term"), !1) : void $("#error-msg").text("")
             },
             select: function(e, t) {
-                $("#StartDate").val(e.format()), $("#EndDate").val(t.format())
+                $("#StartDate").val(e.format()), $("#EndDate").val(t.format()), $("#Duration").val(parseFloat(t.hours() + "." + t.minutes() / 6) - parseFloat(e.hours() + "." + e.minutes() / 6))
             },
             selectHelper: !0,
             unselectAuto: !1
         })), calendarLoaded = !0), $("#calendar").fullCalendar("unselect"), $("#hours-counter").text(""), $("#error-msg").text("");
         var e = "/Bookings/GetCreateRooms/" + $("#AreaID").val();
-        refreshDDL("RoomID", e, !0), $.getJSON(e, function(ee) {
+        refreshDDL("RoomID", e, !0), $.getJSON(e, function (ee) {
             var t = ee[0].value;
-            $.getJSON("/Rooms/GetRoomRules?roomID=" + t, function(e) {
-                null != e.limit ? ($("#roomTitle").text("Click and Drag to select an available time block up to " + e.limit + " hours"), $("#limit").val(e.limit), limit = e.limit) : $("#roomTitle").text("Click and Drag to select an available time block")
+            $.getJSON("/Rooms/GetRoomRules?roomID=" + t, function (e) {
+                null != e.limit ? ($("#roomTitle").text("Click and Drag to select an available time block up to " + e.limit + " hours"), $("#limit").val(e.limit), limit = e.limit) : $("#roomTitle").text("Click and Drag to select an available time block")            
             });
             var r = "/Bookings/GetRoomEvents?roomID=" + t;
-            $.getJSON(r, function(e) {
+            $.getJSON(r, function (e) {
                 $("#calendar").fullCalendar("removeEvents"), $("#calendar").fullCalendar("addEventSource", e), $("#calendar").fullCalendar("addEventSource", [{
                     start: termStart,
                     end: termEnd,
+                    allDay: false,
                     rendering: "inverse-background",
                     backgroundColor: "red"
                 }]),
                     $("#calendar").fullCalendar("addEventSource", [{
-                    start: start,
-                    end: end,
-                    rendering: "inverse-background",
-                    backgroundColor: "grey"
-                }])
+                        start: start,
+                        end: end,
+                        rendering: "inverse-background",
+                        backgroundColor: "grey"
+                    }])
             })
         })
     }), $("#RoomID").change(function() {
         var e = "/Bookings/GetRoomEvents?roomID=" + $("#RoomID").val();
-        $.getJSON(e, function(e) {
+        $.getJSON(e, function (e) {
             $("#calendar").fullCalendar("removeEvents"), $("#calendar").fullCalendar("addEventSource", e)
         }), $("#calendar").fullCalendar("unselect"), $("#hours-counter").text(""), $("#error-msg").text("")
-    }), document.addEventListener("DOMContentLoaded", () => {
+        
+    }), $("#StartTime").change(function () {
+        var max = parseFloat(document.querySelector("#StartTime").value.slice(0, 2) + "." + document.querySelector("#StartTime").value.slice(3, 5) / 6);
+        document.querySelector("#Duration").innerHTML = "";
+        if (limit != null) {
+            for (let i = 1.0; i <= moment.duration(end).asHours() - max; i += 0.5) {
+                document.querySelector("#Duration").innerHTML += "<option value='" + i + "'>" + i + " hours</option>";
+            }
+        }
+        else {
+            for (let i = 1.0; i <= moment.duration(end).asHours() - max; i += 0.5) {
+                document.querySelector("#Duration").innerHTML += "<option value='" + i + "'>" + i + " hours</option>";
+            }
+        }
+    }), $("#Duration").change(function () {
+        $("#calendar").fullCalendar("unselect");
+        var momentX = moment.duration($("#StartTime").val());
+        var momentY = momentX.add($("#Duration").val(), "h");
+            $("#EndDate").val(moment($("#StartDate").val()).format("YYYY-M-D") + "T" + momentY.hours() + ":" + momentY.minutes() / 10 + "0:00");
+    }), document.ready( () => {
         $.getJSON("/Bookings/GetSettings", function (e) {
-            start = e.officeStartHours, end = e.officeEndHours, termStart = e.termStart, termEnd = e.termEnd, $("#officeHours").text("Booking is only available " + start + " to " + end), $("#termDates").text("Current term is " + e.termStart + " to " + e.termEnd)
-        }),
-        "" != document.getElementById("RoomID").value && ($("#AreaID").trigger("change"), $("#RoomID").trigger("change"))
+            start = e.officeStartHours, end = e.officeEndHours, termStart = e.termStart, termEnd = e.termEnd, $("#officeHours").text("Booking is " + "@Days" + moment("@ViewBag.OfficeStartHours", "hh:mm").format("hh:mm A") + " to " + moment("@ViewBag.OfficeEndHours", "hh:mm").format("hh:mm A")), $("#termDates").text("Current term is " + "@ViewBag.TermStart" + " to " + "@ViewBag.TermEnd")
+        })
+            @*"" != document.getElementById("RoomID").value && ($("#AreaID").trigger("change"), $("#RoomID").trigger("change"))*@
+        
     });
+
+        function validateMyForm() {
+            if (document.querySelector("#startTime").value)
+            {
+                alert("validation failed false");
+                returnToPreviousPage();
+                return false;
+            }
+
+            alert("validations passed");
+            return true;
+        }
     </script>
 
 }

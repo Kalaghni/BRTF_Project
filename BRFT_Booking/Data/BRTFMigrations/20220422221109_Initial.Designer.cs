@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRTF_Booking.Data.BRTFMigrations
 {
     [DbContext(typeof(BRTFContext))]
-    [Migration("20220420175728_Initial")]
+    [Migration("20220422221109_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.23");
+                .HasAnnotation("ProductVersion", "3.1.24");
 
             modelBuilder.Entity("BRTF_Booking.Models.Admin", b =>
                 {
@@ -73,6 +73,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("BookingRequested")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Duration")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EndDate")
@@ -252,6 +255,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("Accessibility")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
@@ -321,6 +327,9 @@ namespace BRTF_Booking.Data.BRTFMigrations
 
                     b.Property<string>("TermStart")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("Weekends")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model BRTF_Booking.ViewModels.SettingsViewModel
+@{
     ViewData["Title"] = "Settings";
 }
 
@@ -83,6 +84,7 @@
             $('#emailExtension').val(data.emailExtension);
             $('#termStart').val(data.termStart);
             $('#termEnd').val(data.termEnd);
+            $("#weekends").prop("checked", data.weekends);
         });
 
     </script>
@@ -115,7 +117,8 @@
                         "OfficeEndHours": $('#officeEnd').val(),
                         "EmailExtension": $('#emailExtension').val(),
                         "TermStart": $('#termStart').val(),
-                        "TermEnd": $('#termEnd').val()
+                        "TermEnd": $('#termEnd').val(),
+                        "Weekends": $('#weekends').is(":checked")
                     }
                     $.post("/Home/PostSettings/",
                         data,

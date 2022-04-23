@@ -1426,3 +1426,4 @@ D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\bin\Debug\netcoreapp3.1\Boun
 D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\ForgotPassword.cshtml.g.cs
 D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\Account\Manage\Index.cshtml.g.cs
 D:\Niagara College\Year 2\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Home\Settings.cshtml.g.cs
+C:\Users\joshi\OneDrive\Documents\GitHub\BRFT_Project\BRFT_Booking\obj\Debug\netcoreapp3.1\Razor\Views\Users\PersonalData.cshtml.g.cs

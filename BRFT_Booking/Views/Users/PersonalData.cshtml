@@ -1,0 +1,46 @@
+﻿@model BRTF_Booking.Models.User
+
+@{
+    ViewData["Title"] = "PersonalData";
+}
+
+<style>
+    .btn-primary {
+        color: #fff;
+        background-color: #1dc21d;
+        border-color: #1aab1a;
+    }
+
+        .btn-primary:hover {
+            background-color: #21db21;
+            border-color: #1dc41d;
+        }
+</style>
+
+<h1>User Preferences</h1>
+<hr />
+<form asp-action="PersonalData">
+    <input value="@ViewBag.ID" type="hidden" />
+    <div class="row">
+        <div class="col-sm-6">
+            <table class="table table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Preference</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Accessible Booking</td>
+                        <td>
+                            <input asp-for="Accessibility" />
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+            <input type="submit" value="Save Changes" class="btn btn-primary" /><a style="float: right" href='/Identity/Account/Manage'>Back</a>
+        </div>
+    </div>
+</form>
+    @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

@@ -58,6 +58,9 @@ namespace BRTF_Booking.Models
         public bool Active { get; set; }
         public ICollection<Booking> Bookings { get; set; }
 
+        [Display(Name = "Accessibility")]
+        public bool Accessibility { get; set; }
+
         public User()
         {
             Active = true;

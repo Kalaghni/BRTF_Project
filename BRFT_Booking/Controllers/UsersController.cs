@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BRTF_Booking.Controllers
 {
-    [Authorize(Roles = "Admin, Top-Level Admin")]
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly BRTFContext _context;
@@ -49,6 +49,7 @@ namespace BRTF_Booking.Controllers
         }*/
 
         // GET: Users
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         public async Task<IActionResult> Index(string[] chkDelete, string SearchName, string SearchNumber, string SearchEmail, int? page, int? pageSizeID, string actionButton, string sortDirection = "asc", string sortField = "User")
         {
             CookieHelper.CookieSet(HttpContext, ControllerName() + "URL", "", -1);
@@ -186,6 +187,7 @@ namespace BRTF_Booking.Controllers
             return View(pagedData);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -208,6 +210,7 @@ namespace BRTF_Booking.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Users/Create
         public IActionResult Create()
         {
@@ -216,9 +219,11 @@ namespace BRTF_Booking.Controllers
             return View();
         }
 
+
         // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Top-Level Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,StudentID,FName,MName,LName,Email,DateOfBirth")] User user, string Password)
@@ -300,6 +305,72 @@ namespace BRTF_Booking.Controllers
             return View(user);
         }
 
+        //GET: Users/EditPersonal
+        public async Task<IActionResult> PersonalData(int? id)
+        {
+            ViewDataReturnURL();
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            if (user.Email != User.Identity.Name)
+            {
+                return NotFound();
+            }
+            ViewData["ID"] = user.ID;
+            return View(user);
+        }
+        // POST: Users/PersonalData/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PersonalData(int id)
+        {
+            ViewDataReturnURL();
+
+            var userToUpdate = await _context.Users.FindAsync(id);
+
+            if (userToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            if (await TryUpdateModelAsync<User>(userToUpdate, "", u => u.StudentID, u => u.FName,
+                u => u.MName, u => u.LName, u => u.Accessibility))
+            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Redirect(Url.RouteUrl(new { Controller = "Home", Action = "Index" }));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(userToUpdate.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                catch (DbUpdateException dex)
+                {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+
+            PopulateDropDownLists(userToUpdate);
+            return View(userToUpdate);
+        }
         // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.

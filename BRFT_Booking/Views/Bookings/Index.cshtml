@@ -133,7 +133,7 @@
                                     <strong>Area:</strong> @Html.DisplayFor(modelItem => item.Room.Area.Name)<br />
                                     <strong>Room:</strong> @Html.DisplayFor(modelItem => item.Room.Name)<br />
                                     <strong>Date:</strong> @Convert.ToString(string.Format("{0:MMMM dd, yyyy hh:mm tt}", item.StartDate))<br />
-                                    <strong>Duration:</strong> @Html.DisplayFor(modelItem => item.Duration.TotalHours)<br />
+                                    <strong>Duration:</strong> @Html.DisplayFor(modelItem => item.Duration)<br />
                                     <strong>Status:</strong> @Html.DisplayFor(modelItem => item.Status)<br />
                                 </p>
                                 <div class="card-footer">
@@ -206,7 +206,7 @@
                         @Convert.ToString(string.Format("{0:MMMM dd, yyyy hh:mm tt}", item.StartDate))
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Duration.TotalHours)
+                        @Html.DisplayFor(modelItem => item.Duration)
                     </td>
                     <th>
                         @Html.DisplayFor(modelItem => item.Status)

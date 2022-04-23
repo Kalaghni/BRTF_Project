@@ -73,8 +73,14 @@ namespace BRTF_Booking.Models
         [Display(Name = "End Time")]
         public TimeSpan EndTime { get; set; }
 
-        [Display(Name = "Duration (Hours)")]
-        public TimeSpan Duration => EndDate - StartDate;
+        [Display(Name = "Duration")]
+        public decimal Duration
+        {
+            get;
+            set;
+        }
+
+
 
         [Display(Name = "Status")]
         public string Status { get; set; }

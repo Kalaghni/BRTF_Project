@@ -1,6 +1,8 @@
 ﻿@inject SignInManager<IdentityUser> SignInManager
+@inject BRTF_Booking.Data.BRTFContext context
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    int userID = context.Users.FirstOrDefault(u => u.Email == User.Identity.Name).ID;
 }
 <ul class="nav nav-pills flex-column">
     @if (User.IsInRole("Top-Level Admin"))
@@ -24,5 +26,6 @@
     {
         <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
         <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+        <li class="nav-item"><a class="nav-link" id="personal-data" asp-controller="Users" asp-action="PersonalData" asp-route-ID="@userID">Preferences</a></li>
     }
 </ul>

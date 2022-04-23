@@ -229,12 +229,6 @@ namespace BRTF_Booking.Controllers
 
                 booking.StartDate = booking.StartDate.AddDays(7);
                 booking.EndDate = booking.EndDate.AddDays(7);
-                booking.ID = _context.Bookings.Count() + 1;
-
-
-                ViewData["UserID"] = new SelectList(_context.Users.Where(u => u.ID == booking.UserID), "ID", "FullName");
-                //ViewData["AreaID"] = new SelectList(_context.Areas.Where(a => a.ID == booking.Room.AreaID), "ID", "Name");
-                ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.ID == booking.RoomID), "ID", "Name");
 
                 return View(booking);
             }
@@ -251,21 +245,27 @@ namespace BRTF_Booking.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRepeat(int? id, [Bind("UserID,RoomID,StartDate,StartTime,EndDate,EndTime,Status,AreaID")] Booking bookings)
+        public async Task<IActionResult> CreateRepeat(int id, [Bind("UserID,RoomID,StartDate,EndDate,Status")] Booking booking)
         {
             ViewDataReturnURL();
-
-            Booking booking = _context.Bookings.FindAsync(id).Result;
-            booking.StartDate = booking.StartDate.AddDays(7);
-            booking.EndDate = booking.EndDate.AddDays(7);
-            booking.ID = _context.Bookings.Count() + 1;
 
             try
             {
                 booking.BookingRequested = DateTime.Today;
-                _context.Add(booking);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (booking.StartDate >= DateTime.Parse(_context.SettingsViewModels.First().TermEnd))
+                {
+                    booking.Status = "Declined";
+                    _context.Add(booking);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Calendar));
+                }
+                else
+                {
+                    booking.Status = "Accepted";
+                    _context.Add(booking);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Calendar));
+                }
             }
             catch (DbUpdateException)
             {
@@ -279,27 +279,12 @@ namespace BRTF_Booking.Controllers
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
         // GET: Bookings/Create
-        public IActionResult Create(int? id)
+        public IActionResult Create()
         {
             ViewDataReturnURL();
-
-            if (id != null)
-            {
-                Booking booking = _context.Bookings.FindAsync(id).Result;
-                booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
-
-
-                //ViewData["UserID"] = new SelectList(_context.Users, "ID", "FullName");
-                ViewData["AreaID"] = new SelectList(_context.Areas, "ID", "Name");
-                //ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.Enabled), "ID", "Name");
-
-                return View(booking);
-            }
-            else
-            {
-                PopulateDropDownLists();
-                return View();
-            }
+            SettingsViewData();
+            PopulateDropDownLists();
+            return View();
         }
 
         [Authorize(Roles = "Admin, Top-Level Admin")]
@@ -354,6 +339,10 @@ namespace BRTF_Booking.Controllers
             {
                 return NotFound();
             }
+            ViewData["OfficeStartHours"] = _context.SettingsViewModels.First().OfficeStartHours;
+            ViewData["OfficeEndHours"] = _context.SettingsViewModels.First().OfficeEndHours;
+
+
             ViewData["UserID"] = new SelectList(_context.Users.OrderBy(u => u.FName), "ID", "FullName", booking.UserID);
             ViewData["AreaID"] = IndexedAreaSelectList(booking.Room.AreaID);
             ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.AreaID == booking.Room.AreaID), "ID", "Name", booking.RoomID);
@@ -818,18 +807,24 @@ namespace BRTF_Booking.Controllers
             if (areaID != null && roomID != null)
             {
                 ViewData["DateClicked"] = DateTime.Today.ToString("yyyy-MM-dd");
+                SettingsViewData();
                 ViewData["AreaID"] = AreaSelectList(areaID);
+                ViewData["Accessibility"] = _context.Users.First(u => u.Email == User.Identity.Name).Accessibility;
                 ViewData["RoomID"] = new SelectList(_context.Rooms.Where(r => r.AreaID == areaID), "ID", "Name", roomID);
                 return View();
             }
             else if (date != null)
             {
+                ViewData["Accessibility"] = _context.Users.First(u => u.Email == User.Identity.Name).Accessibility;
+                SettingsViewData();
                 ViewData["DateClicked"] = date;
                 ViewData["AreaID"] = AreaSelectList();
                 return View();
             }
             else
             {
+                ViewData["Accessibility"] = _context.Users.First(u => u.Email == User.Identity.Name).Accessibility;
+                SettingsViewData();
                 ViewData["DateClicked"] = DateTime.Today.ToString("yyyy-MM-dd");
                 ViewData["AreaID"] = AreaSelectList();
                 return View();
@@ -848,35 +843,16 @@ namespace BRTF_Booking.Controllers
             var settings = _context.SettingsViewModels.First();
             if (ModelState.IsValid)
             {
-                if (((Convert.ToInt64(booking.StartDate.ToString("HHmm")) > Convert.ToInt64(DateTime.Parse(settings.OfficeStartHours).ToString("HHmm"))) && (Convert.ToInt64(booking.StartDate.ToString("HHmm")) < Convert.ToInt64(DateTime.Parse(settings.OfficeEndHours).ToString("HHmm")))) && ((Convert.ToInt64(booking.EndDate.ToString("HHmm")) > Convert.ToInt64(DateTime.Parse(settings.OfficeStartHours).ToString("HHmm"))) && (Convert.ToInt64(booking.EndDate.ToString("HHmm")) < Convert.ToInt64(DateTime.Parse(settings.OfficeEndHours).ToString("HHmm")))))
-                {
-                    if ((booking.StartDate > DateTime.Parse(settings.TermStart)) && (booking.StartDate < DateTime.Parse(settings.TermEnd)) && (booking.EndDate > DateTime.Parse(settings.TermStart)) && (booking.EndDate < DateTime.Parse(settings.TermEnd)))
-                    {
                         booking.UserID = _context.Users.Where(u => u.Email == User.Identity.Name).FirstOrDefault().ID;
                         booking.BookingRequested = DateTime.Today;
                         booking.Status = "Accepted";
                         _context.Add(booking);
                         await _context.SaveChangesAsync();
                         return RedirectToAction(nameof(Calendar));
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Booking request outside of current term");
-                        PopulateDropDownLists();
-                        return View(booking);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("","Booking request outside of office hours");
-                    PopulateDropDownLists();
-                    return View(booking);
-                }
-
-                
+                    
             }
             PopulateDropDownLists();
-            return View(booking);
+            return View();
         }
 
         private bool BookingExists(int id)
@@ -1223,6 +1199,15 @@ namespace BRTF_Booking.Controllers
         private void ViewDataReturnURL()
         {
             ViewData["returnURL"] = MaintainURL.ReturnURL(HttpContext, ControllerName());
+        }
+
+        private void SettingsViewData()
+        {
+            ViewData["OfficeStartHours"] = _context.SettingsViewModels.First().OfficeStartHours;
+            ViewData["OfficeEndHours"] = _context.SettingsViewModels.First().OfficeEndHours;
+            ViewData["TermStart"] = _context.SettingsViewModels.First().TermStart;
+            ViewData["TermEnd"] = _context.SettingsViewModels.First().TermEnd;
+            ViewData["Weekends"] = _context.SettingsViewModels.First().Weekends;
         }
 
         private void PopulateDropDownLists()

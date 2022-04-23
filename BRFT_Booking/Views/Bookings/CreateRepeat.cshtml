@@ -19,34 +19,29 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="User" class="control-label"></label>
-                <input type="hidden" id="UserID" name="UserID">
+                <input asp-for="UserID" type="hidden">
                 <p>@Html.DisplayFor(model => model.User.FullName)</p>
             </div>
             <div class="form-group">
-                <label class="control-label">Area:</label>
-                <input type="hidden" id="AreaID" name="AreaID">
+                <label asp-for="Room.Area" class="control-label"></label>
+                <input asp-for="Room.AreaID"  type="hidden" >
                 <p>@Html.DisplayFor(model => model.Room.Area.Name)</p>
             </div>
 
             <div class="form-group">
                 <label asp-for="Room" class="control-label"></label>
-                <input type="hidden" id="Name" name="Name">
+                <input asp-for="RoomID"  type="hidden" >
                 <p>@Html.DisplayFor(model => model.Room.Name)</p>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input type="hidden" id="StartDate" name="StartDate">
+                <label for="StartDate" class="control-label">Start</label>
+                <input asp-for="StartDate" type="hidden">
                 <p>@Html.DisplayFor(model => model.StartDate)</p>
             </div>
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input type="hidden" id="EndDate" name="EndDate">
+                <label for="EndDate" class="control-label">End</label>
+                <input asp-for="EndDate"  type="hidden" >
                 <p>@Html.DisplayFor(model => model.EndDate)</p>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input type="hidden" id="Status" name="Status">
-                <p>@Html.DisplayFor(model => model.Status)</p>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -45,14 +45,17 @@ namespace BRTF_Booking.Controllers
         [Authorize(Roles = "Top-Level Admin")]
         public IActionResult Settings()
         {
-            return View();
+            var settings = _context.SettingsViewModels.First();
+            return View(settings);
         }
 
         [Authorize(Roles = "Top-Level Admin")]
         [HttpGet]
         public JsonResult GetSettings()
         {
-            return Json(_context.SettingsViewModels.First());
+            var settings = _context.SettingsViewModels.First();
+            ViewData["Weekends"] = settings.Weekends.ToString();
+            return Json(settings);
         }
 
         [Authorize(Roles = "Top-Level Admin")]

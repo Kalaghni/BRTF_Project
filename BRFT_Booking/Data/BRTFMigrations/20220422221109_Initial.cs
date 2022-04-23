@@ -59,7 +59,8 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     OfficeEndHours = table.Column<string>(nullable: true),
                     EmailExtension = table.Column<string>(nullable: true),
                     TermStart = table.Column<string>(nullable: true),
-                    TermEnd = table.Column<string>(nullable: true)
+                    TermEnd = table.Column<string>(nullable: true),
+                    Weekends = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,7 +82,8 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     Password = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: true),
                     ProgramTermID = table.Column<int>(nullable: true),
-                    Active = table.Column<bool>(nullable: false)
+                    Active = table.Column<bool>(nullable: false),
+                    Accessibility = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -179,6 +181,7 @@ namespace BRTF_Booking.Data.BRTFMigrations
                     StartTime = table.Column<TimeSpan>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
                     EndTime = table.Column<TimeSpan>(nullable: false),
+                    Duration = table.Column<decimal>(nullable: false),
                     Status = table.Column<string>(nullable: true),
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true)
                 },
