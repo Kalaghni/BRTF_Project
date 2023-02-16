@@ -11,7 +11,6 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap4")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-BRFT_Booking-9758A9C9-289B-4B10-AFED-3520936AA60A")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("BRTF_Booking")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
